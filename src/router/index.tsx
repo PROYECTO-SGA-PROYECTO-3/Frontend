@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { RutaPrivada } from './RutaPrivada'
 import { RutaPorRol } from './RutaPorRol'
+import { Layout } from '@/components/layout/Layout'
 import Login from '@/pages/auth/Login'
 import NoAutorizado from '@/pages/NoAutorizado'
 import NoEncontrado from '@/pages/NoEncontrado'
@@ -25,8 +26,12 @@ export const router = createBrowserRouter([
           {
             element: <RutaPorRol rolesPermitidos={['ADMIN']} />,
             children: [
-              { path: '/admin', element: <AdminDashboard /> },
-              // TODO: agregar rutas de admin (docentes, estudiantes, cursos, etc.)
+              {
+                element: <Layout />,
+                children: [
+                  { path: '/admin', element: <AdminDashboard /> },
+                ],
+              },
             ],
           },
 
@@ -34,8 +39,12 @@ export const router = createBrowserRouter([
           {
             element: <RutaPorRol rolesPermitidos={['DOCENTE']} />,
             children: [
-              { path: '/docente', element: <DocenteDashboard /> },
-              // TODO: agregar rutas de docente (planilla, alertas, etc.)
+              {
+                element: <Layout />,
+                children: [
+                  { path: '/docente', element: <DocenteDashboard /> },
+                ],
+              },
             ],
           },
 
@@ -43,8 +52,12 @@ export const router = createBrowserRouter([
           {
             element: <RutaPorRol rolesPermitidos={['ESTUDIANTE']} />,
             children: [
-              { path: '/estudiante', element: <EstudianteDashboard /> },
-              // TODO: agregar rutas de estudiante (calificaciones, etc.)
+              {
+                element: <Layout />,
+                children: [
+                  { path: '/estudiante', element: <EstudianteDashboard /> },
+                ],
+              },
             ],
           },
         ],
@@ -56,4 +69,5 @@ export const router = createBrowserRouter([
 export function AppRouter() {
   return <RouterProvider router={router} />
 }
+
 
