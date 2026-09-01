@@ -12,6 +12,8 @@ import { login as loginApi } from '@/api/auth.api'
 import { extraerMensajeError } from '@/api/axios'
 import type { Rol } from '@/types/auth.types'
 
+import { ClimaBadge } from '@/components/weather'
+
 const RUTAS_POR_ROL: Record<Rol, string> = {
   ADMIN: '/admin',
   DOCENTE: '/docente',
@@ -61,6 +63,7 @@ export default function Login() {
           </span>
         </div>
         <div className="flex items-center gap-3 text-slate-500">
+          <ClimaBadge />
           <button
             type="button"
             aria-label="Ayuda"
