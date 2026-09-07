@@ -44,7 +44,7 @@ export function HeroStatCard({
 						</div>
 					</div>
 
-					<div className="pointer-events-none absolute right-4 top-4 z-0 flex h-32 w-32 -translate-y-1/4 translate-x-1/4 -rotate-12 items-center justify-center rounded-[2.5rem] bg-brand-50 text-brand-600 shadow-inner ring-1 ring-brand-100 transition-transform duration-700 group-hover:-rotate-6 group-hover:scale-110">
+					<div className="pointer-events-none absolute right-4 top-4 z-0 flex h-32 w-32 -translate-y-1/4 translate-x-1/4 -rotate-12 items-center justify-center rounded-full bg-brand-50 text-brand-600 shadow-inner ring-1 ring-brand-100 transition-transform duration-700 group-hover:-rotate-6 group-hover:scale-110">
 						<GraduationCap size={100} strokeWidth={1.5} className="opacity-80" />
 					</div>
 				</div>
