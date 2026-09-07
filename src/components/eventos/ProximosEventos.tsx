@@ -1,0 +1,53 @@
+import { Calendar } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { formatearFechaCorta } from '@/lib/utils'
+import type { EventoInstitucional } from '@/types/eventos.types'
+
+interface ProximosEventosProps {
+  eventos: EventoInstitucional[]
+}
+
+export function ProximosEventos({ eventos }: ProximosEventosProps) {
+  return (
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+      <div className="flex items-center justify-between">
+        <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Próximos Eventos</p>
+        <Calendar size={18} className="shrink-0 text-slate-300" />
+      </div>
+
+      <ul className="mt-4 max-h-80 space-y-4 overflow-y-auto pr-1">
+        {eventos.length === 0 && <p className="text-sm text-slate-400">No tienes eventos próximos.</p>}
+        {eventos.map((evento) => {
+          const { dia, mes } = formatearFechaCorta(evento.fecha)
+          return (
+            <li key={evento.id} className="flex items-start gap-3">
+              <div className="flex w-12 shrink-0 flex-col items-center rounded-lg bg-brand-50 py-1.5 text-brand-700">
+                <span className="text-lg leading-none font-bold">{dia}</span>
+                <span className="text-[10px] leading-none font-semibold">{mes}</span>
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="break-words text-sm font-semibold text-slate-900">{evento.titulo}</p>
+                <p className="break-words text-xs text-slate-500">{evento.descripcion}</p>
+                {evento.lugar && (
+                  <span
+                    title={evento.lugar}
+                    className="mt-1 inline-block max-w-full truncate rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-slate-500"
+                  >
+                    {evento.lugar}
+                  </span>
+                )}
+              </div>
+            </li>
+          )
+        })}
+      </ul>
+
+      <Link
+        to="/calendario"
+        className="mt-5 block w-full text-center text-xs font-semibold tracking-wide text-brand-700 uppercase hover:text-brand-800"
+      >
+        Ver calendario completo
+      </Link>
+    </div>
+  )
+}
