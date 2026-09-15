@@ -6,6 +6,7 @@ import Login from '@/pages/auth/Login'
 import NoAutorizado from '@/pages/NoAutorizado'
 import NoEncontrado from '@/pages/NoEncontrado'
 import AdminDashboard from '@/pages/admin/Dashboard'
+import AdminConfiguracion from '@/pages/admin/Configuracion'
 import DocenteDashboard from '@/pages/docente/Dashboard'
 import EstudianteDashboard from '@/pages/estudiante/Dashboard'
 
@@ -30,6 +31,7 @@ export const router = createBrowserRouter([
                 element: <Layout />,
                 children: [
                   { path: '/admin', element: <AdminDashboard /> },
+                  { path: '/admin/configuracion', element: <AdminConfiguracion /> },
                 ],
               },
             ],
