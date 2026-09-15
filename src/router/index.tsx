@@ -9,6 +9,7 @@ import AdminDashboard from '@/pages/admin/Dashboard'
 import AdminConfiguracion from '@/pages/admin/Configuracion'
 import DocenteDashboard from '@/pages/docente/Dashboard'
 import EstudianteDashboard from '@/pages/estudiante/Dashboard'
+import EstudianteCalificaciones from '@/pages/estudiante/Calificaciones'
 
 export const router = createBrowserRouter([
   {
@@ -58,6 +59,7 @@ export const router = createBrowserRouter([
                 element: <Layout />,
                 children: [
                   { path: '/estudiante', element: <EstudianteDashboard /> },
+                  { path: '/estudiante/calificaciones', element: <EstudianteCalificaciones /> },
                 ],
               },
             ],
