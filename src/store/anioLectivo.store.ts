@@ -23,6 +23,8 @@ export const useAnioLectivoStore = create<AnioLectivoState>((set, get) => ({
         anios,
         anioSeleccionadoId: get().anioSeleccionadoId ?? activo?.id ?? anios[0]?.id ?? null,
       })
+    } catch {
+      // Si falla la carga de años lectivos (ej. backend no disponible), mantenemos estado silencioso
     } finally {
       set({ cargando: false })
     }

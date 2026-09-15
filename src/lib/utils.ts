@@ -19,7 +19,8 @@ export function nombreCompleto(persona: PersonaConNombre): string {
 
 export function urlBackend(ruta: string): string {
   if (/^https?:\/\//.test(ruta)) return ruta
-  const base = (import.meta.env.VITE_BACKEND_API as string).replace(/\/api\/?$/, '')
+  const envUrl = (import.meta.env.VITE_API_URL ?? import.meta.env.VITE_BACKEND_API ?? 'http://localhost:8080/api') as string
+  const base = envUrl.replace(/\/api\/?$/, '')
   return `${base}${ruta}`
 }
 
