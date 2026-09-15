@@ -19,7 +19,7 @@ export function ProximosEventos({ eventos }: ProximosEventosProps) {
 				</div>
 			</div>
 
-			<div className="flex-1 p-6">
+			<div className="flex-1 overflow-y-auto p-6 max-h-96 pr-4">
 				<ul className="space-y-5">
 					{eventos.length === 0 && (
 						<p className="text-center text-sm italic text-slate-400 py-4">

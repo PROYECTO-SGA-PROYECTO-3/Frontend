@@ -164,7 +164,7 @@ export function ClimaWidget() {
 
         {/* Buscador y botones de geolocalización */}
         <div className="flex flex-wrap items-center gap-2">
-          <div ref={contenedorBusquedaRef} className="relative min-w-[200px] flex-1 sm:w-64 sm:flex-initial">
+          <div ref={contenedorBusquedaRef} className="relative min-w-50 flex-1 sm:w-64 sm:flex-initial">
             <div className="relative">
               <Search
                 size={15}
@@ -295,7 +295,7 @@ export function ClimaWidget() {
           {/* Tarjeta de Gradiente con Clima Actual */}
           <div
             className={cn(
-              'relative overflow-hidden rounded-2xl bg-gradient-to-br p-6 shadow-md transition-all',
+              'relative overflow-hidden rounded-2xl bg-linear-to-br p-6 shadow-md transition-all',
               clima.actual.condicion.fondoGradiente,
               clima.actual.condicion.colorTexto,
             )}
@@ -463,7 +463,7 @@ export function ClimaWidget() {
                 <div
                   key={hora.fechaIso}
                   className={cn(
-                    'flex min-w-[72px] shrink-0 flex-col items-center rounded-xl border p-2.5 text-center transition',
+                    'flex min-w-18 shrink-0 flex-col items-center rounded-xl border p-2.5 text-center transition',
                     idx === 0
                       ? 'border-brand-300 bg-brand-50/70 shadow-2xs'
                       : 'border-slate-100 bg-slate-50/50 hover:bg-slate-100/70',

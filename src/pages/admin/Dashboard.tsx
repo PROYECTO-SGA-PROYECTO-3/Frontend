@@ -83,7 +83,7 @@ export default function Dashboard() {
 						/>
 
 						{/* Métricas Secundarias */}
-						<div className="flex flex-col justify-between gap-5">
+						<div className="flex flex-col gap-6">
 							<StatCard
 								etiqueta="Docentes Activos"
 								valor={dashboard?.docentesActivos ?? 0}
@@ -107,7 +107,7 @@ export default function Dashboard() {
 						{/* Próximos Eventos */}
 						<div className="h-full">
 							{errorEventos ? (
-								<section className="flex h-full min-h-[320px] items-center justify-center rounded-2xl border border-red-200 bg-red-50/50 p-6 text-sm text-red-700 shadow-sm">
+								<section className="flex h-full min-h-80 items-center justify-center rounded-2xl border border-red-200 bg-red-50/50 p-6 text-sm text-red-700 shadow-sm">
 									<div className="text-center">
 										<AlertCircle className="mx-auto mb-2 h-8 w-8 text-red-400" />
 										<p>{errorEventos}</p>
