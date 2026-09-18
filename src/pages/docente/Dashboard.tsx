@@ -8,7 +8,7 @@ import { NavbarDocente } from '@/components/layout/NavbarDocente'
 import { BannerBienvenidaDocente } from '@/components/docente/BannerBienvenidaDocente'
 import { CargaAcademica } from '@/features/carga-academica'
 import { CierrePeriodo } from '@/features/periodos'
-import { AlertasSeguimiento } from '@/components/docente/AlertasSeguimiento'
+import { AlertasSeguimiento } from '@/features/seguimiento'
 import type { DashboardDocente } from '@/types/dashboardDocente.types'
 
 export default function DocenteDashboard() {
