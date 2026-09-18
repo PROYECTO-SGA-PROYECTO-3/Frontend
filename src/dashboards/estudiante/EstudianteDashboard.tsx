@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { obtenerDashboardEstudiante } from '@/api/dashboard.api';
+import { obtenerDashboardEstudiante } from './api';
 import { extraerMensajeError } from '@/shared/lib/axios';
 import { useAuth } from '@/features/auth';
 import { Spinner } from '@/shared/ui/Spinner';
@@ -7,7 +7,7 @@ import { NavbarEstudiante } from '@/layouts';
 import { TarjetaPromedio } from '@/features/calificaciones';
 import { ProximosEventos } from '@/features/eventos';
 import { AsignaturasHoy } from '@/features/carga-academica';
-import type { DashboardEstudiante } from '@/types/dashboardEstudiante.types';
+import type { DashboardEstudiante } from './types';
 
 export default function Dashboard() {
   const { usuario } = useAuth();

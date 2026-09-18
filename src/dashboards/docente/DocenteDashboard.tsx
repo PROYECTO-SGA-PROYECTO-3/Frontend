@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { obtenerDashboardDocente } from '@/api/dashboard.api'
+import { obtenerDashboardDocente } from './api'
 import { extraerMensajeError } from '@/shared/lib/axios'
 import { useAuth } from '@/features/auth'
 import { Spinner } from '@/shared/ui/Spinner'
@@ -9,7 +9,7 @@ import { BannerBienvenida } from './BannerBienvenida'
 import { CargaAcademica } from '@/features/carga-academica'
 import { CierrePeriodo } from '@/features/periodos'
 import { AlertasSeguimiento } from '@/features/seguimiento'
-import type { DashboardDocente } from '@/types/dashboardDocente.types'
+import type { DashboardDocente } from './types'
 
 export default function DocenteDashboard() {
   const { usuario } = useAuth()

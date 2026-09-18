@@ -5,7 +5,7 @@ import {
 	AlertCircle,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
-import { obtenerDashboardAdmin } from "@/api/dashboard.api";
+import { obtenerDashboardAdmin } from "./api";
 import { listarEventos, ProximosEventos } from "@/features/eventos";
 import { extraerMensajeError } from "@/shared/lib/axios";
 import { Navbar } from "@/layouts";
