@@ -6,7 +6,7 @@ import { Spinner } from '@/shared/ui/Spinner';
 import { NavbarEstudiante } from '@/components/layout/NavbarEstudiante';
 import { TarjetaPromedio } from '@/components/estudiante/TarjetaPromedio';
 import { ProximosEventos } from '@/components/eventos/ProximosEventos';
-import { AsignaturasHoy } from '@/components/estudiante/AsignaturasHoy';
+import { AsignaturasHoy } from '@/features/carga-academica';
 import type { DashboardEstudiante } from '@/types/dashboardEstudiante.types';
 
 export default function Dashboard() {

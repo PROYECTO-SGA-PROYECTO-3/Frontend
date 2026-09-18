@@ -1,6 +1,6 @@
 import { BookOpen, Clock, Users } from 'lucide-react'
 import { formatearHora } from '@/shared/lib/utils'
-import type { ClaseHoyDocente } from '@/types/dashboardDocente.types'
+import type { ClaseHoyDocente } from '../types'
 
 interface CargaAcademicaProps {
   clases: ClaseHoyDocente[]

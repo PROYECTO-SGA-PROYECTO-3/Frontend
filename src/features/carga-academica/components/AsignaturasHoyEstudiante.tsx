@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { BookOpenText, Calculator, ChevronLeft, ChevronRight, FlaskConical, Sprout } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { cn, formatearHora } from '@/shared/lib/utils'
-import type { AsignaturaHoy as AsignaturaHoyDto } from '@/types/dashboardEstudiante.types'
+import type { AsignaturaHoy as AsignaturaHoyDto } from '../types'
 
 const ICONO_POR_PALABRA_CLAVE: Array<{ palabra: string; icono: LucideIcon; color: string }> = [
   { palabra: 'biolog', icono: FlaskConical, color: 'bg-blue-50 text-blue-600' },
