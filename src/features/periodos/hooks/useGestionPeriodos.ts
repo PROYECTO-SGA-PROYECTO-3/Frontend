@@ -6,10 +6,10 @@ import {
   actualizarPeriodo,
   cerrarPeriodo,
   reabrirPeriodo,
-} from '@/api/periodos.api'
-import { extraerMensajeError } from '@/api/axios'
+} from '../api/periodosApi'
+import { extraerMensajeError } from '@/shared/lib/axios'
 import type { AnioLectivo } from '@/types/anioLectivo.types'
-import type { Periodo } from '@/types/periodo.types'
+import type { Periodo } from '../types'
 
 export interface FormPeriodoValores {
   nombre: string

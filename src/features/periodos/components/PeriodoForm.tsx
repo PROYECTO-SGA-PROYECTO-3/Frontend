@@ -1,8 +1,8 @@
 import type { FormEvent } from 'react'
 import { Button } from '@/shared/ui/Button'
 import { Input } from '@/shared/ui/Input'
-import type { FormPeriodoValores } from '@/hooks/admin/configuracion/useGestionPeriodos'
-import type { Periodo } from '@/types/periodo.types'
+import type { FormPeriodoValores } from '../hooks/useGestionPeriodos'
+import type { Periodo } from '../types'
 
 interface PeriodoFormProps {
   periodoEditando: Periodo | 'nuevo'

@@ -7,7 +7,7 @@ import { Spinner } from '@/shared/ui/Spinner'
 import { NavbarDocente } from '@/components/layout/NavbarDocente'
 import { BannerBienvenidaDocente } from '@/components/docente/BannerBienvenidaDocente'
 import { CargaAcademica } from '@/features/carga-academica'
-import { CierrePeriodo } from '@/components/docente/CierrePeriodo'
+import { CierrePeriodo } from '@/features/periodos'
 import { AlertasSeguimiento } from '@/components/docente/AlertasSeguimiento'
 import type { DashboardDocente } from '@/types/dashboardDocente.types'
 

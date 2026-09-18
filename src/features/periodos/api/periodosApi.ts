@@ -1,5 +1,5 @@
-import { api } from './axios'
-import type { Periodo, SolicitudPeriodo } from '@/types/periodo.types'
+import { api } from '@/shared/lib/axios'
+import type { Periodo, SolicitudPeriodo } from '../types'
 
 export async function listarPeriodos(anioLectivoId: number): Promise<Periodo[]> {
   return api.get<Periodo[]>(`/academico/periodos/anio/${anioLectivoId}`)

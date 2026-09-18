@@ -2,7 +2,7 @@ import { Plus, Pencil, Lock, Unlock } from 'lucide-react'
 import { Button } from '@/shared/ui/Button'
 import { Badge } from '@/shared/ui/Badge'
 import { Skeleton } from '@/shared/ui/Skeleton'
-import type { Periodo } from '@/types/periodo.types'
+import type { Periodo } from '../types'
 
 interface PeriodosTablaProps {
   periodos: Periodo[]

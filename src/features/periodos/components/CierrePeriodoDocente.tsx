@@ -1,5 +1,5 @@
 import { AlertTriangle } from 'lucide-react'
-import type { CierrePeriodoResumen } from '@/types/dashboardDocente.types'
+import type { CierrePeriodoResumen } from '../types'
 
 const RADIO = 42
 const CIRCUNFERENCIA = 2 * Math.PI * RADIO

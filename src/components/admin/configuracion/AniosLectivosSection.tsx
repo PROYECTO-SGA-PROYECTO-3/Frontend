@@ -4,7 +4,7 @@ import { DialogoConfirmacion } from '@/shared/ui/DialogoConfirmacion'
 import { useGestionAniosLectivos } from '@/hooks/admin/configuracion/useGestionAniosLectivos'
 import { CrearAnioLectivoForm } from './CrearAnioLectivoForm'
 import { AnioLectivoFila } from './AnioLectivoFila'
-import { PeriodosAnioModal } from './PeriodosAnioModal'
+import { PeriodosAnioModal } from '@/features/periodos'
 
 export function AniosLectivosSection() {
   const {
