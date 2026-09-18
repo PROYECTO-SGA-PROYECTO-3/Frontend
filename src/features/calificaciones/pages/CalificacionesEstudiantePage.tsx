@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Award, CheckCircle2, Download, TrendingDown, TrendingUp } from 'lucide-react'
-import { obtenerCalificacionesEstudiante } from '@/api/calificaciones.api'
-import { descargarMiBoletin, extraerMensajeErrorDescargaBoletin } from '@/api/boletin.api'
-import { extraerMensajeError } from '@/api/axios'
+import { obtenerCalificacionesEstudiante } from '../api/calificacionesApi'
+import { descargarMiBoletin, extraerMensajeErrorDescargaBoletin } from '../api/boletinApi'
+import { extraerMensajeError } from '@/shared/lib/axios'
 import { useAuth } from '@/hooks/useAuth'
 import { Spinner } from '@/shared/ui/Spinner'
 import { Button } from '@/shared/ui/Button'
 import { NavbarEstudiante } from '@/components/layout/NavbarEstudiante'
-import { TarjetaIndicador } from '@/components/estudiante/TarjetaIndicador'
-import { BandaAnioLectivo } from '@/components/estudiante/BandaAnioLectivo'
-import { RegistroAcademico } from '@/components/estudiante/RegistroAcademico'
-import type { CalificacionesEstudiante } from '@/types/calificaciones.types'
+import { TarjetaIndicador } from '../components/TarjetaIndicador'
+import { BandaAnioLectivo } from '../components/BandaAnioLectivo'
+import { RegistroAcademico } from '../components/RegistroAcademico'
+import type { CalificacionesEstudiante } from '../types'
 
 export default function Calificaciones() {
   const { usuario } = useAuth()

@@ -2,7 +2,7 @@
 // (protegido con hasRole('ESTUDIANTE'), resuelve el estudiante a partir del
 // @AuthenticationPrincipal, igual que el resto de los endpoints de autoservicio).
 
-import type { EstadoMatricula } from './matricula.types'
+import type { EstadoMatricula } from '@/shared/types/matricula.types'
 import type { EventoInstitucional } from '@/features/eventos'
 
 export type { EventoInstitucional as EventoProximo } from '@/features/eventos'

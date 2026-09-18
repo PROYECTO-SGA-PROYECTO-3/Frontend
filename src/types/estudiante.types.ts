@@ -1,4 +1,4 @@
-import type { EstadoMatricula } from './matricula.types'
+import type { EstadoMatricula } from '@/shared/types/matricula.types'
 
 export interface Estudiante {
   id: number

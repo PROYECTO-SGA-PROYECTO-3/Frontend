@@ -1,6 +1,5 @@
 import { Badge, type BadgeColor } from '@/shared/ui/Badge'
-import type { ResumenAnioLectivoCalificaciones } from '@/types/calificaciones.types'
-import type { EstadoMatricula } from '@/types/matricula.types'
+import type { ResumenAnioLectivoCalificaciones, EstadoMatricula } from '../types'
 
 const COLOR_ESTADO: Record<EstadoMatricula, BadgeColor> = {
   ACTIVA: 'brand',

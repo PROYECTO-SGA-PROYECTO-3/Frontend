@@ -1,4 +1,14 @@
-import type { EstadoMatricula } from './matricula.types'
+import type { EstadoMatricula } from '@/shared/types/matricula.types'
+export type { EstadoMatricula } from '@/shared/types/matricula.types'
+
+export type NivelPromedio = 'BAJO' | 'BASICO' | 'ALTO' | 'SUPERIOR'
+
+export interface ResumenPromedio {
+  valor: number
+  nivel: NivelPromedio
+  variacionPeriodoAnterior: number
+  historicoPeriodos: number[]
+}
 
 export interface ResumenAnioLectivoCalificaciones {
   anio: number | null

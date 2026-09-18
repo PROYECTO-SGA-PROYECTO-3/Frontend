@@ -2,7 +2,7 @@ import { TrendingDown, TrendingUp } from 'lucide-react'
 import { Badge } from '@/shared/ui/Badge'
 import type { BadgeColor } from '@/shared/ui/Badge'
 import { cn } from '@/shared/lib/utils'
-import type { NivelPromedio } from '@/types/dashboardEstudiante.types'
+import type { NivelPromedio } from '../types'
 
 interface TarjetaPromedioProps {
   valor: number

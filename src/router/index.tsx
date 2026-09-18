@@ -9,7 +9,7 @@ import AdminDashboard from '@/pages/admin/Dashboard'
 import { ConfiguracionPage as AdminConfiguracion } from '@/features/configuracion'
 import DocenteDashboard from '@/pages/docente/Dashboard'
 import EstudianteDashboard from '@/pages/estudiante/Dashboard'
-import EstudianteCalificaciones from '@/pages/estudiante/Calificaciones'
+import { CalificacionesEstudiantePage as EstudianteCalificaciones } from '@/features/calificaciones'
 
 export const router = createBrowserRouter([
   {
