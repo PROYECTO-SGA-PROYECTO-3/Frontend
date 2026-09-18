@@ -1,6 +1,6 @@
-import {api} from './axios';
-import type { PaginaSpring} from '@/types/api.types';
-import type { Estudiante , SolicitudActualizarEstudiante,SolicitudCrearEstudiante } from '@/types/estudiante.types';
+import { api } from '@/shared/lib/axios'
+import type { PaginaSpring } from '@/shared/types/api.types'
+import type { Estudiante, SolicitudActualizarEstudiante, SolicitudCrearEstudiante } from '../types'
 
 interface PerametrosLstarEstudiantes {
     pagina?: number
