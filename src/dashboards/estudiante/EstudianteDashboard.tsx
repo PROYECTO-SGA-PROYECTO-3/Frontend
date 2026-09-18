@@ -3,7 +3,7 @@ import { obtenerDashboardEstudiante } from '@/api/dashboard.api';
 import { extraerMensajeError } from '@/shared/lib/axios';
 import { useAuth } from '@/features/auth';
 import { Spinner } from '@/shared/ui/Spinner';
-import { NavbarEstudiante } from '@/components/layout/NavbarEstudiante';
+import { NavbarEstudiante } from '@/layouts';
 import { TarjetaPromedio } from '@/features/calificaciones';
 import { ProximosEventos } from '@/features/eventos';
 import { AsignaturasHoy } from '@/features/carga-academica';

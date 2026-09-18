@@ -1,4 +1,4 @@
-import { Navbar } from '@/components/layout/Navbar'
+import { Navbar } from '@/layouts'
 import { InstitucionSection } from '../components/InstitucionSection'
 import { AniosLectivosSection } from '../components/AniosLectivosSection'
 

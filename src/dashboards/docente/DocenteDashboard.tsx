@@ -4,8 +4,8 @@ import { obtenerDashboardDocente } from '@/api/dashboard.api'
 import { extraerMensajeError } from '@/shared/lib/axios'
 import { useAuth } from '@/features/auth'
 import { Spinner } from '@/shared/ui/Spinner'
-import { NavbarDocente } from '@/components/layout/NavbarDocente'
-import { BannerBienvenidaDocente } from '@/components/docente/BannerBienvenidaDocente'
+import { NavbarDocente } from '@/layouts'
+import { BannerBienvenida } from './BannerBienvenida'
 import { CargaAcademica } from '@/features/carga-academica'
 import { CierrePeriodo } from '@/features/periodos'
 import { AlertasSeguimiento } from '@/features/seguimiento'
@@ -51,7 +51,7 @@ export default function DocenteDashboard() {
         ) : (
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <div className="flex flex-col gap-6 lg:col-span-2">
-              <BannerBienvenidaDocente
+              <BannerBienvenida
                 nombre={dashboard.docente.nombreCompleto}
                 planillasPendientes={dashboard.planillasPendientes}
                 onCalificarAhora={() => navigate('/docente/planilla')}

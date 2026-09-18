@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Menu } from 'lucide-react'
 import { Outlet } from 'react-router-dom'
-import { Sidebar } from './Sidebar'
+import { Sidebar } from './components/Sidebar'
 import { useAnioLectivo } from '@/features/configuracion'
 
 export function Layout() {

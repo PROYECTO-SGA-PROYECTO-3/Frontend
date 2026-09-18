@@ -8,7 +8,7 @@ interface BannerBienvenidaDocenteProps {
   onVerCalendario: () => void
 }
 
-export function BannerBienvenidaDocente({
+export function BannerBienvenida({
   nombre,
   planillasPendientes,
   onCalificarAhora,

@@ -1,14 +1,14 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { RutaPrivada } from './RutaPrivada'
 import { RutaPorRol } from './RutaPorRol'
-import { Layout } from '@/components/layout/Layout'
+import { Layout } from '@/layouts'
 import { LoginPage } from '@/features/auth'
 import NoAutorizado from '@/pages/NoAutorizado'
 import NoEncontrado from '@/pages/NoEncontrado'
-import AdminDashboard from '@/pages/admin/Dashboard'
+import { AdminDashboard } from '@/dashboards/admin'
 import { ConfiguracionPage as AdminConfiguracion } from '@/features/configuracion'
-import DocenteDashboard from '@/pages/docente/Dashboard'
-import EstudianteDashboard from '@/pages/estudiante/Dashboard'
+import { DocenteDashboard } from '@/dashboards/docente'
+import { EstudianteDashboard } from '@/dashboards/estudiante'
 import { CalificacionesEstudiantePage as EstudianteCalificaciones } from '@/features/calificaciones'
 
 export const router = createBrowserRouter([
