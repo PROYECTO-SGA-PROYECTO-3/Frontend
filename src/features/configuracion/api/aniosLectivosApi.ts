@@ -1,5 +1,5 @@
-import { api } from './axios'
-import type { AnioLectivo, SolicitudAnioLectivo } from '@/types/anioLectivo.types'
+import { api } from '@/shared/lib/axios'
+import type { AnioLectivo, SolicitudAnioLectivo } from '../types'
 
 export async function listarAniosLectivos(): Promise<AnioLectivo[]> {
   return api.get<AnioLectivo[]>('/anios-lectivos')

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
-import { listarAniosLectivos } from '@/api/aniosLectivos.api'
-import type { AnioLectivo } from '@/types/anioLectivo.types'
+import { listarAniosLectivos } from './api/aniosLectivosApi'
+import type { AnioLectivo } from './types'
 
 interface AnioLectivoState {
   anios: AnioLectivo[]

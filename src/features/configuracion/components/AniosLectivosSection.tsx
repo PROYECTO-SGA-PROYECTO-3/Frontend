@@ -1,7 +1,7 @@
 import { CalendarCheck, AlertCircle } from 'lucide-react'
 import { Skeleton } from '@/shared/ui/Skeleton'
 import { DialogoConfirmacion } from '@/shared/ui/DialogoConfirmacion'
-import { useGestionAniosLectivos } from '@/hooks/admin/configuracion/useGestionAniosLectivos'
+import { useGestionAniosLectivos } from '../hooks/useGestionAniosLectivos'
 import { CrearAnioLectivoForm } from './CrearAnioLectivoForm'
 import { AnioLectivoFila } from './AnioLectivoFila'
 import { PeriodosAnioModal } from '@/features/periodos'

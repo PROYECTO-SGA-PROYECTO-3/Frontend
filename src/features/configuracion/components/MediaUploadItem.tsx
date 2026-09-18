@@ -1,6 +1,6 @@
 import type { ChangeEvent } from 'react'
 import { Upload, Image as ImageIcon, Check, Loader2 } from 'lucide-react'
-import type { ItemMediaInfo } from '@/hooks/admin/configuracion/useInstitucionMedia'
+import type { ItemMediaInfo } from '../hooks/useInstitucionMedia'
 
 interface MediaUploadItemProps {
   item: ItemMediaInfo

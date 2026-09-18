@@ -1,5 +1,5 @@
 import { X, AlertCircle, Calendar } from 'lucide-react'
-import type { AnioLectivo } from '@/types/anioLectivo.types'
+import type { AnioLectivo } from '@/shared/types/anioLectivo.types'
 import { useGestionPeriodos } from '../hooks/useGestionPeriodos'
 import { PeriodoForm } from './PeriodoForm'
 import { PeriodosTabla } from './PeriodosTabla'

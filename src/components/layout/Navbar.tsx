@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown, Settings } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
-import { useAnioLectivo } from '@/hooks/useAnioLectivo'
+import { useAnioLectivo } from '@/features/configuracion'
 
 interface NavbarProps {
   titulo: string

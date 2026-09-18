@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { actualizarInstitucion } from '@/api/institucion.api'
-import { extraerMensajeError } from '@/api/axios'
-import type { Institucion, SolicitudActualizarInstitucion } from '@/types/institucion.types'
+import { actualizarInstitucion } from '../api/institucionApi'
+import { extraerMensajeError } from '@/shared/lib/axios'
+import type { Institucion, SolicitudActualizarInstitucion } from '../types'
 
 export const esquemaInstitucion = z.object({
   nombre: z.string().trim().min(1, 'El nombre de la institución es obligatorio'),

@@ -1,5 +1,5 @@
-import { api } from './axios'
-import type { Institucion, SolicitudActualizarInstitucion } from '@/types/institucion.types'
+import { api } from '@/shared/lib/axios'
+import type { Institucion, SolicitudActualizarInstitucion } from '../types'
 
 export async function obtenerInstitucion(): Promise<Institucion> {
   return api.get<Institucion>('/institucion')

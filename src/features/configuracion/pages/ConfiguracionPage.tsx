@@ -1,6 +1,6 @@
 import { Navbar } from '@/components/layout/Navbar'
-import { InstitucionSection } from '@/components/admin/configuracion/InstitucionSection'
-import { AniosLectivosSection } from '@/components/admin/configuracion/AniosLectivosSection'
+import { InstitucionSection } from '../components/InstitucionSection'
+import { AniosLectivosSection } from '../components/AniosLectivosSection'
 
 export default function Configuracion() {
   return (

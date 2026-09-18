@@ -1,4 +1,4 @@
-import { useAnioLectivoStore } from '@/store/anioLectivo.store'
+import { useAnioLectivoStore } from '../store'
 
 export function useAnioLectivo() {
   const anios = useAnioLectivoStore((estado) => estado.anios)

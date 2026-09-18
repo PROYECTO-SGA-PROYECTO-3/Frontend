@@ -1,6 +1,6 @@
 import { AlertCircle } from 'lucide-react'
-import type { Institucion } from '@/types/institucion.types'
-import { useInstitucionMedia } from '@/hooks/admin/configuracion/useInstitucionMedia'
+import type { Institucion } from '../types'
+import { useInstitucionMedia } from '../hooks/useInstitucionMedia'
 import { MediaUploadItem } from './MediaUploadItem'
 
 interface InstitucionMediaUploaderProps {

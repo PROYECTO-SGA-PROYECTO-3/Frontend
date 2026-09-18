@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Menu } from 'lucide-react'
 import { Outlet } from 'react-router-dom'
 import { Sidebar } from './Sidebar'
-import { useAnioLectivo } from '@/hooks/useAnioLectivo'
+import { useAnioLectivo } from '@/features/configuracion'
 
 export function Layout() {
   const cargarAnios = useAnioLectivo().cargarAnios
