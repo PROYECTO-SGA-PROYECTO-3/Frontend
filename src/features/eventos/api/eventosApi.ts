@@ -1,5 +1,5 @@
-import { api } from "./axios";
-import type { EventoInstitucional, SolicitudCrearEvento } from "@/types/eventos.types";
+import { api } from '@/shared/lib/axios'
+import type { EventoInstitucional, SolicitudCrearEvento } from '../types'
 
 export function listarEventos(): Promise<EventoInstitucional[]> {
   return api.get<EventoInstitucional[]>("/eventos");

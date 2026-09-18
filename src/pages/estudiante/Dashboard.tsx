@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Spinner } from '@/shared/ui/Spinner';
 import { NavbarEstudiante } from '@/components/layout/NavbarEstudiante';
 import { TarjetaPromedio } from '@/components/estudiante/TarjetaPromedio';
-import { ProximosEventos } from '@/components/eventos/ProximosEventos';
+import { ProximosEventos } from '@/features/eventos';
 import { AsignaturasHoy } from '@/features/carga-academica';
 import type { DashboardEstudiante } from '@/types/dashboardEstudiante.types';
 

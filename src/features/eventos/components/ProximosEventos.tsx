@@ -1,7 +1,7 @@
 import { Calendar, ChevronRight, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { formatearFechaCorta } from "@/shared/lib/utils";
-import type { EventoInstitucional } from "@/types/eventos.types";
+import type { EventoInstitucional } from '../types'
 
 interface ProximosEventosProps {
 	eventos: EventoInstitucional[];
