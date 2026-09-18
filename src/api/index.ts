@@ -1,5 +1,5 @@
 export { api, extraerMensajeError, extraerMensajeErrorDescarga, extraerNombreArchivoDescarga } from './axios'
-export * from './auth.api'
+export * from '@/features/auth'
 export * from './dashboard.api'
 export * from '@/features/calificaciones'
 export * from '@/features/configuracion'

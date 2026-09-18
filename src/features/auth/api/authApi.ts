@@ -1,5 +1,5 @@
-import { api } from './axios'
-import type { Credenciales, Rol, SesionAuth, Usuario } from '@/types/auth.types'
+import { api } from '@/shared/lib/axios'
+import type { Credenciales, Rol, SesionAuth, Usuario } from '../types'
 
 /**
  * Forma cruda que devuelve el backend (ver esquema RespuestaAuth en Swagger):

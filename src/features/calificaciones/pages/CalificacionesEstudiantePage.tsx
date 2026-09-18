@@ -3,7 +3,7 @@ import { Award, CheckCircle2, Download, TrendingDown, TrendingUp } from 'lucide-
 import { obtenerCalificacionesEstudiante } from '../api/calificacionesApi'
 import { descargarMiBoletin, extraerMensajeErrorDescargaBoletin } from '../api/boletinApi'
 import { extraerMensajeError } from '@/shared/lib/axios'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/features/auth'
 import { Spinner } from '@/shared/ui/Spinner'
 import { Button } from '@/shared/ui/Button'
 import { NavbarEstudiante } from '@/components/layout/NavbarEstudiante'

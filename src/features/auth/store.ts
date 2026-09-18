@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Usuario } from '@/types/auth.types'
+import type { Usuario } from './types'
 
 interface AuthState {
   token: string | null

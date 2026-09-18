@@ -2,7 +2,7 @@ import { useState, type ReactNode } from 'react'
 import { Bell, ChevronRight } from 'lucide-react'
 import { Avatar } from '@/shared/ui/Avatar'
 import { nombreCompleto } from '@/shared/lib/utils'
-import type { Usuario } from '@/types/auth.types'
+import type { Usuario } from '@/features/auth'
 
 interface NavbarEstudianteProps {
   usuario: Usuario

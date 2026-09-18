@@ -1,4 +1,4 @@
-export * from './auth.types'
+export * from '@/features/auth'
 export * from './api.types'
 export * from '@/shared/types/matricula.types'
 export * from '@/features/calificaciones'

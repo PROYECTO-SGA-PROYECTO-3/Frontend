@@ -15,10 +15,9 @@ import {
   Users,
   type LucideIcon,
 } from 'lucide-react'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth, type Rol } from '@/features/auth'
 import { cn, nombreCompleto } from '@/shared/lib/utils'
 import { Avatar } from '@/shared/ui/Avatar'
-import type { Rol } from '@/types/auth.types'
 import logoIe from '@/assets/logo-ie-descanse.png'
 
 interface ItemNav {

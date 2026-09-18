@@ -1,4 +1,4 @@
-import { useAuthStore } from '@/store/auth.store'
+import { useAuthStore } from '../store'
 
 /** Hook para acceder a la sesión activa en cualquier componente */
 export function useAuth() {

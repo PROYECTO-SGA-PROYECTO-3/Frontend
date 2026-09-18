@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom'
-import { useAuthStore } from '@/store/auth.store'
-import type { Rol } from '@/types/auth.types'
+import { useAuthStore } from '@/features/auth'
+import type { Rol } from '@/features/auth'
 
 interface RutaPorRolProps {
   rolesPermitidos: Rol[]

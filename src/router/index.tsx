@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { RutaPrivada } from './RutaPrivada'
 import { RutaPorRol } from './RutaPorRol'
 import { Layout } from '@/components/layout/Layout'
-import Login from '@/pages/auth/Login'
+import { LoginPage } from '@/features/auth'
 import NoAutorizado from '@/pages/NoAutorizado'
 import NoEncontrado from '@/pages/NoEncontrado'
 import AdminDashboard from '@/pages/admin/Dashboard'
@@ -17,7 +17,7 @@ export const router = createBrowserRouter([
     children: [
       // Rutas públicas
       { path: '/', element: <Navigate to="/login" replace /> },
-      { path: '/login', element: <Login /> },
+      { path: '/login', element: <LoginPage /> },
       { path: '/no-autorizado', element: <NoAutorizado /> },
 
       // Rutas protegidas (requieren sesión)
