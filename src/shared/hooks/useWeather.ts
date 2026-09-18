@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import type { UbicacionGeo } from '@/types/weather.types'
+import type { UbicacionGeo } from '@/shared/types/weather.types'
 import {
   UBICACION_PREDETERMINADA,
   obtenerPronostico,
   buscarUbicaciones,
   geocodificarInverso,
-} from '@/api/weather.api'
+} from '@/shared/lib/weather'
 
 const CLAVE_STORAGE_UBICACION = 'sga_clima_ubicacion_v3'
 

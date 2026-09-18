@@ -15,10 +15,10 @@ import {
   Calendar,
   Clock,
 } from 'lucide-react'
-import { useWeather } from '@/hooks/useWeather'
+import { useWeather } from '@/shared/hooks/useWeather'
 import { IconoClima } from './IconoClima'
-import type { UbicacionGeo } from '@/types/weather.types'
-import { cn } from '@/lib/utils'
+import type { UbicacionGeo } from '@/shared/types/weather.types'
+import { cn } from '@/shared/lib/utils'
 
 export function ClimaWidget() {
   const {

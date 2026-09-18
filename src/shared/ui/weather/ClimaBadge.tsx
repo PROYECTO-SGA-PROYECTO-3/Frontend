@@ -1,7 +1,7 @@
 import { MapPin, RefreshCw, AlertCircle } from 'lucide-react'
-import { useWeather } from '@/hooks/useWeather'
+import { useWeather } from '@/shared/hooks/useWeather'
 import { IconoClima } from './IconoClima'
-import { cn } from '@/lib/utils'
+import { cn } from '@/shared/lib/utils'
 
 interface ClimaBadgeProps {
   onClick?: () => void

@@ -1,4 +1,4 @@
-import type { CondicionClimatica } from "@/types/weather.types";
+import type { CondicionClimatica } from "@/shared/types/weather.types";
 
 /**
  * Traduce el código de la Organización Meteorológica Mundial (WMO) a estado legible,

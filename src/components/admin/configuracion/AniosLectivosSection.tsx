@@ -1,6 +1,6 @@
 import { CalendarCheck, AlertCircle } from 'lucide-react'
-import { Skeleton } from '@/components/ui/Skeleton'
-import { DialogoConfirmacion } from '@/components/ui/DialogoConfirmacion'
+import { Skeleton } from '@/shared/ui/Skeleton'
+import { DialogoConfirmacion } from '@/shared/ui/DialogoConfirmacion'
 import { useGestionAniosLectivos } from '@/hooks/admin/configuracion/useGestionAniosLectivos'
 import { CrearAnioLectivoForm } from './CrearAnioLectivoForm'
 import { AnioLectivoFila } from './AnioLectivoFila'

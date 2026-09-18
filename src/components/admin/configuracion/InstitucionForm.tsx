@@ -1,6 +1,6 @@
 import { Save, CheckCircle2, AlertCircle } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
+import { Button } from '@/shared/ui/Button'
+import { Input } from '@/shared/ui/Input'
 import type { Institucion } from '@/types/institucion.types'
 import { useInstitucionForm } from '@/hooks/admin/configuracion/useInstitucionForm'
 

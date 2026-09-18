@@ -1,5 +1,5 @@
 import { Layers, Check } from 'lucide-react'
-import { Badge } from '@/components/ui/Badge'
+import { Badge } from '@/shared/ui/Badge'
 import type { AnioLectivo } from '@/types/anioLectivo.types'
 
 interface AnioLectivoFilaProps {

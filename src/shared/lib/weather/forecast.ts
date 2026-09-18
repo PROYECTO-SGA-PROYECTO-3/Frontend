@@ -3,7 +3,7 @@ import type {
 	DatosClimaCompletos,
 	PronosticoHora,
 	PronosticoDia,
-} from "@/types/weather.types";
+} from "@/shared/types/weather.types";
 import { FORECAST_URL } from "./config";
 import { interpretarCodigoWMO } from "./wmo-interpreter";
 

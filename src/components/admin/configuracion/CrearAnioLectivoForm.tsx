@@ -1,7 +1,7 @@
 import type { FormEvent } from 'react'
 import { Plus } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
-import { Input } from '@/components/ui/Input'
+import { Button } from '@/shared/ui/Button'
+import { Input } from '@/shared/ui/Input'
 
 interface CrearAnioLectivoFormProps {
   anioNuevo: string

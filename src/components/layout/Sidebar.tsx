@@ -16,8 +16,8 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
-import { cn, nombreCompleto } from '@/lib/utils'
-import { Avatar } from '@/components/ui/Avatar'
+import { cn, nombreCompleto } from '@/shared/lib/utils'
+import { Avatar } from '@/shared/ui/Avatar'
 import type { Rol } from '@/types/auth.types'
 import logoIe from '@/assets/logo-ie-descanse.png'
 

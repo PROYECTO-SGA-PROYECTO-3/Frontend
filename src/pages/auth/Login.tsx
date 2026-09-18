@@ -5,14 +5,14 @@ import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
 import { HelpCircle, Lock, User } from 'lucide-react'
 import logoIe from '@/assets/logo-ie-descanse.png'
-import { Input } from '@/components/ui/Input'
-import { Button } from '@/components/ui/Button'
+import { Input } from '@/shared/ui/Input'
+import { Button } from '@/shared/ui/Button'
 import { useAuthStore } from '@/store/auth.store'
 import { login as loginApi } from '@/api/auth.api'
 import { extraerMensajeError } from '@/api/axios'
 import type { Rol } from '@/types/auth.types'
 
-import { ClimaBadge } from '@/components/weather'
+import { ClimaBadge } from '@/shared/ui/weather'
 
 const RUTAS_POR_ROL: Record<Rol, string> = {
   ADMIN: '/admin',

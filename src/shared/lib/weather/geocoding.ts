@@ -1,4 +1,4 @@
-import type { UbicacionGeo } from "@/types/weather.types";
+import type { UbicacionGeo } from "@/shared/types/weather.types";
 import { GEOCODING_URL } from "./config";
 
 /**

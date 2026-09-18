@@ -1,5 +1,5 @@
 import { BookOpen, Clock, Users } from 'lucide-react'
-import { formatearHora } from '@/lib/utils'
+import { formatearHora } from '@/shared/lib/utils'
 import type { ClaseHoyDocente } from '@/types/dashboardDocente.types'
 
 interface CargaAcademicaProps {

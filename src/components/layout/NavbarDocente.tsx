@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Bell, ChevronRight } from 'lucide-react'
-import { Avatar } from '@/components/ui/Avatar'
-import { nombreCompleto } from '@/lib/utils'
+import { Avatar } from '@/shared/ui/Avatar'
+import { nombreCompleto } from '@/shared/lib/utils'
 import type { Usuario } from '@/types/auth.types'
 
 interface NavbarDocenteProps {

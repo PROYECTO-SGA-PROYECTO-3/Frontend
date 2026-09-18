@@ -1,5 +1,5 @@
 import { CalendarDays, PenLine } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
+import { Button } from '@/shared/ui/Button'
 
 interface BannerBienvenidaDocenteProps {
   nombre: string

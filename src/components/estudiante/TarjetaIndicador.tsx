@@ -1,7 +1,7 @@
 import type { LucideIcon } from 'lucide-react'
-import { Badge } from '@/components/ui/Badge'
-import type { BadgeColor } from '@/components/ui/Badge'
-import { cn } from '@/lib/utils'
+import { Badge } from '@/shared/ui/Badge'
+import type { BadgeColor } from '@/shared/ui/Badge'
+import { cn } from '@/shared/lib/utils'
 
 interface TarjetaIndicadorProps {
   icono: LucideIcon

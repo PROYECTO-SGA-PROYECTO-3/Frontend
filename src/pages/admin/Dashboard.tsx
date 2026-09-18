@@ -9,8 +9,8 @@ import { obtenerDashboardAdmin } from "@/api/dashboard.api";
 import { listarEventos } from "@/api/eventos.api";
 import { extraerMensajeError } from "@/api/axios";
 import { Navbar } from "@/components/layout/Navbar";
-import { StatCard } from "@/components/ui/StatCard";
-import { HeroStatCard } from "@/components/ui/HeroStatCard";
+import { StatCard } from "@/shared/ui/StatCard";
+import { HeroStatCard } from "@/shared/ui/HeroStatCard";
 import { DashboardSkeleton } from "./DashboardSkeleton";
 import { ProximosEventos } from "@/components/eventos/ProximosEventos";
 

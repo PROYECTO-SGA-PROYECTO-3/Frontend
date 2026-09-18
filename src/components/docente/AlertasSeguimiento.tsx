@@ -1,7 +1,7 @@
 import { AlertOctagon } from 'lucide-react'
-import { Avatar } from '@/components/ui/Avatar'
-import { Badge } from '@/components/ui/Badge'
-import { Button } from '@/components/ui/Button'
+import { Avatar } from '@/shared/ui/Avatar'
+import { Badge } from '@/shared/ui/Badge'
+import { Button } from '@/shared/ui/Button'
 import type { EstudianteBajoRendimiento } from '@/types/dashboardDocente.types'
 
 interface AlertasSeguimientoProps {

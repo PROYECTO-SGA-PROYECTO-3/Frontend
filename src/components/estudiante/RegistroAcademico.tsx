@@ -1,5 +1,5 @@
 import { Table2 } from 'lucide-react'
-import { cn, estiloNotaFinal } from '@/lib/utils'
+import { cn, estiloNotaFinal } from '@/shared/lib/utils'
 import type { AsignaturaCalificacion } from '@/types/calificaciones.types'
 
 const BARRAS_COLOR = ['bg-blue-500', 'bg-purple-500', 'bg-brand-500', 'bg-orange-500', 'bg-pink-500', 'bg-cyan-500']

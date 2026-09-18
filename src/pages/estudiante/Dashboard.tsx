@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { obtenerDashboardEstudiante } from '@/api/dashboard.api';
 import { extraerMensajeError } from '@/api/axios';
 import { useAuth } from '@/hooks/useAuth';
-import { Spinner } from '@/components/ui/Spinner';
+import { Spinner } from '@/shared/ui/Spinner';
 import { NavbarEstudiante } from '@/components/layout/NavbarEstudiante';
 import { TarjetaPromedio } from '@/components/estudiante/TarjetaPromedio';
 import { ProximosEventos } from '@/components/eventos/ProximosEventos';

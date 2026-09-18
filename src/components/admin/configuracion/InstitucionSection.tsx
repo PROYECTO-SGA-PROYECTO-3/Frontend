@@ -4,7 +4,7 @@ import { obtenerInstitucion } from '@/api/institucion.api'
 import { extraerMensajeError } from '@/api/axios'
 import { InstitucionForm } from './InstitucionForm'
 import { InstitucionMediaUploader } from './InstitucionMediaUploader'
-import { Skeleton } from '@/components/ui/Skeleton'
+import { Skeleton } from '@/shared/ui/Skeleton'
 
 export function InstitucionSection() {
   const {

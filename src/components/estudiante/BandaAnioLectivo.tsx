@@ -1,4 +1,4 @@
-import { Badge, type BadgeColor } from '@/components/ui/Badge'
+import { Badge, type BadgeColor } from '@/shared/ui/Badge'
 import type { ResumenAnioLectivoCalificaciones } from '@/types/calificaciones.types'
 import type { EstadoMatricula } from '@/types/matricula.types'
 
