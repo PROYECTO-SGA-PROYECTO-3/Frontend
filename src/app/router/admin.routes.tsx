@@ -11,6 +11,12 @@ const AdminConfiguracion = lazy(() =>
 const AdminMaterias = lazy(() =>
   import('@/features/materias').then((m) => ({ default: m.MateriasPage })),
 )
+const AdminDocentes = lazy(() =>
+  import('@/features/docentes').then((m) => ({ default: m.DocentesPage })),
+)
+const AdminDocenteFormulario = lazy(() =>
+  import('@/features/docentes').then((m) => ({ default: m.DocenteFormPage })),
+)
 
 export const adminRoutes: RouteObject = {
   element: <AdminLayout />,
@@ -18,5 +24,9 @@ export const adminRoutes: RouteObject = {
     { path: '/admin', element: <AdminDashboard /> },
     { path: '/admin/configuracion', element: <AdminConfiguracion /> },
     { path: '/admin/materias', element: <AdminMaterias /> },
+    { path: '/admin/docentes', element: <AdminDocentes /> },
+    { path: '/admin/docentes/nuevo', element: <AdminDocenteFormulario /> },
+    { path: '/admin/docentes/:id/editar', element: <AdminDocenteFormulario /> },
   ],
 }
+
