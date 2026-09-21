@@ -127,7 +127,7 @@ export default function DocentesPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50/50">
+    <div className="flex flex-1 flex-col bg-slate-50/50">
       <Navbar
         titulo="Docentes"
         subtitulo="Directorio y administración del cuerpo profesoral"
@@ -275,11 +275,6 @@ export default function DocentesPage() {
           setErrorAccion(null)
         }}
       />
-
-      {/* Pie institucional */}
-      <footer className="mt-auto border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500">
-        &copy; {new Date().getFullYear()} Institución Educativa Agrícola Fray Isidoro de Montclar &bull; Sistema de Gestión Académica (SGA)
-      </footer>
     </div>
   )
 }

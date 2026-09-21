@@ -4,7 +4,7 @@ import { AniosLectivosSection } from '../components/AniosLectivosSection'
 
 export default function Configuracion() {
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex flex-1 flex-col">
       <Navbar
         titulo="Configuración General"
         subtitulo="Ajustes institucionales y régimen de años lectivos"
@@ -27,10 +27,6 @@ export default function Configuracion() {
         {/* Sección 2: Años Lectivos y Periodos Académicos */}
         <AniosLectivosSection />
       </main>
-
-      <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500">
-        &copy; {new Date().getFullYear()} IE FRAY ISIDORO de Montclar &bull; Sistema de Gestión Académica (SGA)
-      </footer>
     </div>
   )
 }

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Menu } from 'lucide-react'
 import { Outlet } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar'
+import { Footer } from './components/Footer'
 import { useAnioLectivo } from '@/features/configuracion'
 
 export function Layout() {
@@ -26,7 +27,10 @@ export function Layout() {
         >
           <Menu size={20} />
         </button>
-        <Outlet />
+        <div className="flex flex-1 flex-col">
+          <Outlet />
+        </div>
+        <Footer />
       </div>
     </div>
   )
