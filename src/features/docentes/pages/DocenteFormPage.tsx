@@ -97,7 +97,7 @@ export default function DocenteFormPage() {
 	const estaGuardando = estaCreando || estaActualizando;
 
 	return (
-		<div className="flex min-h-screen flex-col bg-slate-50/50">
+		<div className="flex flex-1 flex-col bg-slate-50/50">
 			<Navbar
 				titulo="Docentes"
 				subtitulo={
@@ -279,12 +279,6 @@ export default function DocenteFormPage() {
 					</div>
 				)}
 			</main>
-
-			{/* Pie institucional */}
-			<footer className="mt-auto border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500">
-				&copy; {new Date().getFullYear()} Institución Educativa Agrícola Fray
-				Isidoro de Montclar &bull; Sistema de Gestión Académica (SGA)
-			</footer>
 		</div>
 	);
 }

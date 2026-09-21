@@ -12,6 +12,7 @@ import { extraerMensajeError } from '@/shared/lib/axios'
 import type { Rol } from '../types'
 
 import { ClimaBadge } from '@/shared/ui/weather'
+import { Footer } from '@/layouts'
 
 const RUTAS_POR_ROL: Record<Rol, string> = {
   ADMIN: '/admin',
@@ -135,11 +136,7 @@ export default function Login() {
         </div>
       </main>
 
-      <footer className="relative border-t border-slate-100 py-4 text-center text-xs text-slate-400">
-        <p>© {new Date().getFullYear()} Institución Educativa Agrícola Fray Isidoro de Montclar.</p>
-        <p>Descanse - Cauca, Colombia</p>
-        <span className="absolute inset-x-0 bottom-0 h-1 bg-linear-to-r from-brand-600 via-accent-400 to-blue-400" />
-      </footer>
+      <Footer showLocation showAccentBar />
     </div>
   )
 }

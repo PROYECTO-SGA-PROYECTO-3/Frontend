@@ -54,11 +54,6 @@ export default function Dashboard() {
           </div>
         )}
       </main>
-
-      <footer className="border-t border-slate-100 py-4 text-center text-xs text-slate-400">
-        © {new Date().getFullYear()} Institución Educativa Agrícola Fray Isidoro de Montclar. Todos los
-        derechos reservados.
-      </footer>
     </>
   );
 }

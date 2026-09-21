@@ -44,7 +44,7 @@ export default function Dashboard() {
 	const estaCargando = cargandoDashboard || cargandoEventos;
 
 	return (
-		<div className="flex h-full flex-col">
+		<div className="flex flex-1 flex-col">
 			<Navbar
 				titulo="Panel de Control"
 				subtitulo="Institución Educativa Agrícola Fray Isidoro"
