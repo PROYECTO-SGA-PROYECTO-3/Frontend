@@ -1,2 +1,5 @@
 export * from './types'
 export * from './api/estudiantesApi'
+export * from './hooks'
+export * from './components'
+export * from './pages/EstudiantesPage'
