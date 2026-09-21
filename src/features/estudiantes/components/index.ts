@@ -1,0 +1,6 @@
+export * from './EstudianteFila'
+export * from './EstudiantesTable'
+export * from './EstudiantesToolbar'
+export * from './EstudiantesStats'
+export * from './EstudiantesSkeleton'
+export * from './EstudiantesEmptyState'
