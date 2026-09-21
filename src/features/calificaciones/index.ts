@@ -1,0 +1,8 @@
+export * from './types'
+export * from './api/calificacionesApi'
+export * from './api/boletinApi'
+export { BandaAnioLectivo } from './components/BandaAnioLectivo'
+export { RegistroAcademico } from './components/RegistroAcademico'
+export { TarjetaIndicador } from './components/TarjetaIndicador'
+export { TarjetaPromedio } from './components/TarjetaPromedio'
+export { default as CalificacionesEstudiantePage } from './pages/CalificacionesEstudiantePage'

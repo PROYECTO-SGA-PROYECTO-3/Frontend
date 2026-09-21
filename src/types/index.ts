@@ -1,6 +1,0 @@
-export * from './auth.types'
-export * from './api.types'
-export * from './matricula.types'
-export * from './calificaciones.types'
-export * from './anioLectivo.types'
-export * from './dashboardDocente.types'
