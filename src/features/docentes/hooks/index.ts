@@ -1,0 +1,5 @@
+export * from './useCatalogoDocentes'
+export * from './useDocenteDetalle'
+export * from './useDocenteMutations'
+export * from './useFiltroDocentes'
+export * from './useValidacionDocente'
