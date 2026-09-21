@@ -8,11 +8,15 @@ const AdminDashboard = lazy(() =>
 const AdminConfiguracion = lazy(() =>
   import('@/features/configuracion').then((m) => ({ default: m.ConfiguracionPage })),
 )
+const AdminMaterias = lazy(() =>
+  import('@/features/materias').then((m) => ({ default: m.MateriasPage })),
+)
 
 export const adminRoutes: RouteObject = {
   element: <AdminLayout />,
   children: [
     { path: '/admin', element: <AdminDashboard /> },
     { path: '/admin/configuracion', element: <AdminConfiguracion /> },
+    { path: '/admin/materias', element: <AdminMaterias /> },
   ],
 }
