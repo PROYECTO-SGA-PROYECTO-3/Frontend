@@ -1,0 +1,7 @@
+export * from './DocentesStats'
+export * from './DocentesToolbar'
+export * from './DocenteFila'
+export * from './DocentesTable'
+export * from './DocentesSkeleton'
+export * from './DocentesEmptyState'
+export * from './DocenteFirmaUploader'
