@@ -30,3 +30,15 @@ export interface SolicitudActualizarEstudiante {
   primerApellido: string
   segundoApellido?: string
 }
+
+export interface ParametrosListarEstudiantes {
+  pagina?: number
+  tamanoPagina?: number
+  incluirInactivos?: boolean
+  termino?: string
+  gradoId?: number
+  sortBy?: string
+  direction?: 'ASC' | 'DESC'
+}
+
+export type FiltroEstadoEstudiante = 'TODOS' | 'ACTIVOS' | 'INACTIVOS'
