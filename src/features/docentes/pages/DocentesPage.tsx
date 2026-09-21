@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AlertTriangle, CheckCircle2, RotateCcw } from 'lucide-react'
+import { CheckCircle2 } from 'lucide-react'
 import { Navbar } from '@/layouts'
-import { Button, DialogoConfirmacion } from '@/shared/ui'
+import { DialogoConfirmacion, ErrorState } from '@/shared/ui'
 import { nombreCompleto } from '@/shared/lib/utils'
 import {
   useCatalogoDocentes,
@@ -196,19 +196,11 @@ export default function DocentesPage() {
           {isLoading ? (
             <DocentesSkeleton cantidadFilas={6} />
           ) : isError ? (
-            <div className="flex flex-col items-center justify-center rounded-2xl border border-red-200 bg-red-50/50 p-10 text-center shadow-xs">
-              <AlertTriangle size={32} className="text-red-500" />
-              <h3 className="mt-3 text-base font-bold text-red-900">
-                Error al cargar el listado de docentes
-              </h3>
-              <p className="mt-1 text-sm text-red-700">{error}</p>
-              <div className="mt-5">
-                <Button variant="secondary" onClick={() => refetch()}>
-                  <RotateCcw size={16} />
-                  Reintentar carga
-                </Button>
-              </div>
-            </div>
+            <ErrorState
+              titulo="Error al cargar el listado de docentes"
+              mensaje={error}
+              onRetry={() => refetch()}
+            />
           ) : docentes.length === 0 ? (
             <DocentesEmptyState esBusqueda={false} onCrear={handleCrear} />
           ) : docentesFiltrados.length === 0 ? (

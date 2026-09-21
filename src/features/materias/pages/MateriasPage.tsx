@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Navbar } from "@/layouts";
-import { DialogoConfirmacion } from "@/shared/ui/DialogoConfirmacion";
-import { Button } from "@/shared/ui/Button";
-import { AlertTriangle, CheckCircle2, RotateCcw } from "lucide-react";
+import { DialogoConfirmacion, ErrorState } from "@/shared/ui";
+import { CheckCircle2 } from "lucide-react";
 import {
 	useCatalogoMaterias,
 	useMateriaMutations,
@@ -194,19 +193,11 @@ export default function MateriasPage() {
 					{isLoading ? (
 						<MateriasSkeleton cantidad={6} />
 					) : isError ? (
-						<div className="flex flex-col items-center justify-center rounded-2xl border border-red-200 bg-red-50/50 p-10 text-center shadow-xs">
-							<AlertTriangle size={32} className="text-red-500" />
-							<h3 className="mt-3 text-base font-bold text-red-900">
-								Error al cargar el catálogo de materias
-							</h3>
-							<p className="mt-1 text-sm text-red-700">{error}</p>
-							<div className="mt-5 w-auto">
-								<Button variant="secondary" onClick={() => refetch()}>
-									<RotateCcw size={16} />
-									Reintentar carga
-								</Button>
-							</div>
-						</div>
+						<ErrorState
+							titulo="Error al cargar el catálogo de materias"
+							mensaje={error}
+							onRetry={() => refetch()}
+						/>
 					) : asignaturas.length === 0 ? (
 						<MateriasEmptyState esBusqueda={false} onCrear={handleAbrirCrear} />
 					) : materiasFiltradas.length === 0 ? (
