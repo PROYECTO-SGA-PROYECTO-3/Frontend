@@ -1,55 +1,48 @@
-import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { obtenerDashboardDocente } from './api'
 import { extraerMensajeError } from '@/shared/lib/axios'
 import { useAuth } from '@/features/auth'
-import { Spinner } from '@/shared/ui/Spinner'
 import { NavbarDocente } from '@/layouts'
 import { BannerBienvenida } from './BannerBienvenida'
-import { CargaAcademica } from '@/features/carga-academica'
+import { DocenteDashboardSkeleton } from './DocenteDashboardSkeleton'
+import { useDashboardDocente } from './hooks/useDashboardDocente'
+import { ClasesHoy } from '@/features/carga-academica'
 import { CierrePeriodo } from '@/features/periodos'
 import { AlertasSeguimiento } from '@/features/seguimiento'
-import type { DashboardDocente } from './types'
+import { ProximosEventos, useEventosInstitucionales } from '@/features/eventos'
+import { ErrorState } from '@/shared/ui/ErrorState'
 
 export default function DocenteDashboard() {
   const { usuario } = useAuth()
   const navigate = useNavigate()
-  const [dashboard, setDashboard] = useState<DashboardDocente | null>(null)
-  const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    let vigente = true
+  const {
+    data: dashboard,
+    isLoading: cargandoDashboard,
+    isError: hayErrorDashboard,
+    error: errorDashboardObj,
+    refetch: reintentarDashboard,
+  } = useDashboardDocente()
 
-    obtenerDashboardDocente()
-      .then((datos) => {
-        if (vigente) setDashboard(datos)
-      })
-      .catch((err: unknown) => {
-        if (vigente) setError(extraerMensajeError(err))
-      })
-
-    return () => {
-      vigente = false
-    }
-  }, [])
+  const { data: eventos = [] } = useEventosInstitucionales()
 
   if (!usuario) return null
 
   return (
     <>
-      <NavbarDocente usuario={usuario} cargo={dashboard?.docente.cargo ?? ''} seccionActual="Inicio" />
+      <NavbarDocente seccionActual="Inicio" />
 
-      <main className="flex-1 p-4 sm:p-6 lg:p-8">
-        {error ? (
-          <p className="rounded-xl border border-slate-200 bg-white p-8 text-center text-sm text-red-500 shadow-sm">
-            {error}
-          </p>
-        ) : !dashboard ? (
-          <div className="flex justify-center rounded-xl border border-slate-200 bg-white py-16 shadow-sm">
-            <Spinner />
-          </div>
+      <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
+        {hayErrorDashboard ? (
+          <ErrorState
+            titulo="Error al cargar el panel del docente"
+            mensaje={extraerMensajeError(errorDashboardObj)}
+            onRetry={() => reintentarDashboard()}
+          />
+        ) : cargandoDashboard || !dashboard ? (
+          <DocenteDashboardSkeleton />
         ) : (
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            {/* Columna Principal: Responsabilidades y Clases */}
             <div className="flex flex-col gap-6 lg:col-span-2">
               <BannerBienvenida
                 nombre={dashboard.docente.nombreCompleto}
@@ -57,15 +50,21 @@ export default function DocenteDashboard() {
                 onCalificarAhora={() => navigate('/docente/planilla')}
                 onVerCalendario={() => navigate('/calendario')}
               />
-              <CargaAcademica clases={dashboard.clasesDeHoy} />
+
+              <ClasesHoy clases={dashboard.clasesDeHoy} />
+
               <AlertasSeguimiento
                 estudiantes={dashboard.estudiantesBajoRendimiento}
+                planillasPendientes={dashboard.planillasPendientes}
+                onSubirNotas={() => navigate('/docente/planilla')}
                 onVerReporteCompleto={() => navigate('/docente/alertas-seguimiento')}
               />
             </div>
 
+            {/* Columna Lateral: Periodo y Eventos Institucionales */}
             <div className="flex flex-col gap-6">
               <CierrePeriodo {...dashboard.cierrePeriodo} />
+              <ProximosEventos eventos={eventos} />
             </div>
           </div>
         )}

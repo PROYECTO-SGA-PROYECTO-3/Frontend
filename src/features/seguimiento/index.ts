@@ -1,3 +1,5 @@
 export * from './types'
 export * from './api/seguimientoApi'
+export * from './hooks/useAlertasSeguimientoDocente'
 export { AlertasSeguimiento } from './components/AlertasSeguimiento'
+export { AlertasSeguimientoDocentePage } from './pages/AlertasSeguimientoDocentePage'
