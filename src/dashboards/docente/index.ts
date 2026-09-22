@@ -1,4 +1,6 @@
 export * from './types'
 export * from './api'
+export * from './hooks/useDashboardDocente'
 export { default as DocenteDashboard } from './DocenteDashboard'
-export { BannerBienvenida as BannerBienvenidaDocente } from './BannerBienvenida'
+export { BannerBienvenida as BannerBienvenidaDocente, BannerBienvenida } from './BannerBienvenida'
+export { DocenteDashboardSkeleton } from './DocenteDashboardSkeleton'
