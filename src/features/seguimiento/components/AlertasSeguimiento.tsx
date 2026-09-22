@@ -1,4 +1,4 @@
-import { AlertOctagon } from 'lucide-react'
+import { AlertOctagon, AlertTriangle } from 'lucide-react'
 import { Avatar } from '@/shared/ui/Avatar'
 import { Badge } from '@/shared/ui/Badge'
 import { Button } from '@/shared/ui/Button'
@@ -7,17 +7,50 @@ import type { EstudianteBajoRendimiento } from '../types'
 interface AlertasSeguimientoProps {
   estudiantes: EstudianteBajoRendimiento[]
   onVerReporteCompleto: () => void
+  planillasPendientes?: number
+  onSubirNotas?: () => void
 }
 
-export function AlertasSeguimiento({ estudiantes, onVerReporteCompleto }: AlertasSeguimientoProps) {
+export function AlertasSeguimiento({
+  estudiantes,
+  onVerReporteCompleto,
+  planillasPendientes = 0,
+  onSubirNotas,
+}: AlertasSeguimientoProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <section aria-labelledby="alertas-seguimiento-titulo" className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="flex items-center gap-3">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-red-50 text-red-600">
           <AlertOctagon size={18} />
         </div>
-        <h3 className="text-lg font-bold text-slate-900">Alertas de Seguimiento</h3>
+        <h3 id="alertas-seguimiento-titulo" className="text-lg font-bold text-slate-900">
+          Alertas de Seguimiento
+        </h3>
       </div>
+
+      {planillasPendientes > 0 && (
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-accent-100/60 p-3.5">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <AlertTriangle size={18} className="shrink-0 text-accent-600" />
+            <p className="text-xs font-medium text-slate-700 truncate">
+              Faltan subir calificaciones en{' '}
+              <span className="font-semibold text-slate-900">
+                {planillasPendientes} {planillasPendientes === 1 ? 'planilla' : 'planillas'}
+              </span>
+            </p>
+          </div>
+          {onSubirNotas && (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={onSubirNotas}
+              className="shrink-0 h-8 px-2.5 text-xs font-semibold"
+            >
+              Subir notas
+            </Button>
+          )}
+        </div>
+      )}
 
       {estudiantes.length === 0 ? (
         <p className="mt-4 text-sm text-slate-400">No hay estudiantes en seguimiento por ahora.</p>
@@ -46,6 +79,6 @@ export function AlertasSeguimiento({ estudiantes, onVerReporteCompleto }: Alerta
           Ver reporte completo
         </Button>
       </div>
-    </div>
+    </section>
   )
 }
