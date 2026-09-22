@@ -30,9 +30,9 @@ export function AlertasSeguimiento({
 
       {planillasPendientes > 0 && (
         <div className="mt-4 flex items-center justify-between gap-3 rounded-xl border border-amber-200 bg-accent-100/60 p-3.5">
-          <div className="flex items-center gap-2.5 min-w-0">
+          <div className="flex min-w-0 flex-1 items-center gap-2.5">
             <AlertTriangle size={18} className="shrink-0 text-accent-600" />
-            <p className="text-xs font-medium text-slate-700 truncate">
+            <p className="truncate text-xs font-medium text-slate-700">
               Faltan subir calificaciones en{' '}
               <span className="font-semibold text-slate-900">
                 {planillasPendientes} {planillasPendientes === 1 ? 'planilla' : 'planillas'}
@@ -44,7 +44,7 @@ export function AlertasSeguimiento({
               type="button"
               variant="secondary"
               onClick={onSubirNotas}
-              className="shrink-0 h-8 px-2.5 text-xs font-semibold"
+              className="h-8 w-auto shrink-0 px-3 text-xs font-semibold whitespace-nowrap"
             >
               Subir notas
             </Button>

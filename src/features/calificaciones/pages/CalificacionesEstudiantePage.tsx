@@ -6,7 +6,7 @@ import { extraerMensajeError } from '@/shared/lib/axios'
 import { useAuth } from '@/features/auth'
 import { Spinner } from '@/shared/ui/Spinner'
 import { Button } from '@/shared/ui/Button'
-import { NavbarEstudiante } from '@/layouts'
+import { PageHeader } from '@/layouts'
 import { TarjetaIndicador } from '../components/TarjetaIndicador'
 import { BandaAnioLectivo } from '../components/BandaAnioLectivo'
 import { RegistroAcademico } from '../components/RegistroAcademico'
@@ -62,10 +62,8 @@ export default function Calificaciones() {
 
   return (
     <>
-      <NavbarEstudiante
-        usuario={usuario}
-        gradoNombre={calificaciones?.anioLectivo.gradoNombre}
-        raiz="Académico"
+      <PageHeader
+        raiz="Portal Académico"
         seccionActual="Detalle de Notas"
       >
         <div className="flex flex-col items-end gap-1">
@@ -77,7 +75,7 @@ export default function Calificaciones() {
           </div>
           {errorBoletin && <p className="text-xs text-red-500">{errorBoletin}</p>}
         </div>
-      </NavbarEstudiante>
+      </PageHeader>
 
       <main className="flex-1 p-8">
         {error ? (
@@ -136,3 +134,5 @@ export default function Calificaciones() {
     </>
   )
 }
+
+

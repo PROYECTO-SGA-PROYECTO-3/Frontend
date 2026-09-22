@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, IdCard, Pencil, Plus, Save, User } from "lucide-react";
-import { Navbar } from "@/layouts";
+import { PageHeader } from "@/layouts";
 import { Button, Input, Skeleton } from "@/shared/ui";
 import {
 	crearEsquemaDocente,
@@ -98,14 +98,9 @@ export default function DocenteFormPage() {
 
 	return (
 		<div className="flex flex-1 flex-col bg-slate-50/50">
-			<Navbar
-				titulo="Docentes"
-				subtitulo={
-					esEdicion
-						? "Administración › Editar docente"
-						: "Administración › Nuevo docente"
-				}
-				sistemaEnLinea
+			<PageHeader
+				raiz="Portal Administrativo"
+				seccionActual={esEdicion ? "Editar Docente" : "Nuevo Docente"}
 			/>
 
 			<main className="mx-auto w-full max-w-4xl flex-1 space-y-6 p-6 md:p-8 xl:p-10">
@@ -282,3 +277,4 @@ export default function DocenteFormPage() {
 		</div>
 	);
 }
+

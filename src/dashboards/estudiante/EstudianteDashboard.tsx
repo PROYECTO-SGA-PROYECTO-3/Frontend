@@ -3,7 +3,7 @@ import { obtenerDashboardEstudiante } from './api';
 import { extraerMensajeError } from '@/shared/lib/axios';
 import { useAuth } from '@/features/auth';
 import { Spinner } from '@/shared/ui/Spinner';
-import { NavbarEstudiante } from '@/layouts';
+import { PageHeader } from '@/layouts';
 import { TarjetaPromedio } from '@/features/calificaciones';
 import { ProximosEventos } from '@/features/eventos';
 import { AsignaturasHoy } from '@/features/carga-academica';
@@ -32,7 +32,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <NavbarEstudiante usuario={usuario} gradoNombre={dashboard?.estudiante.gradoNombre} seccionActual="Inicio"></NavbarEstudiante>
+      <PageHeader raiz="Portal Académico" seccionActual="Inicio" />
 
       <main className="flex-1 p-8">
         {error ? (
@@ -57,3 +57,4 @@ export default function Dashboard() {
     </>
   );
 }
+

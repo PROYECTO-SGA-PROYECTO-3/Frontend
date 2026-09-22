@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Pencil, Plus } from "lucide-react";
-import { Navbar } from "@/layouts";
+import { PageHeader } from "@/layouts";
 import { ErrorState, Skeleton } from "@/shared/ui";
 import {
 	useEstudianteDetalle,
@@ -73,14 +73,9 @@ export function EstudianteFormPage() {
 
 	return (
 		<div className="flex flex-1 flex-col bg-slate-50/50">
-			<Navbar
-				titulo="Estudiantes"
-				subtitulo={
-					esEdicion
-						? "Administración › Editar estudiante"
-						: "Administración › Nuevo estudiante"
-				}
-				sistemaEnLinea
+			<PageHeader
+				raiz="Portal Administrativo"
+				seccionActual={esEdicion ? "Editar Estudiante" : "Nuevo Estudiante"}
 			/>
 
 			<main className="mx-auto w-full max-w-4xl flex-1 space-y-6 p-6 md:p-8 xl:p-10">
@@ -146,3 +141,4 @@ export function EstudianteFormPage() {
 		</div>
 	);
 }
+

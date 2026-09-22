@@ -1,14 +1,13 @@
-import { Navbar } from '@/layouts'
+import { PageHeader } from '@/layouts'
 import { InstitucionSection } from '../components/InstitucionSection'
 import { AniosLectivosSection } from '../components/AniosLectivosSection'
 
 export default function Configuracion() {
   return (
     <div className="flex flex-1 flex-col">
-      <Navbar
-        titulo="Configuración General"
-        subtitulo="Ajustes institucionales y régimen de años lectivos"
-        sistemaEnLinea
+      <PageHeader
+        raiz="Portal Administrativo"
+        seccionActual="Configuración General"
       />
 
       <main className="flex-1 p-6 md:p-8 xl:p-10 max-w-[1600px] mx-auto w-full space-y-10">
@@ -30,3 +29,4 @@ export default function Configuracion() {
     </div>
   )
 }
+

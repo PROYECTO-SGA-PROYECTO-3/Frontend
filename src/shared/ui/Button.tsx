@@ -9,12 +9,15 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, isLoading, variant = 'primary', disabled, children, ...props }, ref) => {
+    const hasCustomWidth = className && /\b(w-auto|w-fit|w-\d+|w-\[|w-full)\b/.test(className)
+
     return (
       <button
         ref={ref}
         disabled={disabled || isLoading}
         className={cn(
-          'inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-70',
+          'inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-70',
+          !hasCustomWidth && 'w-full',
           variant === 'primary' &&
             'bg-brand-700 text-white hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-brand-700',
           variant === 'secondary' &&
