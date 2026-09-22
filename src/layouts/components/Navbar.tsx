@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { ChevronDown, Settings } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 import { useAnioLectivo } from '@/features/configuracion'
 
@@ -82,14 +81,6 @@ export function Navbar({ titulo, subtitulo, sistemaEnLinea = true }: NavbarProps
           />
           {sistemaEnLinea ? 'Sistema en línea' : 'Sistema fuera de línea'}
         </span>
-
-        <Link
-          to="/admin/configuracion"
-          aria-label="Configuración"
-          className="cursor-pointer rounded-full p-2 text-slate-500 hover:bg-slate-100"
-        >
-          <Settings size={20} />
-        </Link>
       </div>
     </header>
   )
