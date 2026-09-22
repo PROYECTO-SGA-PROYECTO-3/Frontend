@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { extraerMensajeError } from '@/shared/lib/axios'
 import { useAuth } from '@/features/auth'
-import { NavbarDocente } from '@/layouts'
+import { PageHeader } from '@/layouts'
 import { BannerBienvenida } from './BannerBienvenida'
 import { DocenteDashboardSkeleton } from './DocenteDashboardSkeleton'
 import { useDashboardDocente } from './hooks/useDashboardDocente'
@@ -29,7 +29,7 @@ export default function DocenteDashboard() {
 
   return (
     <>
-      <NavbarDocente seccionActual="Inicio" />
+      <PageHeader raiz="Portal Docente" seccionActual="Inicio" />
 
       <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
         {hayErrorDashboard ? (
@@ -72,3 +72,5 @@ export default function DocenteDashboard() {
     </>
   )
 }
+
+
