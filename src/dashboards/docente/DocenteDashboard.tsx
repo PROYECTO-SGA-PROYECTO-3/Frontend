@@ -37,7 +37,7 @@ export default function DocenteDashboard() {
 
   return (
     <>
-      <NavbarDocente usuario={usuario} cargo={dashboard?.docente.cargo ?? ''} seccionActual="Inicio" />
+      <NavbarDocente seccionActual="Inicio" />
 
       <main className="flex-1 p-4 sm:p-6 lg:p-8">
         {error ? (
