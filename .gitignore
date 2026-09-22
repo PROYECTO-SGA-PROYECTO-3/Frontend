@@ -32,6 +32,8 @@ dist-ssr
 CLAUDE.md
 AGENTS.md
 .agents
+DESIGN.md
+PRODUCT.md
 
 # No subir graphify
 graphify-out/
