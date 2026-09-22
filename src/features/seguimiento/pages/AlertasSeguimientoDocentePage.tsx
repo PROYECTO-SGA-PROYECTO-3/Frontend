@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { AlertOctagon, ArrowLeft, GraduationCap } from 'lucide-react'
-import { NavbarDocente } from '@/layouts'
+import { PageHeader } from '@/layouts'
 import { Avatar } from '@/shared/ui/Avatar'
 import { Badge } from '@/shared/ui/Badge'
 import { Skeleton } from '@/shared/ui/Skeleton'
@@ -13,7 +13,7 @@ export function AlertasSeguimientoDocentePage() {
 
   return (
     <>
-      <NavbarDocente raiz="Portal Docente" seccionActual="Alertas de Seguimiento" />
+      <PageHeader raiz="Portal Docente" seccionActual="Alertas de Seguimiento" />
 
       <main className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full">
         <Link
@@ -127,3 +127,5 @@ export function AlertasSeguimientoDocentePage() {
     </>
   )
 }
+
+

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Navbar } from "@/layouts";
+import { PageHeader } from "@/layouts";
 import { DialogoConfirmacion, ErrorState } from "@/shared/ui";
 import { CheckCircle2 } from "lucide-react";
 import {
@@ -133,10 +133,9 @@ export default function MateriasPage() {
 
 	return (
 		<div className="flex flex-1 flex-col bg-slate-50/50">
-			<Navbar
-				titulo="Materias"
-				subtitulo="Catálogo institucional de asignaturas"
-				sistemaEnLinea
+			<PageHeader
+				raiz="Portal Administrativo"
+				seccionActual="Materias"
 			/>
 
 			<main className="mx-auto w-full max-w-7xl flex-1 space-y-8 p-6 md:p-8 xl:p-10">
@@ -255,3 +254,4 @@ export default function MateriasPage() {
 		</div>
 	);
 }
+

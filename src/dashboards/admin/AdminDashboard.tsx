@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { obtenerDashboardAdmin } from "./api";
 import { listarEventos, ProximosEventos } from "@/features/eventos";
 import { extraerMensajeError } from "@/shared/lib/axios";
-import { Navbar } from "@/layouts";
+import { PageHeader } from "@/layouts";
 import { StatCard } from "@/shared/ui/StatCard";
 import { HeroStatCard } from "@/shared/ui/HeroStatCard";
 import { DashboardSkeleton } from "./DashboardSkeleton";
@@ -45,10 +45,9 @@ export default function Dashboard() {
 
 	return (
 		<div className="flex flex-1 flex-col">
-			<Navbar
-				titulo="Panel de Control"
-				subtitulo="Institución Educativa Agrícola Fray Isidoro"
-				sistemaEnLinea 
+			<PageHeader
+				raiz="Portal Administrativo"
+				seccionActual="Panel de Control"
 			/>
 
 			<main className="flex-1 p-6 md:p-8 xl:p-10 max-w-[1600px] mx-auto w-full">
@@ -122,3 +121,4 @@ export default function Dashboard() {
 		</div>
 	);
 }
+
