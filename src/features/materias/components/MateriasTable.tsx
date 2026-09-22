@@ -17,10 +17,16 @@ export function MateriasTable({ materias, onEditar, onEliminar }: MateriasTableP
               <th scope="col" className="w-16 px-6 py-3.5 text-center">
                 #
               </th>
+              <th scope="col" className="w-28 px-4 py-3.5">
+                Código
+              </th>
               <th scope="col" className="px-6 py-3.5">
                 Asignatura
               </th>
-              <th scope="col" className="w-32 px-6 py-3.5 text-right">
+              <th scope="col" className="w-32 px-4 py-3.5 text-center">
+                Estado
+              </th>
+              <th scope="col" className="w-28 px-6 py-3.5 text-right">
                 Acciones
               </th>
             </tr>

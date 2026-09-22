@@ -139,21 +139,24 @@ export default function MateriasPage() {
 				sistemaEnLinea
 			/>
 
-			<main className="mx-auto w-full max-w-[1600px] flex-1 space-y-8 p-6 md:p-8 xl:p-10">
-				{/* Banner de notificación de éxito */}
+			<main className="mx-auto w-full max-w-7xl flex-1 space-y-8 p-6 md:p-8 xl:p-10">
+				{/* Notificación de éxito flotante (sin Layout Shift) */}
 				{mensajeExito && (
 					<div
 						role="status"
-						className="flex items-center justify-between gap-3 rounded-xl border border-brand-200 bg-brand-50/90 px-4 py-3 text-sm text-brand-900 shadow-xs animate-in fade-in slide-in-from-top-2 duration-300"
+						className="fixed bottom-6 right-6 z-50 flex max-w-md items-center justify-between gap-3 rounded-xl border border-brand-200 bg-white/95 p-4 text-sm text-slate-800 shadow-xl backdrop-blur-xs animate-in fade-in slide-in-from-bottom-3 duration-300"
 					>
-						<div className="flex items-center gap-2">
-							<CheckCircle2 size={18} className="text-brand-700 shrink-0" />
-							<span className="font-medium">{mensajeExito}</span>
+						<div className="flex items-center gap-2.5">
+							<div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-700">
+								<CheckCircle2 size={18} />
+							</div>
+							<span className="font-medium text-slate-900">{mensajeExito}</span>
 						</div>
 						<button
 							type="button"
 							onClick={() => setMensajeExito(null)}
-							className="cursor-pointer text-brand-700 hover:text-brand-900"
+							aria-label="Cerrar notificación"
+							className="cursor-pointer rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 text-lg leading-none"
 						>
 							&times;
 						</button>
