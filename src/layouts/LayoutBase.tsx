@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, Suspense } from 'react'
 import { Menu } from 'lucide-react'
 import { Outlet } from 'react-router-dom'
 import { Sidebar } from './components/Sidebar'
 import { Footer } from './components/Footer'
 import { useAnioLectivo } from '@/features/configuracion'
+import { Spinner } from '@/shared/ui/Spinner'
 
 export function Layout() {
   const cargarAnios = useAnioLectivo().cargarAnios
@@ -28,10 +29,19 @@ export function Layout() {
           <Menu size={20} />
         </button>
         <div className="flex flex-1 flex-col">
-          <Outlet />
+          <Suspense
+            fallback={
+              <div className="flex flex-1 items-center justify-center p-8">
+                <Spinner />
+              </div>
+            }
+          >
+            <Outlet />
+          </Suspense>
         </div>
         <Footer />
       </div>
     </div>
   )
 }
+

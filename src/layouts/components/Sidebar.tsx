@@ -1,86 +1,13 @@
 import { NavLink } from 'react-router-dom'
-import {
-  BarChart3,
-  BookMarked,
-  BookOpen,
-  CalendarDays,
-  ClipboardList,
-  FileText,
-  GraduationCap,
-  HelpCircle,
-  Home,
-  LayoutDashboard,
-  LogOut,
-  Settings,
-  Users,
-  type LucideIcon,
-} from 'lucide-react'
-import { useAuth, useAuthorization, type Rol } from '@/features/auth'
+import { LogOut } from 'lucide-react'
+import { useAuth } from '@/features/auth'
 import { cn, nombreCompleto } from '@/shared/lib/utils'
 import { Avatar } from '@/shared/ui/Avatar'
 import logoIe from '@/assets/logo-ie-descanse.png'
-
-interface ItemNav {
-  etiqueta: string
-  ruta: string
-  icono: LucideIcon
-  roles: Rol[]
-}
-
-/**
- * Catálogo maestro declarativo de navegación principal por roles autorizados (Regla 5).
- */
-const ITEMS_NAV_PRINCIPAL: ItemNav[] = [
-  // Dashboards / Vistas iniciales por rol
-  { etiqueta: 'Dashboard', ruta: '/admin', icono: LayoutDashboard, roles: ['ADMIN'] },
-  { etiqueta: 'Inicio', ruta: '/docente', icono: LayoutDashboard, roles: ['DOCENTE'] },
-  { etiqueta: 'Inicio', ruta: '/estudiante', icono: Home, roles: ['ESTUDIANTE'] },
-
-  // Calendario institucional compartido
-  {
-    etiqueta: 'Calendario',
-    ruta: '/calendario',
-    icono: CalendarDays,
-    roles: ['ADMIN', 'DOCENTE', 'ESTUDIANTE'],
-  },
-
-  // Gestión administrativa (Admin)
-  { etiqueta: 'Docentes', ruta: '/admin/docentes', icono: Users, roles: ['ADMIN'] },
-  { etiqueta: 'Estudiantes', ruta: '/admin/estudiantes', icono: GraduationCap, roles: ['ADMIN'] },
-  { etiqueta: 'Cursos', ruta: '/admin/cursos', icono: BookOpen, roles: ['ADMIN'] },
-  { etiqueta: 'Materias', ruta: '/admin/materias', icono: BookMarked, roles: ['ADMIN'] },
-  { etiqueta: 'Reportes', ruta: '/admin/reportes', icono: BarChart3, roles: ['ADMIN'] },
-
-  // Módulos docentes
-  {
-    etiqueta: 'Planilla de Calificaciones',
-    ruta: '/docente/planilla',
-    icono: ClipboardList,
-    roles: ['DOCENTE'],
-  },
-
-  // Módulos estudiantes
-  {
-    etiqueta: 'Calificaciones',
-    ruta: '/estudiante/calificaciones',
-    icono: FileText,
-    roles: ['ESTUDIANTE'],
-  },
-]
-
-/**
- * Catálogo declarativo de navegación secundaria (pie de barra) por roles autorizados.
- */
-const ITEMS_NAV_SECUNDARIO: ItemNav[] = [
-  // Configuración por rol
-  { etiqueta: 'Configuración', ruta: '/admin/configuracion', icono: Settings, roles: ['ADMIN'] },
-  { etiqueta: 'Configuración', ruta: '/docente/configuracion', icono: Settings, roles: ['DOCENTE'] },
-
-  // Soporte por rol
-  { etiqueta: 'Soporte', ruta: '/admin/soporte', icono: HelpCircle, roles: ['ADMIN'] },
-  { etiqueta: 'Soporte', ruta: '/docente/soporte', icono: HelpCircle, roles: ['DOCENTE'] },
-  { etiqueta: 'Soporte', ruta: '/estudiante/soporte', icono: HelpCircle, roles: ['ESTUDIANTE'] },
-]
+import {
+  ITEMS_NAV_PRINCIPAL,
+  ITEMS_NAV_SECUNDARIO,
+} from '../config/navigation.config'
 
 interface SidebarProps {
   abierto: boolean
@@ -89,10 +16,13 @@ interface SidebarProps {
 
 export function Sidebar({ abierto, onCerrar }: SidebarProps) {
   const { usuario, cerrarSesion } = useAuth()
-  const { hasAnyRole } = useAuthorization()
 
-  const items = ITEMS_NAV_PRINCIPAL.filter((item) => hasAnyRole(item.roles))
-  const itemsSecundarios = ITEMS_NAV_SECUNDARIO.filter((item) => hasAnyRole(item.roles))
+  const handleCerrarSesion = () => {
+    cerrarSesion('voluntario')
+  }
+
+  const items = usuario ? ITEMS_NAV_PRINCIPAL[usuario.rol] ?? [] : []
+  const itemsSecundarios = usuario ? ITEMS_NAV_SECUNDARIO[usuario.rol] ?? [] : []
 
   return (
     <>
@@ -172,7 +102,7 @@ export function Sidebar({ abierto, onCerrar }: SidebarProps) {
           <button
             type="button"
             aria-label="Cerrar sesión"
-            onClick={cerrarSesion}
+            onClick={handleCerrarSesion}
             className="shrink-0 cursor-pointer rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
           >
             <LogOut size={16} />
