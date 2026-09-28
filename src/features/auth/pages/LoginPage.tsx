@@ -1,24 +1,18 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useNavigate } from 'react-router-dom'
-import { HelpCircle, Lock, User } from 'lucide-react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { HelpCircle, Lock, User, AlertCircle } from 'lucide-react'
 import logoIe from '@/assets/logo-ie-descanse.png'
 import { Input, Button } from '@/shared/ui'
 import { useAuthStore } from '../store'
 import { login as loginApi } from '../api/authApi'
 import { extraerMensajeError } from '@/shared/lib/axios'
-import type { Rol } from '../types'
 
 import { ClimaBadge } from '@/shared/ui/weather'
 import { Footer } from '@/layouts'
-
-const RUTAS_POR_ROL: Record<Rol, string> = {
-  ADMIN: '/admin',
-  DOCENTE: '/docente',
-  ESTUDIANTE: '/estudiante',
-}
+import { resolverRutaDestino } from '../utils/redirect'
 
 const loginSchema = z.object({
   documento: z.string().min(1, 'Ingresa tu número de documento'),
@@ -29,9 +23,20 @@ type LoginFormValues = z.infer<typeof loginSchema>
 
 export default function Login() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const redirectParam = searchParams.get('redirect')
   const setSesion = useAuthStore((state) => state.setSesion)
+  const motivoCierre = useAuthStore((state) => state.motivoCierre)
+  const limpiarMotivo = useAuthStore((state) => state.limpiarMotivo)
   const [errorLogin, setErrorLogin] = useState<string | null>(null)
   const [enviando, setEnviando] = useState(false)
+
+  // Al desmontar la página de login, limpiamos el motivo efímero
+  useEffect(() => {
+    return () => {
+      limpiarMotivo()
+    }
+  }, [limpiarMotivo])
 
   const {
     register,
@@ -45,7 +50,8 @@ export default function Login() {
     try {
       const sesion = await loginApi(data)
       setSesion(sesion.token, sesion.usuario)
-      navigate(RUTAS_POR_ROL[sesion.usuario.rol])
+      const rutaDestino = resolverRutaDestino(redirectParam, sesion.usuario.rol)
+      navigate(rutaDestino, { replace: true })
     } catch (error) {
       setErrorLogin(extraerMensajeError(error))
     } finally {
@@ -96,6 +102,13 @@ export default function Login() {
             </p>
             <span className="mt-3 h-1 w-10 rounded-full bg-accent-400" />
           </div>
+
+          {motivoCierre === 'expirada' && (
+            <div className="mt-6 flex items-start gap-2.5 rounded-xl border border-amber-200 bg-amber-50 p-3.5 text-xs text-amber-800 text-left">
+              <AlertCircle size={18} className="shrink-0 text-amber-600 mt-0.5" />
+              <span>Tu sesión ha expirado por seguridad. Ingresa tus credenciales para continuar donde estabas.</span>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="mt-6 flex flex-col gap-4" noValidate>
             <Input

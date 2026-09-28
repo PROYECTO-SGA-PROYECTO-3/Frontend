@@ -19,14 +19,19 @@ axiosClient.interceptors.request.use((config) => {
 
 // Manejo centralizado de errores:
 // - 401 en /auth/login → credenciales inválidas, se deja pasar para que el formulario lo muestre
-// - 401 en cualquier otra ruta → sesión vencida, limpiar sesión y redirigir
+// - 401 en cualquier otra ruta → sesión vencida, limpiar sesión y redirigir conservando la ruta de origen
 axiosClient.interceptors.response.use(
 	(response) => response,
 	(error: AxiosError) => {
 		const esIntentoDeLogin = error.config?.url?.includes("/auth/login");
 		if (error.response?.status === 401 && !esIntentoDeLogin) {
-			useAuthStore.getState().cerrarSesion();
-			window.location.assign("/login");
+			useAuthStore.getState().cerrarSesion('expirada');
+			const rutaActual = window.location.pathname + window.location.search;
+			const queryRedirect =
+				rutaActual && !rutaActual.startsWith("/login") && rutaActual !== "/"
+					? `?redirect=${encodeURIComponent(rutaActual)}`
+					: "";
+			window.location.assign(`/login${queryRedirect}`);
 		}
 		return Promise.reject(error);
 	},

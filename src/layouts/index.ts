@@ -5,4 +5,5 @@ export * from './EstudianteLayout'
 export * from './components/Sidebar'
 export * from './components/PageHeader'
 export * from './components/Footer'
+export * from './config/navigation.config'
 
