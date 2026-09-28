@@ -15,7 +15,7 @@ import {
   Users,
   type LucideIcon,
 } from 'lucide-react'
-import { useAuth, type Rol } from '@/features/auth'
+import { useAuth, useAuthorization, type Rol } from '@/features/auth'
 import { cn, nombreCompleto } from '@/shared/lib/utils'
 import { Avatar } from '@/shared/ui/Avatar'
 import logoIe from '@/assets/logo-ie-descanse.png'
@@ -24,39 +24,63 @@ interface ItemNav {
   etiqueta: string
   ruta: string
   icono: LucideIcon
+  roles: Rol[]
 }
 
-const NAV_POR_ROL: Record<Rol, ItemNav[]> = {
-  ADMIN: [
-    { etiqueta: 'Dashboard', ruta: '/admin', icono: LayoutDashboard },
-    { etiqueta: 'Calendario', ruta: '/calendario', icono: CalendarDays },
-    { etiqueta: 'Docentes', ruta: '/admin/docentes', icono: Users },
-    { etiqueta: 'Estudiantes', ruta: '/admin/estudiantes', icono: GraduationCap },
-    { etiqueta: 'Cursos', ruta: '/admin/cursos', icono: BookOpen },
-    { etiqueta: 'Materias', ruta: '/admin/materias', icono: BookMarked },
-    { etiqueta: 'Reportes', ruta: '/admin/reportes', icono: BarChart3 },
-    { etiqueta: 'Soporte', ruta: '/admin/soporte', icono: HelpCircle },
-    { etiqueta: 'Configuración', ruta: '/admin/configuracion', icono: Settings },
-  ],
-  DOCENTE: [
-    { etiqueta: 'Inicio', ruta: '/docente', icono: LayoutDashboard },
-    { etiqueta: 'Calendario', ruta: '/calendario', icono: CalendarDays },
-    { etiqueta: 'Planilla de Calificaciones', ruta: '/docente/planilla', icono: ClipboardList },
-  ],
-  ESTUDIANTE: [
-    { etiqueta: 'Inicio', ruta: '/estudiante', icono: Home },
-    { etiqueta: 'Calendario', ruta: '/calendario', icono: CalendarDays },
-    { etiqueta: 'Calificaciones', ruta: '/estudiante/calificaciones', icono: FileText },
-  ],
-}
+/**
+ * Catálogo maestro declarativo de navegación principal por roles autorizados (Regla 5).
+ */
+const ITEMS_NAV_PRINCIPAL: ItemNav[] = [
+  // Dashboards / Vistas iniciales por rol
+  { etiqueta: 'Dashboard', ruta: '/admin', icono: LayoutDashboard, roles: ['ADMIN'] },
+  { etiqueta: 'Inicio', ruta: '/docente', icono: LayoutDashboard, roles: ['DOCENTE'] },
+  { etiqueta: 'Inicio', ruta: '/estudiante', icono: Home, roles: ['ESTUDIANTE'] },
 
-const NAV_SECUNDARIO_POR_ROL: Partial<Record<Rol, ItemNav[]>> = {
-  DOCENTE: [
-    { etiqueta: 'Configuración', ruta: '/docente/configuracion', icono: Settings },
-    { etiqueta: 'Soporte', ruta: '/docente/soporte', icono: HelpCircle },
-  ],
-  ESTUDIANTE: [{ etiqueta: 'Soporte', ruta: '/estudiante/soporte', icono: HelpCircle }],
-}
+  // Calendario institucional compartido
+  {
+    etiqueta: 'Calendario',
+    ruta: '/calendario',
+    icono: CalendarDays,
+    roles: ['ADMIN', 'DOCENTE', 'ESTUDIANTE'],
+  },
+
+  // Gestión administrativa (Admin)
+  { etiqueta: 'Docentes', ruta: '/admin/docentes', icono: Users, roles: ['ADMIN'] },
+  { etiqueta: 'Estudiantes', ruta: '/admin/estudiantes', icono: GraduationCap, roles: ['ADMIN'] },
+  { etiqueta: 'Cursos', ruta: '/admin/cursos', icono: BookOpen, roles: ['ADMIN'] },
+  { etiqueta: 'Materias', ruta: '/admin/materias', icono: BookMarked, roles: ['ADMIN'] },
+  { etiqueta: 'Reportes', ruta: '/admin/reportes', icono: BarChart3, roles: ['ADMIN'] },
+
+  // Módulos docentes
+  {
+    etiqueta: 'Planilla de Calificaciones',
+    ruta: '/docente/planilla',
+    icono: ClipboardList,
+    roles: ['DOCENTE'],
+  },
+
+  // Módulos estudiantes
+  {
+    etiqueta: 'Calificaciones',
+    ruta: '/estudiante/calificaciones',
+    icono: FileText,
+    roles: ['ESTUDIANTE'],
+  },
+]
+
+/**
+ * Catálogo declarativo de navegación secundaria (pie de barra) por roles autorizados.
+ */
+const ITEMS_NAV_SECUNDARIO: ItemNav[] = [
+  // Configuración por rol
+  { etiqueta: 'Configuración', ruta: '/admin/configuracion', icono: Settings, roles: ['ADMIN'] },
+  { etiqueta: 'Configuración', ruta: '/docente/configuracion', icono: Settings, roles: ['DOCENTE'] },
+
+  // Soporte por rol
+  { etiqueta: 'Soporte', ruta: '/admin/soporte', icono: HelpCircle, roles: ['ADMIN'] },
+  { etiqueta: 'Soporte', ruta: '/docente/soporte', icono: HelpCircle, roles: ['DOCENTE'] },
+  { etiqueta: 'Soporte', ruta: '/estudiante/soporte', icono: HelpCircle, roles: ['ESTUDIANTE'] },
+]
 
 interface SidebarProps {
   abierto: boolean
@@ -65,8 +89,10 @@ interface SidebarProps {
 
 export function Sidebar({ abierto, onCerrar }: SidebarProps) {
   const { usuario, cerrarSesion } = useAuth()
-  const items = usuario ? NAV_POR_ROL[usuario.rol] : []
-  const itemsSecundarios = usuario ? (NAV_SECUNDARIO_POR_ROL[usuario.rol] ?? []) : []
+  const { hasAnyRole } = useAuthorization()
+
+  const items = ITEMS_NAV_PRINCIPAL.filter((item) => hasAnyRole(item.roles))
+  const itemsSecundarios = ITEMS_NAV_SECUNDARIO.filter((item) => hasAnyRole(item.roles))
 
   return (
     <>
@@ -78,6 +104,7 @@ export function Sidebar({ abierto, onCerrar }: SidebarProps) {
       )}
 
       <aside
+        aria-label="Barra lateral de navegación"
         className={cn(
           'flex h-full w-64 shrink-0 flex-col border-r border-slate-200 bg-white',
           'fixed inset-y-0 left-0 z-40 transition-transform duration-300 ease-in-out',
@@ -93,7 +120,7 @@ export function Sidebar({ abierto, onCerrar }: SidebarProps) {
           </div>
         </div>
 
-        <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
+        <nav aria-label="Navegación principal" className="flex flex-1 flex-col gap-1 px-3 py-4">
           {items.map(({ etiqueta, ruta, icono: Icono }) => (
             <NavLink
               key={ruta}
