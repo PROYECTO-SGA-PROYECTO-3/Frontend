@@ -1,5 +1,5 @@
-import { Plus, Search, X, ArrowDownAZ, ArrowUpZA, Clock } from 'lucide-react'
-import { Button } from '@/shared/ui/Button'
+import { Plus, ArrowDownAZ, ArrowUpZA, Clock } from 'lucide-react'
+import { Button, SearchInput } from '@/shared/ui'
 import type { CriterioOrdenMateria } from '../types'
 
 interface MateriasToolbarProps {
@@ -20,28 +20,12 @@ export function MateriasToolbar({
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-slate-200/90 bg-white p-3.5 shadow-xs sm:flex-row sm:items-center sm:justify-between">
       {/* Barra de búsqueda */}
-      <div className="relative flex-1">
-        <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
-          <Search size={18} />
-        </span>
-        <input
-          type="text"
-          value={busqueda}
-          onChange={(e) => onCambioBusqueda(e.target.value)}
-          placeholder="Buscar asignatura por nombre..."
-          className="w-full rounded-xl border border-slate-200 bg-slate-50/70 py-2.5 pr-10 pl-10 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition-all focus:border-brand-700 focus:bg-white focus:ring-2 focus:ring-brand-700/15"
-        />
-        {busqueda && (
-          <button
-            type="button"
-            onClick={() => onCambioBusqueda('')}
-            aria-label="Borrar búsqueda"
-            className="cursor-pointer absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400 transition-colors hover:text-slate-700"
-          >
-            <X size={16} />
-          </button>
-        )}
-      </div>
+      <SearchInput
+        value={busqueda}
+        onChange={onCambioBusqueda}
+        placeholder="Buscar asignatura por nombre..."
+        containerClassName="flex-1"
+      />
 
       {/* Selector de ordenamiento y Botón Crear */}
       <div className="flex items-center gap-2.5 shrink-0">
