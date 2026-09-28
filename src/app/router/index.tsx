@@ -56,39 +56,15 @@ export const router = createBrowserRouter([
       // Rutas protegidas por Rol
       {
         element: <ProtectedRoute roles={['ADMIN']} />,
-        children: [
-          {
-            element: <SuspenseWrapper>{adminRoutes.element}</SuspenseWrapper>,
-            children: adminRoutes.children?.map((route) => ({
-              ...route,
-              element: <SuspenseWrapper>{route.element}</SuspenseWrapper>,
-            })),
-          },
-        ],
+        children: [adminRoutes],
       },
       {
         element: <ProtectedRoute roles={['DOCENTE']} />,
-        children: [
-          {
-            element: <SuspenseWrapper>{docenteRoutes.element}</SuspenseWrapper>,
-            children: docenteRoutes.children?.map((route) => ({
-              ...route,
-              element: <SuspenseWrapper>{route.element}</SuspenseWrapper>,
-            })),
-          },
-        ],
+        children: [docenteRoutes],
       },
       {
         element: <ProtectedRoute roles={['ESTUDIANTE']} />,
-        children: [
-          {
-            element: <SuspenseWrapper>{estudianteRoutes.element}</SuspenseWrapper>,
-            children: estudianteRoutes.children?.map((route) => ({
-              ...route,
-              element: <SuspenseWrapper>{route.element}</SuspenseWrapper>,
-            })),
-          },
-        ],
+        children: [estudianteRoutes],
       },
       {
         path: '*',

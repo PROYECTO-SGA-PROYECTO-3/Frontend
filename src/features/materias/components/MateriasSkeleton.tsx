@@ -23,13 +23,17 @@ export function MateriasSkeleton({ filas, cantidad = 6 }: MateriasSkeletonProps)
             className="flex items-center justify-between gap-4 px-6 py-4"
           >
             <div className="flex items-center gap-4 flex-1">
-              <Skeleton className="h-4 w-6 text-center" />
+              <Skeleton className="h-4 w-6" />
+              <Skeleton className="h-5 w-16 rounded-md" />
               <Skeleton className="h-8 w-8 rounded-lg shrink-0" />
               <Skeleton className="h-4 w-1/3" />
             </div>
-            <div className="flex items-center gap-2">
-              <Skeleton className="h-8 w-8 rounded-lg" />
-              <Skeleton className="h-8 w-8 rounded-lg" />
+            <div className="flex items-center gap-6">
+              <Skeleton className="h-5 w-16 rounded-full" />
+              <div className="flex items-center gap-2">
+                <Skeleton className="h-8 w-8 rounded-lg" />
+                <Skeleton className="h-8 w-8 rounded-lg" />
+              </div>
             </div>
           </div>
         ))}

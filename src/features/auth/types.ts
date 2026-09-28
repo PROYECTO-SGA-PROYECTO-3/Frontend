@@ -1,5 +1,7 @@
 export type Rol = 'ADMIN' | 'DOCENTE' | 'ESTUDIANTE'
 
+export type MotivoCierre = 'voluntario' | 'expirada' | null
+
 export interface Usuario {
   documento: string
   email: string

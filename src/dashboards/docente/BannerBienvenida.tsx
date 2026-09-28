@@ -15,7 +15,7 @@ export function BannerBienvenida({
   onVerCalendario,
 }: BannerBienvenidaDocenteProps) {
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-brand-50 p-8 shadow-sm">
+    <section aria-label="Bienvenida al docente" className="relative overflow-hidden rounded-2xl bg-brand-50 p-8 shadow-sm transition-shadow duration-300 hover:shadow-md">
       <div className="pointer-events-none absolute -right-10 -top-10 h-56 w-56 rounded-full bg-brand-100/80" />
       <div className="pointer-events-none absolute -right-4 bottom-[-3rem] h-32 w-32 rounded-full bg-brand-200/60" />
 
@@ -43,6 +43,6 @@ export function BannerBienvenida({
           </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

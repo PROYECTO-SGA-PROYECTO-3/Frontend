@@ -1,62 +1,13 @@
 import { NavLink } from 'react-router-dom'
-import {
-  BarChart3,
-  BookMarked,
-  BookOpen,
-  CalendarDays,
-  ClipboardList,
-  FileText,
-  GraduationCap,
-  HelpCircle,
-  Home,
-  LayoutDashboard,
-  LogOut,
-  Settings,
-  Users,
-  type LucideIcon,
-} from 'lucide-react'
-import { useAuth, type Rol } from '@/features/auth'
+import { LogOut } from 'lucide-react'
+import { useAuth } from '@/features/auth'
 import { cn, nombreCompleto } from '@/shared/lib/utils'
 import { Avatar } from '@/shared/ui/Avatar'
 import logoIe from '@/assets/logo-ie-descanse.png'
-
-interface ItemNav {
-  etiqueta: string
-  ruta: string
-  icono: LucideIcon
-}
-
-const NAV_POR_ROL: Record<Rol, ItemNav[]> = {
-  ADMIN: [
-    { etiqueta: 'Dashboard', ruta: '/admin', icono: LayoutDashboard },
-    { etiqueta: 'Calendario', ruta: '/calendario', icono: CalendarDays },
-    { etiqueta: 'Docentes', ruta: '/admin/docentes', icono: Users },
-    { etiqueta: 'Estudiantes', ruta: '/admin/estudiantes', icono: GraduationCap },
-    { etiqueta: 'Cursos', ruta: '/admin/cursos', icono: BookOpen },
-    { etiqueta: 'Materias', ruta: '/admin/materias', icono: BookMarked },
-    { etiqueta: 'Reportes', ruta: '/admin/reportes', icono: BarChart3 },
-    { etiqueta: 'Soporte', ruta: '/admin/soporte', icono: HelpCircle },
-    { etiqueta: 'Configuración', ruta: '/admin/configuracion', icono: Settings },
-  ],
-  DOCENTE: [
-    { etiqueta: 'Inicio', ruta: '/docente', icono: LayoutDashboard },
-    { etiqueta: 'Calendario', ruta: '/calendario', icono: CalendarDays },
-    { etiqueta: 'Planilla de Calificaciones', ruta: '/docente/planilla', icono: ClipboardList },
-  ],
-  ESTUDIANTE: [
-    { etiqueta: 'Inicio', ruta: '/estudiante', icono: Home },
-    { etiqueta: 'Calendario', ruta: '/calendario', icono: CalendarDays },
-    { etiqueta: 'Calificaciones', ruta: '/estudiante/calificaciones', icono: FileText },
-  ],
-}
-
-const NAV_SECUNDARIO_POR_ROL: Partial<Record<Rol, ItemNav[]>> = {
-  DOCENTE: [
-    { etiqueta: 'Configuración', ruta: '/docente/configuracion', icono: Settings },
-    { etiqueta: 'Soporte', ruta: '/docente/soporte', icono: HelpCircle },
-  ],
-  ESTUDIANTE: [{ etiqueta: 'Soporte', ruta: '/estudiante/soporte', icono: HelpCircle }],
-}
+import {
+  ITEMS_NAV_PRINCIPAL,
+  ITEMS_NAV_SECUNDARIO,
+} from '../config/navigation.config'
 
 interface SidebarProps {
   abierto: boolean
@@ -65,8 +16,13 @@ interface SidebarProps {
 
 export function Sidebar({ abierto, onCerrar }: SidebarProps) {
   const { usuario, cerrarSesion } = useAuth()
-  const items = usuario ? NAV_POR_ROL[usuario.rol] : []
-  const itemsSecundarios = usuario ? (NAV_SECUNDARIO_POR_ROL[usuario.rol] ?? []) : []
+
+  const handleCerrarSesion = () => {
+    cerrarSesion('voluntario')
+  }
+
+  const items = usuario ? ITEMS_NAV_PRINCIPAL[usuario.rol] ?? [] : []
+  const itemsSecundarios = usuario ? ITEMS_NAV_SECUNDARIO[usuario.rol] ?? [] : []
 
   return (
     <>
@@ -78,6 +34,7 @@ export function Sidebar({ abierto, onCerrar }: SidebarProps) {
       )}
 
       <aside
+        aria-label="Barra lateral de navegación"
         className={cn(
           'flex h-full w-64 shrink-0 flex-col border-r border-slate-200 bg-white',
           'fixed inset-y-0 left-0 z-40 transition-transform duration-300 ease-in-out',
@@ -93,7 +50,7 @@ export function Sidebar({ abierto, onCerrar }: SidebarProps) {
           </div>
         </div>
 
-        <nav className="flex flex-1 flex-col gap-1 px-3 py-4">
+        <nav aria-label="Navegación principal" className="flex flex-1 flex-col gap-1 px-3 py-4">
           {items.map(({ etiqueta, ruta, icono: Icono }) => (
             <NavLink
               key={ruta}
@@ -145,7 +102,7 @@ export function Sidebar({ abierto, onCerrar }: SidebarProps) {
           <button
             type="button"
             aria-label="Cerrar sesión"
-            onClick={cerrarSesion}
+            onClick={handleCerrarSesion}
             className="shrink-0 cursor-pointer rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
           >
             <LogOut size={16} />

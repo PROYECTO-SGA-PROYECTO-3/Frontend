@@ -20,6 +20,9 @@ const AdminDocenteFormulario = lazy(() =>
 const AdminEstudiantes = lazy(() =>
   import('@/features/estudiantes').then((m) => ({ default: m.EstudiantesPage })),
 )
+const AdminEstudianteFormulario = lazy(() =>
+  import('@/features/estudiantes').then((m) => ({ default: m.EstudianteFormPage })),
+)
 
 export const adminRoutes: RouteObject = {
   element: <AdminLayout />,
@@ -31,5 +34,7 @@ export const adminRoutes: RouteObject = {
     { path: '/admin/docentes/nuevo', element: <AdminDocenteFormulario /> },
     { path: '/admin/docentes/:id/editar', element: <AdminDocenteFormulario /> },
     { path: '/admin/estudiantes', element: <AdminEstudiantes /> },
+    { path: '/admin/estudiantes/nuevo', element: <AdminEstudianteFormulario /> },
+    { path: '/admin/estudiantes/:id/editar', element: <AdminEstudianteFormulario /> },
   ],
 }

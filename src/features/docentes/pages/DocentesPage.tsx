@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CheckCircle2 } from 'lucide-react'
-import { Navbar } from '@/layouts'
+import { PageHeader } from '@/layouts'
 import { DialogoConfirmacion, ErrorState } from '@/shared/ui'
 import { nombreCompleto } from '@/shared/lib/utils'
 import {
@@ -128,10 +128,9 @@ export default function DocentesPage() {
 
   return (
     <div className="flex flex-1 flex-col bg-slate-50/50">
-      <Navbar
-        titulo="Docentes"
-        subtitulo="Directorio y administración del cuerpo profesoral"
-        sistemaEnLinea
+      <PageHeader
+        raiz="Portal Administrativo"
+        seccionActual="Docentes"
       />
 
       <main className="mx-auto w-full max-w-[1600px] flex-1 space-y-8 p-6 md:p-8 xl:p-10">
@@ -270,3 +269,4 @@ export default function DocentesPage() {
     </div>
   )
 }
+
