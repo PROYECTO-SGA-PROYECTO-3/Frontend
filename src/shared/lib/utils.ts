@@ -27,8 +27,14 @@ export function urlBackend(ruta: string): string {
 const MESES = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC']
 
 export function formatearFechaCorta(fechaIso: string): { dia: number; mes: string } {
+  if (!fechaIso) return { dia: 1, mes: 'ENE' }
+  if (/^\d{4}-\d{2}-\d{2}$/.test(fechaIso)) {
+    const [, mesStr, diaStr] = fechaIso.split('-')
+    const mesIndex = parseInt(mesStr, 10) - 1
+    return { dia: parseInt(diaStr, 10), mes: MESES[mesIndex] ?? 'ENE' }
+  }
   const fecha = new Date(fechaIso)
-  return { dia: fecha.getDate(), mes: MESES[fecha.getMonth()] }
+  return { dia: fecha.getDate(), mes: MESES[fecha.getMonth()] ?? 'ENE' }
 }
 
 // El backend serializa LocalTime como "HH:mm:ss"; la UI solo necesita "HH:mm".
