@@ -79,16 +79,7 @@ export default function CalendarioPage({ soloLectura = false }: CalendarioPagePr
 
   return (
     <div className="flex flex-1 flex-col bg-slate-50/50">
-      <PageHeader raiz={portalRaiz} seccionActual="Calendario Institucional">
-        <Can roles={['ADMIN']}>
-          {!soloLectura && (
-            <Button onClick={() => setModalAbierto(true)}>
-              <Plus size={16} aria-hidden="true" />
-              Nuevo evento
-            </Button>
-          )}
-        </Can>
-      </PageHeader>
+      <PageHeader raiz={portalRaiz} seccionActual="Calendario Institucional" />
 
       <main className="mx-auto w-full max-w-7xl flex-1 space-y-8 p-6 md:p-8 xl:p-10">
         {/* Notificación flotante de éxito */}
@@ -116,7 +107,7 @@ export default function CalendarioPage({ soloLectura = false }: CalendarioPagePr
 
         {/* Encabezado y resumen de la vista */}
         <section className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-3.5">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-700 ring-1 ring-brand-700/10 mt-0.5">
               <CalendarDays size={24} aria-hidden="true" />
             </div>
@@ -134,10 +125,16 @@ export default function CalendarioPage({ soloLectura = false }: CalendarioPagePr
 
           <Can roles={['ADMIN']}>
             {!soloLectura && (
-              <Button onClick={() => setModalAbierto(true)}>
-                <Plus size={18} aria-hidden="true" />
-                Nuevo evento
-              </Button>
+              <div className="w-auto shrink-0">
+                <Button
+                  variant="primary"
+                  className="w-auto"
+                  onClick={() => setModalAbierto(true)}
+                >
+                  <Plus size={18} aria-hidden="true" />
+                  <span>Nuevo evento</span>
+                </Button>
+              </div>
             )}
           </Can>
         </section>

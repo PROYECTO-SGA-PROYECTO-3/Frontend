@@ -187,17 +187,22 @@ export function CrearEventoModal({
 
           {/* Acciones */}
           <div className="mt-3 flex justify-end gap-3 border-t border-slate-100 pt-4">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={onCerrar}
-              disabled={estaCreando}
-            >
-              Cancelar
-            </Button>
-            <Button type="submit" isLoading={estaCreando}>
-              Crear Evento
-            </Button>
+            <div className="w-auto">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={onCerrar}
+                disabled={estaCreando}
+                className="w-auto"
+              >
+                Cancelar
+              </Button>
+            </div>
+            <div className="w-auto">
+              <Button type="submit" isLoading={estaCreando} className="w-auto">
+                Crear Evento
+              </Button>
+            </div>
           </div>
         </form>
       </div>
