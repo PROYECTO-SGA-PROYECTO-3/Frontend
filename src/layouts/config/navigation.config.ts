@@ -1,5 +1,6 @@
 import {
 	BookMarked,
+	Calendar,
 	ClipboardList,
 	FileText,
 	GraduationCap,
@@ -23,6 +24,7 @@ export const ITEMS_NAV_PRINCIPAL: Record<Rol, ItemNav[]> = {
 		{ etiqueta: "Docentes", ruta: "/admin/docentes", icono: Users },
 		{ etiqueta: "Estudiantes", ruta: "/admin/estudiantes", icono: GraduationCap },
 		{ etiqueta: "Materias", ruta: "/admin/materias", icono: BookMarked },
+		{ etiqueta: "Calendario", ruta: "/admin/calendario", icono: Calendar },
 	],
 	DOCENTE: [
 		{ etiqueta: "Inicio", ruta: "/docente", icono: LayoutDashboard },
@@ -31,6 +33,7 @@ export const ITEMS_NAV_PRINCIPAL: Record<Rol, ItemNav[]> = {
 			ruta: "/docente/planilla",
 			icono: ClipboardList,
 		},
+		{ etiqueta: "Calendario", ruta: "/docente/calendario", icono: Calendar },
 	],
 	ESTUDIANTE: [
 		{ etiqueta: "Inicio", ruta: "/estudiante", icono: Home },
@@ -39,6 +42,7 @@ export const ITEMS_NAV_PRINCIPAL: Record<Rol, ItemNav[]> = {
 			ruta: "/estudiante/calificaciones",
 			icono: FileText,
 		},
+		{ etiqueta: "Calendario", ruta: "/estudiante/calendario", icono: Calendar },
 	],
 };
 

@@ -1,6 +1,7 @@
 import { Calendar, ChevronRight, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { formatearFechaCorta } from "@/shared/lib/utils";
+import { useRol, RUTAS_POR_ROL } from "@/features/auth";
 import type { EventoInstitucional } from '../types'
 
 interface ProximosEventosProps {
@@ -8,6 +9,9 @@ interface ProximosEventosProps {
 }
 
 export function ProximosEventos({ eventos }: ProximosEventosProps) {
+	const rol = useRol();
+	const rutaCalendario = rol ? `${RUTAS_POR_ROL[rol]}/calendario` : "/calendario";
+
 	return (
 		<div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:shadow-md">
 			<div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/50 px-6 py-4">
@@ -57,7 +61,7 @@ export function ProximosEventos({ eventos }: ProximosEventosProps) {
 
 			<div className="bg-slate-50 p-4 border-t border-slate-100">
 				<Link
-					to="/calendario"
+					to={rutaCalendario}
 					className="group flex w-full items-center justify-center gap-1.5 text-xs font-bold tracking-wide text-brand-700 uppercase transition-colors hover:text-brand-800"
 				>
 					<span>Ver calendario completo</span>
