@@ -10,11 +10,15 @@ const EstudianteCalificaciones = lazy(() =>
     default: m.CalificacionesEstudiantePage,
   })),
 )
+const EstudianteCalendario = lazy(() =>
+  import('@/features/eventos').then((m) => ({ default: m.CalendarioPage })),
+)
 
 export const estudianteRoutes: RouteObject = {
   element: <EstudianteLayout />,
   children: [
     { path: '/estudiante', element: <EstudianteDashboard /> },
     { path: '/estudiante/calificaciones', element: <EstudianteCalificaciones /> },
+    { path: '/estudiante/calendario', element: <EstudianteCalendario /> },
   ],
 }
