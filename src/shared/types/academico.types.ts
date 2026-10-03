@@ -16,7 +16,7 @@ export interface Grado {
 
 export interface SolicitudGrado {
   nombre: string
-  directorId: number
+  directorId?: number | null
 }
 
 export interface CargaAcademica {

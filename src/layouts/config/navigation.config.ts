@@ -5,6 +5,7 @@ import {
 	GraduationCap,
 	Home,
 	LayoutDashboard,
+	School,
 	Settings,
 	Users,
 	type LucideIcon,
@@ -20,6 +21,7 @@ export interface ItemNav {
 export const ITEMS_NAV_PRINCIPAL: Record<Rol, ItemNav[]> = {
 	ADMIN: [
 		{ etiqueta: "Dashboard", ruta: "/admin", icono: LayoutDashboard },
+		{ etiqueta: "Cursos", ruta: "/admin/cursos", icono: School },
 		{ etiqueta: "Docentes", ruta: "/admin/docentes", icono: Users },
 		{ etiqueta: "Estudiantes", ruta: "/admin/estudiantes", icono: GraduationCap },
 		{ etiqueta: "Materias", ruta: "/admin/materias", icono: BookMarked },
