@@ -65,17 +65,7 @@ export default function Calificaciones() {
       <PageHeader
         raiz="Portal Académico"
         seccionActual="Detalle de Notas"
-      >
-        <div className="flex flex-col items-end gap-1">
-          <div className="w-fit">
-            <Button type="button" onClick={manejarDescargarBoletin} isLoading={descargandoBoletin}>
-              <Download size={16} />
-              Descargar Boletín
-            </Button>
-          </div>
-          {errorBoletin && <p className="text-xs text-red-500">{errorBoletin}</p>}
-        </div>
-      </PageHeader>
+      />
 
       <main className="flex-1 p-8">
         {error ? (
@@ -88,7 +78,16 @@ export default function Calificaciones() {
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-            <h2 className="text-2xl font-bold text-slate-900">Mis Calificaciones</h2>
+            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <h2 className="text-2xl font-bold text-slate-900">Mis Calificaciones</h2>
+              <div className="flex w-full flex-col gap-1 sm:w-fit sm:items-end">
+                <Button type="button" className="w-full sm:w-auto" onClick={manejarDescargarBoletin} isLoading={descargandoBoletin}>
+                  <Download size={16} />
+                  Descargar Boletín
+                </Button>
+                {errorBoletin && <p className="text-xs text-red-500">{errorBoletin}</p>}
+              </div>
+            </div>
 
             <BandaAnioLectivo anioLectivo={calificaciones.anioLectivo} />
 
