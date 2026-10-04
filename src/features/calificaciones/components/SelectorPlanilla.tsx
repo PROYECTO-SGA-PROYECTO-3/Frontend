@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { Download, Filter } from 'lucide-react'
 import { Button } from '@/shared/ui/Button'
+import { DialogoConfirmacion } from '@/shared/ui/DialogoConfirmacion'
 import type { CargaAcademica, Periodo } from '@/shared/types/academico.types'
 
 const CLASE_SELECT =
@@ -26,7 +28,21 @@ export function SelectorPlanilla({
   onDescargarPlantilla,
   descargando,
 }: SelectorPlanillaProps) {
+  const [mostrarDialogo, setMostrarDialogo] = useState(false)
+
   const puedeDescargar = cargaAcademicaId !== '' && periodoId !== '' && !descargando
+  
+  const cargaSeleccionada = cargas.find(c => c.id === cargaAcademicaId)
+  const periodoSeleccionado = periodos.find(p => p.id === periodoId)
+
+  const manejarDescarga = () => {
+    setMostrarDialogo(true)
+  }
+
+  const confirmarDescarga = () => {
+    setMostrarDialogo(false)
+    onDescargarPlantilla()
+  }
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
@@ -87,7 +103,7 @@ export function SelectorPlanilla({
         <Button
           type="button"
           variant="secondary"
-          onClick={onDescargarPlantilla}
+          onClick={manejarDescarga}
           disabled={!puedeDescargar}
           isLoading={descargando}
         >
@@ -95,6 +111,16 @@ export function SelectorPlanilla({
           Descargar Plantilla
         </Button>
       </div>
+
+      <DialogoConfirmacion
+        abierto={mostrarDialogo}
+        titulo="Descargar plantilla"
+        mensaje={`¿Estás seguro que deseas generar y descargar la plantilla de calificaciones para ${cargaSeleccionada?.nombreAsignatura} · ${cargaSeleccionada?.nombreGrado} del ${periodoSeleccionado?.nombre}?`}
+        textoConfirmar="Descargar"
+        varianteConfirmar="primary"
+        onConfirmar={confirmarDescarga}
+        onCancelar={() => setMostrarDialogo(false)}
+      />
     </section>
   )
 }

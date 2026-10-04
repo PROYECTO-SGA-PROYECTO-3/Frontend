@@ -8,6 +8,7 @@ interface DialogoConfirmacionProps {
   error?: string
   procesando?: boolean
   textoConfirmar?: string
+  varianteConfirmar?: 'primary' | 'secondary' | 'peligro'
   onConfirmar: () => void
   onCancelar: () => void
 }
@@ -19,6 +20,7 @@ export function DialogoConfirmacion({
   error,
   procesando = false,
   textoConfirmar = 'Confirmar',
+  varianteConfirmar = 'peligro',
   onConfirmar,
   onCancelar,
 }: DialogoConfirmacionProps) {
@@ -57,7 +59,7 @@ export function DialogoConfirmacion({
           <div className="w-auto">
             <Button
               type="button"
-              variant="peligro"
+              variant={varianteConfirmar}
               isLoading={procesando}
               onClick={onConfirmar}
             >
