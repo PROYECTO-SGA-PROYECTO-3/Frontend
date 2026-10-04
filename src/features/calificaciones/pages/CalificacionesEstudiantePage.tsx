@@ -4,8 +4,7 @@ import { obtenerCalificacionesEstudiante } from '../api/calificacionesApi'
 import { descargarMiBoletin, extraerMensajeErrorDescargaBoletin } from '../api/boletinApi'
 import { extraerMensajeError } from '@/shared/lib/axios'
 import { useAuth } from '@/features/auth'
-import { Spinner } from '@/shared/ui/Spinner'
-import { Button } from '@/shared/ui/Button'
+import { Spinner, Button, ErrorState } from '@/shared/ui'
 import { PageHeader } from '@/layouts'
 import { TarjetaIndicador } from '../components/TarjetaIndicador'
 import { BandaAnioLectivo } from '../components/BandaAnioLectivo'
@@ -85,9 +84,18 @@ export default function Calificaciones() {
                   <Download size={16} />
                   Descargar Boletín
                 </Button>
-                {errorBoletin && <p className="text-xs text-red-500">{errorBoletin}</p>}
               </div>
             </div>
+
+            {errorBoletin && (
+              <ErrorState
+                variant="inline"
+                titulo="Descarga no disponible"
+                mensaje={errorBoletin}
+                onRetry={manejarDescargarBoletin}
+                textoBoton="Reintentar"
+              />
+            )}
 
             <BandaAnioLectivo anioLectivo={calificaciones.anioLectivo} />
 
