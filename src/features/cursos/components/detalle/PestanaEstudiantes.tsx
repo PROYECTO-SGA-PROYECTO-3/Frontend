@@ -1,20 +1,33 @@
 import { useState, useMemo } from 'react'
-import { Users } from 'lucide-react'
-import { ErrorState, Skeleton, SearchInput, Badge } from '@/shared/ui'
+import { Users, UserPlus, CheckCircle2 } from 'lucide-react'
+import { ErrorState, Skeleton, SearchInput, Badge, Button } from '@/shared/ui'
 import { useEstudiantesCurso } from '../../hooks'
 import { EstudiantesMatriculadosTable } from './EstudiantesMatriculadosTable'
 import { EstudiantesCursoEmptyState } from './EstudiantesCursoEmptyState'
+import { MatricularEstudianteModal } from './MatricularEstudianteModal'
 
 export interface PestanaEstudiantesProps {
   cursoId: number
   nombreCurso?: string
 }
 
-export function PestanaEstudiantes({ cursoId }: PestanaEstudiantesProps) {
+export function PestanaEstudiantes({
+  cursoId,
+  nombreCurso,
+}: PestanaEstudiantesProps) {
   const { estudiantes, totalEstudiantes, isLoading, isError, error, refetch } =
     useEstudiantesCurso(cursoId)
 
   const [busqueda, setBusqueda] = useState('')
+  const [modalMatricularAbierto, setModalMatricularAbierto] = useState(false)
+  const [mensajeExito, setMensajeExito] = useState<string | null>(null)
+
+  const mostrarExitoTemporal = (mensaje: string) => {
+    setMensajeExito(mensaje)
+    setTimeout(() => {
+      setMensajeExito(null)
+    }, 4000)
+  }
 
   // Filtrado en memoria por nombre completo o documento
   const estudiantesFiltrados = useMemo(() => {
@@ -29,15 +42,39 @@ export function PestanaEstudiantes({ cursoId }: PestanaEstudiantesProps) {
   }, [estudiantes, busqueda])
 
   const hayFiltroActivo = busqueda.trim().length > 0
+  const tituloCurso = nombreCurso ?? `Curso #${cursoId}`
 
   return (
     <div className="space-y-5">
+      {/* Notificación flotante de éxito */}
+      {mensajeExito && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="flex items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-4 text-sm font-medium text-brand-900 shadow-sm animate-in fade-in slide-in-from-top-2 duration-200"
+        >
+          <CheckCircle2
+            size={20}
+            className="text-brand-600 shrink-0"
+            aria-hidden="true"
+          />
+          <span>{mensajeExito}</span>
+        </div>
+      )}
+
       {/* 1. Estado de Carga con Skeleton en formato Tabla */}
       {isLoading && (
-        <div className="space-y-4" aria-busy="true" aria-label="Cargando nómina de estudiantes">
+        <div
+          className="space-y-4"
+          aria-busy="true"
+          aria-label="Cargando nómina de estudiantes"
+        >
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <Skeleton className="h-10 w-full sm:w-72 rounded-xl" />
-            <Skeleton className="h-6 w-28 rounded-full" />
+            <div className="flex items-center gap-3">
+              <Skeleton className="h-6 w-28 rounded-full" />
+              <Skeleton className="h-10 w-36 rounded-xl" />
+            </div>
           </div>
 
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
@@ -77,7 +114,19 @@ export function PestanaEstudiantes({ cursoId }: PestanaEstudiantesProps) {
 
       {/* 3. Estado Vacío General (El curso no tiene matriculados) */}
       {!isLoading && !isError && totalEstudiantes === 0 && (
-        <EstudiantesCursoEmptyState />
+        <div className="space-y-4">
+          <div className="flex justify-end">
+            <Button
+              type="button"
+              onClick={() => setModalMatricularAbierto(true)}
+              className="w-auto px-4 py-2 text-xs font-semibold"
+            >
+              <UserPlus size={16} aria-hidden="true" />
+              <span>Matricular estudiante</span>
+            </Button>
+          </div>
+          <EstudiantesCursoEmptyState />
+        </div>
       )}
 
       {/* 4. Listado con Barra de Búsqueda y Tabla Institucional */}
@@ -94,19 +143,36 @@ export function PestanaEstudiantes({ cursoId }: PestanaEstudiantesProps) {
               />
             </div>
 
-            <div className="flex items-center gap-2 self-start sm:self-auto text-xs text-slate-500">
-              <Users size={15} className="text-slate-400" aria-hidden="true" />
-              <span>
-                {hayFiltroActivo ? (
-                  <>
-                    Mostrando <strong className="text-slate-700">{estudiantesFiltrados.length}</strong> de {totalEstudiantes} estudiantes
-                  </>
-                ) : (
-                  <>
-                    Total matriculados: <Badge color="brand">{totalEstudiantes}</Badge>
-                  </>
-                )}
-              </span>
+            <div className="flex flex-wrap items-center gap-3 self-start sm:self-auto">
+              <div className="flex items-center gap-2 text-xs text-slate-500">
+                <Users size={15} className="text-slate-400" aria-hidden="true" />
+                <span>
+                  {hayFiltroActivo ? (
+                    <>
+                      Mostrando{' '}
+                      <strong className="text-slate-700">
+                        {estudiantesFiltrados.length}
+                      </strong>{' '}
+                      de {totalEstudiantes} estudiantes
+                    </>
+                  ) : (
+                    <>
+                      Total matriculados:{' '}
+                      <Badge color="brand">{totalEstudiantes}</Badge>
+                    </>
+                  )}
+                </span>
+              </div>
+
+              {/* Botón de acción principal: Matricular Estudiante */}
+              <Button
+                type="button"
+                onClick={() => setModalMatricularAbierto(true)}
+                className="w-auto px-3.5 py-2 text-xs font-semibold"
+              >
+                <UserPlus size={15} aria-hidden="true" />
+                <span>Matricular estudiante</span>
+              </Button>
             </div>
           </div>
 
@@ -123,6 +189,19 @@ export function PestanaEstudiantes({ cursoId }: PestanaEstudiantesProps) {
           )}
         </div>
       )}
+
+      {/* Modal de Matrícula / Asignación */}
+      <MatricularEstudianteModal
+        abierto={modalMatricularAbierto}
+        cursoId={cursoId}
+        nombreCurso={tituloCurso}
+        onCerrar={() => setModalMatricularAbierto(false)}
+        onExito={(nombre) => {
+          mostrarExitoTemporal(
+            `El estudiante "${nombre}" ha sido matriculado exitosamente en ${tituloCurso}.`,
+          )
+        }}
+      />
     </div>
   )
 }

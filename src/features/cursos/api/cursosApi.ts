@@ -33,3 +33,9 @@ export async function listarEstudiantesPorGrado(
     params: anio ? { anio } : undefined,
   })
 }
+
+export async function matricularEstudianteEnCurso(
+  datos: { documentoEstudiante: string; gradoId: number; anio?: number },
+): Promise<Matricula> {
+  return api.post<Matricula>('/matriculas', datos)
+}
