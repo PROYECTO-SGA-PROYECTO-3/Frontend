@@ -30,55 +30,52 @@ export function CursoHeader({ curso, onEditar }: CursoHeaderProps) {
 
       {/* Cabecera Principal del Curso */}
       <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-xs sm:flex-row sm:items-center sm:justify-between sm:p-6">
-        <div className="flex items-start sm:items-center gap-4">
+        <div className="flex items-center gap-4 min-w-0">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-brand-700">
             <School size={28} aria-hidden="true" />
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2.5">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 truncate">
                 {curso.nombre}
               </h1>
               <span className="inline-flex items-center rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 text-xs font-semibold text-slate-600">
                 ID #{curso.id}
               </span>
             </div>
-            <p className="mt-1 text-xs sm:text-sm text-slate-500">
-              Grado escolar oficial registrado en la sede principal.
-            </p>
+
+            {/* Metadato del Director de Grupo integrado */}
+            <div className="mt-1.5 flex items-center gap-2">
+              <span className="text-xs font-medium text-slate-400">Director:</span>
+              {tieneDirector ? (
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-200 bg-brand-50/80 px-2.5 py-0.5 text-xs font-semibold text-brand-800">
+                  <UserCheck size={13} className="text-brand-600 shrink-0" aria-hidden="true" />
+                  <span className="truncate max-w-64">{curso.nombreDirector}</span>
+                </div>
+              ) : (
+                <div className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-500">
+                  <UserX size={12} className="text-slate-400 shrink-0" aria-hidden="true" />
+                  <span>Sin director asignado</span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        {/* Acciones y Director de Grupo */}
-        <div className="flex flex-wrap items-center gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-          <div className="text-left sm:text-right">
-            <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
-              Director de Grupo
-            </p>
-            {tieneDirector ? (
-              <div className="mt-1 inline-flex items-center gap-2 rounded-full border border-brand-200 bg-brand-50/80 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-brand-800">
-                <UserCheck size={16} className="text-brand-600 shrink-0" aria-hidden="true" />
-                <span className="truncate max-w-56">{curso.nombreDirector}</span>
-              </div>
-            ) : (
-              <div className="mt-1 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-100 px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-500">
-                <UserX size={15} className="text-slate-400 shrink-0" aria-hidden="true" />
-                <span>Sin director asignado</span>
-              </div>
-            )}
-          </div>
-
-          {onEditar && (
+        {/* Acción de Edición */}
+        {onEditar && (
+          <div className="pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100 flex items-center justify-end shrink-0">
             <Button
-              variant="secondary"
+              type="button"
+              variant="primary"
               onClick={onEditar}
-              className="w-auto px-3 py-2 text-xs font-semibold"
+              className="w-auto rounded-xl px-4 py-2 text-xs sm:text-sm font-semibold shadow-xs"
             >
               <Pencil size={15} aria-hidden="true" />
               <span>Editar curso</span>
             </Button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )
