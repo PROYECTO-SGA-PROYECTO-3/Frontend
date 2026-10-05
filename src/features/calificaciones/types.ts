@@ -17,6 +17,7 @@ export interface ResumenAnioLectivoCalificaciones {
   estadoMatricula: EstadoMatricula | null
   directorGrupo: string | null
   periodoActual: string | null
+  periodos: string[]
 }
 
 export interface ResumenAcademico {

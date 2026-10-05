@@ -134,7 +134,7 @@ export default function Calificaciones() {
               />
             </div>
 
-            <RegistroAcademico asignaturas={calificaciones.asignaturas} />
+            <RegistroAcademico asignaturas={calificaciones.asignaturas} periodos={calificaciones.anioLectivo.periodos || []} />
           </div>
         )}
       </main>
