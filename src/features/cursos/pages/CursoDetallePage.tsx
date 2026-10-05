@@ -1,9 +1,19 @@
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, CheckCircle2 } from 'lucide-react'
 import { PageHeader } from '@/layouts'
 import { ErrorState, Button } from '@/shared/ui'
-import { useCursoDetalle } from '../hooks'
-import { CursoHeader, CursoDetalleSkeleton } from '../components'
+import type { SolicitudGrado } from '@/shared/types/academico.types'
+import { useCursoDetalle, useCursos, useCursoMutations } from '../hooks'
+import {
+  CursoHeader,
+  CursoDetalleSkeleton,
+  CursoTabs,
+  CursoModal,
+  PestanaEstudiantes,
+  PestanaCargaAcademica,
+} from '../components'
+import type { TabCursoId } from '../components/detalle/CursoTabs'
 
 export function CursoDetallePage() {
   const { id } = useParams<{ id: string }>()
@@ -12,7 +22,52 @@ export function CursoDetallePage() {
   const cursoId = Number(id)
   const esIdValido = Number.isInteger(cursoId) && cursoId > 0
 
+  // Datos del curso
   const { curso, isLoading, isError, error, refetch } = useCursoDetalle(cursoId)
+  const { cursos = [] } = useCursos()
+  const { actualizarCurso, estaActualizando } = useCursoMutations()
+
+  // Estado de navegación por pestañas (Estudiantes por defecto)
+  const [tabActiva, setTabActiva] = useState<TabCursoId>('estudiantes')
+
+  // Estado del modal de edición rápida
+  const [modalEditarAbierto, setModalEditarAbierto] = useState(false)
+  const [errorServidorModal, setErrorServidorModal] = useState<string | null>(null)
+  const [mensajeExito, setMensajeExito] = useState<string | null>(null)
+
+  const mostrarExitoTemporal = (mensaje: string) => {
+    setMensajeExito(mensaje)
+    setTimeout(() => {
+      setMensajeExito(null)
+    }, 4000)
+  }
+
+  const existeDuplicado = (nombre: string, ignorarId?: number) => {
+    const nombreNormalizado = nombre.trim().toLowerCase()
+    return cursos.some(
+      (c) =>
+        c.nombre.trim().toLowerCase() === nombreNormalizado &&
+        c.id !== (ignorarId ?? cursoId),
+    )
+  }
+
+  const handleGuardarCurso = async (datos: SolicitudGrado) => {
+    if (!curso) return
+    setErrorServidorModal(null)
+    try {
+      await actualizarCurso({ id: curso.id, datos })
+      mostrarExitoTemporal(
+        `El curso "${datos.nombre}" ha sido actualizado exitosamente.`,
+      )
+      setModalEditarAbierto(false)
+    } catch (err: unknown) {
+      setErrorServidorModal(
+        err instanceof Error
+          ? err.message
+          : 'Ocurrió un error al actualizar los datos del curso.',
+      )
+    }
+  }
 
   return (
     <div className="min-h-screen bg-slate-50/60 pb-16">
@@ -74,18 +129,71 @@ export function CursoDetallePage() {
         {/* Detalle del curso cargado exitosamente */}
         {esIdValido && !isLoading && curso && (
           <div className="space-y-6 animate-in fade-in duration-200">
-            {/* Cabecera del Curso */}
-            <CursoHeader curso={curso} />
+            {/* Mensaje de éxito tras editar */}
+            {mensajeExito && (
+              <div
+                role="status"
+                aria-live="polite"
+                className="flex items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-4 text-sm font-medium text-brand-900 shadow-sm animate-in fade-in slide-in-from-top-2 duration-200"
+              >
+                <CheckCircle2
+                  size={20}
+                  className="text-brand-600 shrink-0"
+                  aria-hidden="true"
+                />
+                <span>{mensajeExito}</span>
+              </div>
+            )}
 
-            {/* Espacio reservado para las pestañas de navegación (Fase 2) */}
-            <div className="rounded-2xl border border-dashed border-slate-300 bg-white/70 p-8 text-center">
-              <p className="text-sm font-medium text-slate-500">
-                Estructura base del curso cargada correctamente.
-              </p>
-              <p className="mt-1 text-xs text-slate-400">
-                La navegación por pestañas (Resumen, Estudiantes, Carga Académica) será incorporada en la siguiente fase.
-              </p>
+            {/* Cabecera del Curso con acción de editar */}
+            <CursoHeader
+              curso={curso}
+              onEditar={() => {
+                setErrorServidorModal(null)
+                setModalEditarAbierto(true)
+              }}
+            />
+
+            {/* Pestañas de Navegación */}
+            <CursoTabs
+              tabActiva={tabActiva}
+              onSeleccionarTab={setTabActiva}
+            />
+
+            {/* Contenido según pestaña activa */}
+            <div
+              role="tabpanel"
+              id={`panel-${tabActiva}`}
+              aria-labelledby={`tab-${tabActiva}`}
+            >
+              {tabActiva === 'estudiantes' && (
+                <PestanaEstudiantes
+                  cursoId={curso.id}
+                  nombreCurso={curso.nombre}
+                />
+              )}
+
+              {tabActiva === 'carga' && (
+                <PestanaCargaAcademica
+                  cursoId={curso.id}
+                  nombreCurso={curso.nombre}
+                />
+              )}
             </div>
+
+            {/* Modal de edición rápida del grado */}
+            <CursoModal
+              abierto={modalEditarAbierto}
+              cursoAEditar={curso}
+              guardando={estaActualizando}
+              errorServidor={errorServidorModal}
+              existeDuplicado={existeDuplicado}
+              onGuardar={handleGuardarCurso}
+              onCerrar={() => {
+                setModalEditarAbierto(false)
+                setErrorServidorModal(null)
+              }}
+            />
           </div>
         )}
       </main>

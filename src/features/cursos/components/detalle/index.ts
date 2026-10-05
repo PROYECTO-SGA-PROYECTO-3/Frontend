@@ -1,2 +1,5 @@
 export * from './CursoHeader'
 export * from './CursoDetalleSkeleton'
+export * from './CursoTabs'
+export * from './PestanaEstudiantes'
+export * from './PestanaCargaAcademica'

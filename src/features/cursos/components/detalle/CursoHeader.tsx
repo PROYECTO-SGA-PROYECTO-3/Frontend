@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom'
-import { ArrowLeft, School, UserCheck, UserX, ChevronRight } from 'lucide-react'
+import { ArrowLeft, School, UserCheck, UserX, ChevronRight, Pencil } from 'lucide-react'
 import type { Grado } from '@/shared/types/academico.types'
+import { Button } from '@/shared/ui'
 
 export interface CursoHeaderProps {
   curso: Grado
+  onEditar?: () => void
 }
 
-export function CursoHeader({ curso }: CursoHeaderProps) {
+export function CursoHeader({ curso, onEditar }: CursoHeaderProps) {
   const tieneDirector = Boolean(curso.directorId && curso.nombreDirector)
 
   return (
@@ -47,8 +49,8 @@ export function CursoHeader({ curso }: CursoHeaderProps) {
           </div>
         </div>
 
-        {/* Indicador de Director de Grupo */}
-        <div className="flex items-center gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
+        {/* Acciones y Director de Grupo */}
+        <div className="flex flex-wrap items-center gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-slate-100">
           <div className="text-left sm:text-right">
             <p className="text-xs font-medium uppercase tracking-wider text-slate-400">
               Director de Grupo
@@ -65,6 +67,17 @@ export function CursoHeader({ curso }: CursoHeaderProps) {
               </div>
             )}
           </div>
+
+          {onEditar && (
+            <Button
+              variant="secondary"
+              onClick={onEditar}
+              className="w-auto px-3 py-2 text-xs font-semibold"
+            >
+              <Pencil size={15} aria-hidden="true" />
+              <span>Editar curso</span>
+            </Button>
+          )}
         </div>
       </div>
     </div>
