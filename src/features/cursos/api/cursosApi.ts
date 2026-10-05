@@ -39,3 +39,8 @@ export async function matricularEstudianteEnCurso(
 ): Promise<Matricula> {
   return api.post<Matricula>('/matriculas', datos)
 }
+
+export async function eliminarMatricula(matriculaId: number): Promise<void> {
+  await api.delete(`/matriculas/${matriculaId}`)
+}
+

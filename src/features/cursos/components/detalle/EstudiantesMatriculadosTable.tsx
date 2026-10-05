@@ -3,10 +3,12 @@ import { EstudianteMatriculadoFila } from './EstudianteMatriculadoFila'
 
 export interface EstudiantesMatriculadosTableProps {
   estudiantes: Matricula[]
+  onRetirar?: (matricula: Matricula) => void
 }
 
 export function EstudiantesMatriculadosTable({
   estudiantes,
+  onRetirar,
 }: EstudiantesMatriculadosTableProps) {
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
@@ -27,10 +29,10 @@ export function EstudiantesMatriculadosTable({
                 Documento
               </th>
               <th scope="col" className="py-3.5 px-4 text-center">
-                Año Lectivo
+                Estado
               </th>
               <th scope="col" className="py-3.5 pl-4 pr-6 text-right">
-                Estado
+                Acciones
               </th>
             </tr>
           </thead>
@@ -40,6 +42,7 @@ export function EstudiantesMatriculadosTable({
                 key={matricula.id}
                 matricula={matricula}
                 indice={index + 1}
+                onRetirar={onRetirar}
               />
             ))}
           </tbody>

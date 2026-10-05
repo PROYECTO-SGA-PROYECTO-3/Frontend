@@ -1,7 +1,15 @@
 import { useState, useMemo } from 'react'
 import { Users, UserPlus, CheckCircle2 } from 'lucide-react'
-import { ErrorState, Skeleton, SearchInput, Badge, Button } from '@/shared/ui'
-import { useEstudiantesCurso } from '../../hooks'
+import {
+  ErrorState,
+  Skeleton,
+  SearchInput,
+  Badge,
+  Button,
+  DialogoConfirmacion,
+} from '@/shared/ui'
+import type { Matricula } from '@/shared/types/matricula.types'
+import { useEstudiantesCurso, useEliminarMatricula } from '../../hooks'
 import { EstudiantesMatriculadosTable } from './EstudiantesMatriculadosTable'
 import { EstudiantesCursoEmptyState } from './EstudiantesCursoEmptyState'
 import { MatricularEstudianteModal } from './MatricularEstudianteModal'
@@ -18,8 +26,17 @@ export function PestanaEstudiantes({
   const { estudiantes, totalEstudiantes, isLoading, isError, error, refetch } =
     useEstudiantesCurso(cursoId)
 
+  const {
+    retirarEstudiante,
+    estaRetirando,
+    errorRetiro,
+    resetearError,
+  } = useEliminarMatricula(cursoId)
+
   const [busqueda, setBusqueda] = useState('')
   const [modalMatricularAbierto, setModalMatricularAbierto] = useState(false)
+  const [matriculaARetirar, setMatriculaARetirar] =
+    useState<Matricula | null>(null)
   const [mensajeExito, setMensajeExito] = useState<string | null>(null)
 
   const mostrarExitoTemporal = (mensaje: string) => {
@@ -27,6 +44,32 @@ export function PestanaEstudiantes({
     setTimeout(() => {
       setMensajeExito(null)
     }, 4000)
+  }
+
+  const handleAbrirRetirar = (matricula: Matricula) => {
+    resetearError()
+    setMatriculaARetirar(matricula)
+  }
+
+  const handleCancelarRetirar = () => {
+    if (estaRetirando) return
+    resetearError()
+    setMatriculaARetirar(null)
+  }
+
+  const handleConfirmarRetirar = async () => {
+    if (!matriculaARetirar) return
+
+    try {
+      await retirarEstudiante(matriculaARetirar.id)
+      const nombre = matriculaARetirar.nombreCompletoEstudiante
+      setMatriculaARetirar(null)
+      mostrarExitoTemporal(
+        `El estudiante "${nombre}" ha sido retirado del curso correctamente.`,
+      )
+    } catch {
+      // El error se maneja reactivamente mediante errorRetiro
+    }
   }
 
   // Filtrado en memoria por nombre completo o documento
@@ -185,7 +228,10 @@ export function PestanaEstudiantes({
             />
           ) : (
             /* Tabla accesible de estudiantes matriculados */
-            <EstudiantesMatriculadosTable estudiantes={estudiantesFiltrados} />
+            <EstudiantesMatriculadosTable
+              estudiantes={estudiantesFiltrados}
+              onRetirar={handleAbrirRetirar}
+            />
           )}
         </div>
       )}
@@ -202,6 +248,20 @@ export function PestanaEstudiantes({
           )
         }}
       />
+
+      {/* Diálogo de Confirmación para Retirar Estudiante del Curso */}
+      <DialogoConfirmacion
+        abierto={Boolean(matriculaARetirar)}
+        titulo="¿Retirar estudiante del curso?"
+        mensaje={`¿Estás seguro de que deseas retirar a "${matriculaARetirar?.nombreCompletoEstudiante}" de ${tituloCurso}? El estudiante quedará libre para ser matriculado en otro grado.`}
+        error={errorRetiro ?? undefined}
+        procesando={estaRetirando}
+        textoConfirmar="Retirar estudiante"
+        varianteConfirmar="peligro"
+        onConfirmar={handleConfirmarRetirar}
+        onCancelar={handleCancelarRetirar}
+      />
     </div>
   )
 }
+

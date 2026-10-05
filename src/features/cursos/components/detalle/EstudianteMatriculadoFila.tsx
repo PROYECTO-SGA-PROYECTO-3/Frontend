@@ -1,10 +1,11 @@
-import { Calendar } from 'lucide-react'
+import { Eye, Trash2 } from 'lucide-react'
 import type { Matricula, EstadoMatricula } from '@/shared/types/matricula.types'
 import { Avatar, Badge, type BadgeColor } from '@/shared/ui'
 
 export interface EstudianteMatriculadoFilaProps {
   matricula: Matricula
   indice: number
+  onRetirar?: (matricula: Matricula) => void
 }
 
 const COLOR_ESTADO: Record<EstadoMatricula, BadgeColor> = {
@@ -17,8 +18,13 @@ const COLOR_ESTADO: Record<EstadoMatricula, BadgeColor> = {
 export function EstudianteMatriculadoFila({
   matricula,
   indice,
+  onRetirar,
 }: EstudianteMatriculadoFilaProps) {
   const colorBadge = COLOR_ESTADO[matricula.estado] ?? 'slate'
+
+  const handleRetirar = () => {
+    onRetirar?.(matricula)
+  }
 
   return (
     <tr className="group transition-colors hover:bg-slate-50/80">
@@ -52,20 +58,54 @@ export function EstudianteMatriculadoFila({
         </span>
       </td>
 
-      {/* Columna: Año Lectivo */}
-      <td className="py-3.5 px-4 text-center">
-        <span className="inline-flex items-center gap-1 text-xs text-slate-500 font-medium">
-          <Calendar size={13} className="text-slate-400 shrink-0" aria-hidden="true" />
-          <span>{matricula.anioLectivo}</span>
-        </span>
-      </td>
-
       {/* Columna: Estado de Matrícula */}
-      <td className="py-3.5 pl-4 pr-6 text-right">
+      <td className="py-3.5 px-4 text-center">
         <Badge color={colorBadge}>
           {matricula.estado}
         </Badge>
       </td>
+
+      <td className="py-3.5 pl-4 pr-6 text-right">
+        <div className="flex items-center justify-end gap-1">
+          {/* Botón Ver (preparado sin funciones por ahora) */}
+          <button
+            type="button"
+            disabled
+            title={`Ver detalles de ${matricula.nombreCompletoEstudiante}`}
+            aria-label={`Ver detalles de ${matricula.nombreCompletoEstudiante}`}
+            className="rounded-lg p-1.5 text-slate-300 cursor-not-allowed opacity-60 transition"
+          >
+            <Eye size={16} aria-hidden="true" />
+          </button>
+
+          {/* Botón Retirar Estudiante del Curso (solo permitido si está ACTIVA) */}
+          {onRetirar && (
+            <button
+              type="button"
+              disabled={matricula.estado !== 'ACTIVA'}
+              onClick={handleRetirar}
+              title={
+                matricula.estado === 'ACTIVA'
+                  ? `Retirar a ${matricula.nombreCompletoEstudiante} del curso`
+                  : `No se puede retirar una matrícula en estado ${matricula.estado}`
+              }
+              aria-label={
+                matricula.estado === 'ACTIVA'
+                  ? `Retirar a ${matricula.nombreCompletoEstudiante} del curso`
+                  : `Matrícula en estado ${matricula.estado}, no retirable`
+              }
+              className={
+                matricula.estado === 'ACTIVA'
+                  ? 'cursor-pointer rounded-lg p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-600'
+                  : 'rounded-lg p-1.5 text-slate-300 cursor-not-allowed opacity-40 transition'
+              }
+            >
+              <Trash2 size={16} aria-hidden="true" />
+            </button>
+          )}
+        </div>
+      </td>
     </tr>
   )
 }
+
