@@ -1,5 +1,6 @@
 import { api } from '@/shared/lib/axios'
 import type { Grado, SolicitudGrado } from '@/shared/types/academico.types'
+import type { Matricula } from '@/shared/types/matricula.types'
 
 export async function listarGrados(): Promise<Grado[]> {
   return api.get<Grado[]>('/academico/grados')
@@ -23,3 +24,23 @@ export async function actualizarGrado(
 export async function eliminarGrado(id: number): Promise<void> {
   await api.delete(`/academico/grados/${id}`)
 }
+
+export async function listarEstudiantesPorGrado(
+  gradoId: number,
+  anio?: number,
+): Promise<Matricula[]> {
+  return api.get<Matricula[]>(`/matriculas/grado/${gradoId}`, {
+    params: anio ? { anio } : undefined,
+  })
+}
+
+export async function matricularEstudianteEnCurso(
+  datos: { documentoEstudiante: string; gradoId: number; anio?: number },
+): Promise<Matricula> {
+  return api.post<Matricula>('/matriculas', datos)
+}
+
+export async function eliminarMatricula(matriculaId: number): Promise<void> {
+  await api.delete(`/matriculas/${matriculaId}`)
+}
+

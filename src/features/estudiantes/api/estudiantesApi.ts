@@ -63,3 +63,22 @@ export async function activarEstudiante(id: number): Promise<void> {
 export async function eliminarEstudiante(id: number): Promise<void> {
   await api.delete(`/estudiantes/${id}`)
 }
+
+
+/**
+ * Consulta liviana de candidatos a estudiantes para autocompletados y selectores.
+ * El backend aplica sus valores por defecto de paginación automáticamente.
+ */
+export async function buscarCandidatosEstudiantes(
+  termino: string,
+  limite = 5,
+): Promise<Estudiante[]> {
+  const respuesta = await api.get<PaginaSpring<Estudiante>>('/estudiantes', {
+    params: {
+      termino: termino.trim(),
+      size: limite,
+      incluirInactivos: false,
+    },
+  })
+  return respuesta.content
+}
