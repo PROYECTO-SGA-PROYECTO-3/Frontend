@@ -14,6 +14,9 @@ const AdminMaterias = lazy(() =>
 const AdminCursos = lazy(() =>
   import('@/features/cursos').then((m) => ({ default: m.CursosPage })),
 )
+const AdminCursoDetalle = lazy(() =>
+  import('@/features/cursos').then((m) => ({ default: m.CursoDetallePage })),
+)
 const AdminDocentes = lazy(() =>
   import('@/features/docentes').then((m) => ({ default: m.DocentesPage })),
 )
@@ -35,6 +38,7 @@ export const adminRoutes: RouteObject = {
   children: [
     { path: '/admin', element: <AdminDashboard /> },
     { path: '/admin/cursos', element: <AdminCursos /> },
+    { path: '/admin/cursos/:id', element: <AdminCursoDetalle /> },
     { path: '/admin/materias', element: <AdminMaterias /> },
     { path: '/admin/docentes', element: <AdminDocentes /> },
     { path: '/admin/docentes/nuevo', element: <AdminDocenteFormulario /> },
