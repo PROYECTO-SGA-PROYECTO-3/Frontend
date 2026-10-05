@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, CheckCircle2 } from 'lucide-react'
+import { ArrowLeft } from 'lucide-react'
 import { PageHeader } from '@/layouts'
-import { ErrorState, Button } from '@/shared/ui'
+import { ErrorState, Button, ToastNotificacion } from '@/shared/ui'
 import type { SolicitudGrado } from '@/shared/types/academico.types'
 import { useCursoDetalle, useCursos, useCursoMutations } from '../hooks'
 import {
@@ -129,21 +129,12 @@ export function CursoDetallePage() {
         {/* Detalle del curso cargado exitosamente */}
         {esIdValido && !isLoading && curso && (
           <div className="space-y-6 animate-in fade-in duration-200">
-            {/* Mensaje de éxito tras editar */}
-            {mensajeExito && (
-              <div
-                role="status"
-                aria-live="polite"
-                className="flex items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-4 text-sm font-medium text-brand-900 shadow-sm animate-in fade-in slide-in-from-top-2 duration-200"
-              >
-                <CheckCircle2
-                  size={20}
-                  className="text-brand-600 shrink-0"
-                  aria-hidden="true"
-                />
-                <span>{mensajeExito}</span>
-              </div>
-            )}
+            {/* Notificación flotante de éxito tras editar */}
+            <ToastNotificacion
+              mensaje={mensajeExito}
+              onCerrar={() => setMensajeExito(null)}
+              tipo="exito"
+            />
 
             {/* Cabecera del Curso con acción de editar */}
             <CursoHeader

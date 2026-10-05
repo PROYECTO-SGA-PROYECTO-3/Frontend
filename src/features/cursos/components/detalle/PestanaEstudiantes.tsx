@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { Users, UserPlus, CheckCircle2 } from 'lucide-react'
+import { Users, UserPlus } from 'lucide-react'
 import {
   ErrorState,
   Skeleton,
@@ -7,6 +7,7 @@ import {
   Badge,
   Button,
   DialogoConfirmacion,
+  ToastNotificacion,
 } from '@/shared/ui'
 import type { Matricula } from '@/shared/types/matricula.types'
 import { useEstudiantesCurso, useEliminarMatricula } from '../../hooks'
@@ -39,11 +40,8 @@ export function PestanaEstudiantes({
     useState<Matricula | null>(null)
   const [mensajeExito, setMensajeExito] = useState<string | null>(null)
 
-  const mostrarExitoTemporal = (mensaje: string) => {
-    setMensajeExito(mensaje)
-    setTimeout(() => {
-      setMensajeExito(null)
-    }, 4000)
+  const handleCerrarToast = () => {
+    setMensajeExito(null)
   }
 
   const handleAbrirRetirar = (matricula: Matricula) => {
@@ -64,7 +62,7 @@ export function PestanaEstudiantes({
       await retirarEstudiante(matriculaARetirar.id)
       const nombre = matriculaARetirar.nombreCompletoEstudiante
       setMatriculaARetirar(null)
-      mostrarExitoTemporal(
+      setMensajeExito(
         `El estudiante "${nombre}" ha sido retirado del curso correctamente.`,
       )
     } catch {
@@ -89,21 +87,12 @@ export function PestanaEstudiantes({
 
   return (
     <div className="space-y-5">
-      {/* Notificación flotante de éxito */}
-      {mensajeExito && (
-        <div
-          role="status"
-          aria-live="polite"
-          className="flex items-center gap-3 rounded-2xl border border-brand-200 bg-brand-50 p-4 text-sm font-medium text-brand-900 shadow-sm animate-in fade-in slide-in-from-top-2 duration-200"
-        >
-          <CheckCircle2
-            size={20}
-            className="text-brand-600 shrink-0"
-            aria-hidden="true"
-          />
-          <span>{mensajeExito}</span>
-        </div>
-      )}
+      {/* Notificación flotante de éxito (sin Layout Shift) */}
+      <ToastNotificacion
+        mensaje={mensajeExito}
+        onCerrar={handleCerrarToast}
+        tipo="exito"
+      />
 
       {/* 1. Estado de Carga con Skeleton en formato Tabla */}
       {isLoading && (
@@ -243,7 +232,7 @@ export function PestanaEstudiantes({
         nombreCurso={tituloCurso}
         onCerrar={() => setModalMatricularAbierto(false)}
         onExito={(nombre) => {
-          mostrarExitoTemporal(
+          setMensajeExito(
             `El estudiante "${nombre}" ha sido matriculado exitosamente en ${tituloCurso}.`,
           )
         }}
