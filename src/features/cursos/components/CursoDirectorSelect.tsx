@@ -74,7 +74,7 @@ export function CursoDirectorSelect({
 				</div>
 			</div>
 
-			<p className="text-[11px] text-slate-400">
+			<p className="text-xs text-slate-400">
 				Docente responsable de la orientación y acompañamiento del curso.
 			</p>
 		</div>
