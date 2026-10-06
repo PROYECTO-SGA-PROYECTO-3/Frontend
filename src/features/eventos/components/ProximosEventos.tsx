@@ -36,7 +36,7 @@ export function ProximosEventos({ eventos }: ProximosEventosProps) {
 							<li key={evento.id} className="group flex items-start gap-4">
 								<div className="flex w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-brand-50 py-2 text-brand-700 shadow-sm transition-colors duration-300 group-hover:bg-brand-600 group-hover:text-white">
 									<span className="text-xl font-black leading-none">{dia}</span>
-									<span className="mt-1 text-[10px] font-bold uppercase tracking-widest">
+									<span className="mt-1 text-xs font-bold uppercase tracking-widest">
 										{mes}
 									</span>
 								</div>
@@ -48,7 +48,7 @@ export function ProximosEventos({ eventos }: ProximosEventosProps) {
 										{evento.descripcion}
 									</p>
 									{evento.lugar && (
-										<span className="mt-2 inline-flex items-center rounded-md bg-slate-100 px-2.5 py-0.5 text-[10px] font-medium text-slate-600">
+										<span className="mt-2 inline-flex items-center rounded-md bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
 											<MapPin size={12} className="mr-1 shrink-0" /> {evento.lugar}
 										</span>
 									)}

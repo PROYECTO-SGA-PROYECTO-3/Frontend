@@ -180,7 +180,7 @@ function AsignarMateriaDialog({
                 </option>
               ))}
             </select>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-xs text-slate-400">
               Solo se pueden vincular asignaturas que no estén activas en este curso.
             </p>
           </div>
@@ -209,7 +209,7 @@ function AsignarMateriaDialog({
                 </option>
               ))}
             </select>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-xs text-slate-400">
               El docente tendrá acceso a la planilla y registro de calificaciones de esta materia.
             </p>
           </div>

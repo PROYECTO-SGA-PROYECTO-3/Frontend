@@ -148,7 +148,7 @@ export function CrearEventoModal({
               required
               className="w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 outline-none transition focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-400 resize-none"
             />
-            <span className="text-right text-[11px] text-slate-400">
+            <span className="text-right text-xs text-slate-400">
               {descripcion.length}/255 caracteres
             </span>
           </div>

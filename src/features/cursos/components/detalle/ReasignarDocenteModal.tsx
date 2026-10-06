@@ -150,7 +150,7 @@ function ReasignarDocenteDialog({
           )}
 
           <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-3.5">
-            <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
               Docente titular actual
             </p>
             <p className="mt-1 text-sm font-semibold text-slate-800">
@@ -185,7 +185,7 @@ function ReasignarDocenteDialog({
                 </option>
               ))}
             </select>
-            <p className="text-[11px] text-slate-400">
+            <p className="text-xs text-slate-400">
               El nuevo docente asumirá la titularidad de las notas y planillas de esta materia.
             </p>
           </div>
