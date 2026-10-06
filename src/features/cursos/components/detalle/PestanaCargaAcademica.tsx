@@ -2,16 +2,19 @@ import { useState, useMemo } from "react";
 import { Plus } from "lucide-react";
 import {
 	ErrorState,
-	Skeleton,
 	SearchInput,
 	Badge,
 	Button,
 	ToastNotificacion,
+	DialogoConfirmacion,
 } from "@/shared/ui";
 import type { CargaAcademica } from "@/shared/types/academico.types";
-import { useCargaAcademicaCurso } from "../../hooks";
+import { useCargaAcademicaCurso, useRemoverMateria } from "../../hooks";
 import { CargaAcademicaTable } from "./CargaAcademicaTable";
 import { CargaAcademicaEmptyState } from "./CargaAcademicaEmptyState";
+import { CargaAcademicaSkeleton } from "./CargaAcademicaSkeleton";
+import { AsignarMateriaModal } from "./AsignarMateriaModal";
+import { ReasignarDocenteModal } from "./ReasignarDocenteModal";
 
 export interface PestanaCargaAcademicaProps {
 	cursoId: number;
@@ -25,6 +28,13 @@ export function PestanaCargaAcademica({
 	const { cargas, totalCargas, isLoading, isError, error, refetch } =
 		useCargaAcademicaCurso(cursoId);
 
+	const {
+		removerMateria,
+		estaRemoviendo,
+		errorRemover,
+		resetearError: resetearErrorRemover,
+	} = useRemoverMateria(cursoId);
+
 	const [busqueda, setBusqueda] = useState("");
 	const [modalAsignarAbierto, setModalAsignarAbierto] = useState(false);
 	const [cargaAReasignar, setCargaAReasignar] = useState<CargaAcademica | null>(
@@ -35,6 +45,8 @@ export function PestanaCargaAcademica({
 	);
 	const [mensajeExito, setMensajeExito] = useState<string | null>(null);
 
+	const tituloCurso = nombreCurso ?? `Curso #${cursoId}`;
+
 	const handleCerrarToast = () => {
 		setMensajeExito(null);
 	};
@@ -43,12 +55,57 @@ export function PestanaCargaAcademica({
 		setModalAsignarAbierto(true);
 	};
 
+	const handleCerrarAsignar = () => {
+		setModalAsignarAbierto(false);
+	};
+
 	const handleAbrirReasignar = (carga: CargaAcademica) => {
 		setCargaAReasignar(carga);
 	};
 
+	const handleCerrarReasignar = () => {
+		setCargaAReasignar(null);
+	};
+
 	const handleAbrirRemover = (carga: CargaAcademica) => {
+		resetearErrorRemover();
 		setCargaARemover(carga);
+	};
+
+	const handleCancelarRemover = () => {
+		if (estaRemoviendo) return;
+		resetearErrorRemover();
+		setCargaARemover(null);
+	};
+
+	const handleConfirmarRemover = async () => {
+		if (!cargaARemover) return;
+
+		try {
+			await removerMateria(cargaARemover.id);
+			const nombre = cargaARemover.nombreAsignatura;
+			setCargaARemover(null);
+			setMensajeExito(
+				`La materia "${nombre}" ha sido removida del curso exitosamente.`,
+			);
+		} catch {
+			// errorRemover se maneja reactivamente en DialogoConfirmacion
+		}
+	};
+
+	const handleExitoAsignacion = (nombreAsignatura: string) => {
+		setMensajeExito(
+			`La materia "${nombreAsignatura}" ha sido asignada a ${tituloCurso} exitosamente.`,
+		);
+	};
+
+	const handleExitoReasignacion = (
+		nombreAsignatura: string,
+		nuevoDocente: string,
+	) => {
+		setMensajeExito(
+			`Se reasignó a "${nuevoDocente}" como docente titular de ${nombreAsignatura}.`,
+		);
 	};
 
 	const handleLimpiarBusqueda = () => {
@@ -68,6 +125,10 @@ export function PestanaCargaAcademica({
 		);
 	}, [cargas, busqueda]);
 
+	const asignaturasYaAsignadasIds = useMemo(() => {
+		return cargas.map((c) => c.asignaturaId);
+	}, [cargas]);
+
 	const hayFiltroActivo = busqueda.trim().length > 0;
 
 	return (
@@ -80,49 +141,7 @@ export function PestanaCargaAcademica({
 			/>
 
 			{/* 1. Estado de Carga con Skeleton en formato Tabla */}
-			{isLoading && (
-				<div
-					className="space-y-4"
-					aria-busy="true"
-					aria-label="Cargando distribución de asignaturas del curso"
-				>
-					<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-						<Skeleton className="h-10 w-full sm:w-72 rounded-xl" />
-						<div className="flex items-center gap-3">
-							<Skeleton className="h-6 w-28 rounded-full" />
-							<Skeleton className="h-10 w-36 rounded-xl" />
-						</div>
-					</div>
-
-					<div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-						<div className="border-b border-slate-100 bg-slate-50/75 p-3.5 flex gap-4">
-							<Skeleton className="h-4 w-12" />
-							<Skeleton className="h-4 w-48" />
-							<Skeleton className="h-4 w-40" />
-							<Skeleton className="h-4 w-20 text-center" />
-							<Skeleton className="h-4 w-24 ml-auto" />
-						</div>
-						<div className="divide-y divide-slate-100 p-2 space-y-2">
-							{Array.from({ length: 4 }).map((_, index) => (
-								<div key={index} className="flex items-center gap-4 py-3 px-2">
-									<Skeleton className="h-4 w-8" />
-									<Skeleton className="h-9 w-9 rounded-xl shrink-0" />
-									<div className="space-y-1.5 flex-1">
-										<Skeleton className="h-4 w-36" />
-										<Skeleton className="h-3 w-20" />
-									</div>
-									<div className="space-y-1.5 flex-1">
-										<Skeleton className="h-4 w-40" />
-										<Skeleton className="h-3 w-24" />
-									</div>
-									<Skeleton className="h-5 w-16 rounded-full mx-auto" />
-									<Skeleton className="h-8 w-16 rounded-lg ml-auto" />
-								</div>
-							))}
-						</div>
-					</div>
-				</div>
-			)}
+			{isLoading && <CargaAcademicaSkeleton />}
 
 			{/* 2. Estado de Error de Red */}
 			{!isLoading && isError && (
@@ -136,7 +155,19 @@ export function PestanaCargaAcademica({
 
 			{/* 3. Estado Vacío General (El curso no tiene materias asignadas aún) */}
 			{!isLoading && !isError && totalCargas === 0 && (
-				<CargaAcademicaEmptyState onAsignarMateria={handleAbrirAsignar} />
+				<div className="space-y-4">
+					<div className="flex justify-end">
+						<Button
+							type="button"
+							onClick={handleAbrirAsignar}
+							className="w-auto px-4 py-2 text-xs font-semibold"
+						>
+							<Plus size={16} aria-hidden="true" />
+							<span>Asignar materia</span>
+						</Button>
+					</div>
+					<CargaAcademicaEmptyState onAsignarMateria={handleAbrirAsignar} />
+				</div>
 			)}
 
 			{/* 4. Contenido Principal con Datos */}
@@ -148,6 +179,7 @@ export function PestanaCargaAcademica({
 							<SearchInput
 								value={busqueda}
 								onChange={setBusqueda}
+								onClear={handleLimpiarBusqueda}
 								placeholder="Buscar materia o docente..."
 								aria-label="Buscar asignaturas o docentes en este curso"
 							/>
@@ -186,6 +218,38 @@ export function PestanaCargaAcademica({
 					)}
 				</div>
 			)}
+
+			{/* Modal: Asignar nueva materia */}
+			<AsignarMateriaModal
+				abierto={modalAsignarAbierto}
+				cursoId={cursoId}
+				nombreCurso={tituloCurso}
+				asignaturasYaAsignadasIds={asignaturasYaAsignadasIds}
+				onCerrar={handleCerrarAsignar}
+				onExito={handleExitoAsignacion}
+			/>
+
+			{/* Modal: Reasignar docente titular */}
+			<ReasignarDocenteModal
+				abierto={Boolean(cargaAReasignar)}
+				carga={cargaAReasignar}
+				cursoId={cursoId}
+				onCerrar={handleCerrarReasignar}
+				onExito={handleExitoReasignacion}
+			/>
+
+			{/* Diálogo de Confirmación: Remover materia del curso */}
+			<DialogoConfirmacion
+				abierto={Boolean(cargaARemover)}
+				titulo="¿Remover materia del curso?"
+				mensaje={`¿Estás seguro de que deseas remover la asignatura "${cargaARemover?.nombreAsignatura}" de ${tituloCurso}? La materia no se borrará del colegio, pero ya no formará parte de este curso en el año escolar actual.`}
+				error={errorRemover ?? undefined}
+				procesando={estaRemoviendo}
+				textoConfirmar="Remover materia"
+				varianteConfirmar="peligro"
+				onConfirmar={handleConfirmarRemover}
+				onCancelar={handleCancelarRemover}
+			/>
 		</div>
 	);
 }

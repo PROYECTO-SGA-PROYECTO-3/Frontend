@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { BookOpen, UserRoundPen, Trash2 } from 'lucide-react'
 import type { CargaAcademica } from '@/shared/types/academico.types'
+import { Avatar } from '@/shared/ui'
 
-import { Avatar, Badge } from '@/shared/ui'
 
 export interface CargaAcademicaFilaProps {
   carga: CargaAcademica
@@ -67,14 +67,8 @@ export const CargaAcademicaFila = memo(function CargaAcademicaFila({
         </div>
       </td>
 
-      {/* Columna: Año Lectivo */}
-      <td className="py-3.5 px-4 text-center">
-        <Badge color="slate">
-          {carga.anioLectivo}
-        </Badge>
-      </td>
-
       {/* Columna: Acciones */}
+
       <td className="py-3.5 pl-4 pr-6 text-right">
         <div className="flex items-center justify-end gap-1">
           {/* Botón Reasignar Docente */}

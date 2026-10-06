@@ -13,4 +13,9 @@ export * from './MatricularEstudianteModal'
 export * from './CargaAcademicaEmptyState'
 export * from './CargaAcademicaFila'
 export * from './CargaAcademicaTable'
+export * from './AsignarMateriaModal'
+export * from './ReasignarDocenteModal'
+export * from './CargaAcademicaSkeleton'
+
+
 

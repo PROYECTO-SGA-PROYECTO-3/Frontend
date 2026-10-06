@@ -30,12 +30,10 @@ export function CargaAcademicaTable({
               <th scope="col" className="py-3.5 px-4">
                 Docente Titular
               </th>
-              <th scope="col" className="py-3.5 px-4 text-center">
-                Año Lectivo
-              </th>
               <th scope="col" className="py-3.5 pl-4 pr-6 text-right">
                 Acciones
               </th>
+
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
