@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react'
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ProtectedRoute } from './ProtectedRoute'
 import { adminRoutes } from './admin.routes'
 import { docenteRoutes } from './docente.routes'
@@ -11,6 +11,9 @@ const LoginPage = lazy(() =>
 )
 const NoAutorizado = lazy(() => import('@/pages/NoAutorizado'))
 const NoEncontrado = lazy(() => import('@/pages/NoEncontrado'))
+const LandingPage = lazy(() =>
+  import('@/features/portal-publico').then((m) => ({ default: m.LandingPage }))
+)
 
 function SuspenseWrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -35,7 +38,14 @@ export const router = createBrowserRouter([
     ),
     children: [
       // Rutas públicas
-      { path: '/', element: <Navigate to="/login" replace /> },
+      { 
+        path: '/', 
+        element: (
+          <SuspenseWrapper>
+            <LandingPage />
+          </SuspenseWrapper>
+        ) 
+      },
       {
         path: '/login',
         element: (
