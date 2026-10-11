@@ -1,7 +1,7 @@
 import { Home, Target, Network, Mail, Compass, Leaf, MonitorSmartphone, HeartHandshake } from 'lucide-react'
 
 export const navItems = [
-  { name: 'Inicio', href: '#inicio', icon: Home, active: true },
+  { name: 'Inicio', href: '#inicio', icon: Home },
   { name: 'Misión y Visión', href: '#institucional', icon: Target },
   { name: 'Pilares Pedagógicos', href: '#pilares', icon: Network },
   { name: 'Información y Contacto', href: '#contacto', icon: Mail },
@@ -67,12 +67,5 @@ export const footerData = {
     { label: 'Municipio:', value: 'Santa Rosa, Cauca - Colombia' },
     { label: 'Resolución:', value: 'Reconocimiento Oficial S.E.D.' },
     { label: 'Correo:', value: 'institucionagricola@edu.co' },
-  ],
-  secciones: [
-    { name: 'Nuestra Institución y Misión', href: '#' },
-    { name: 'Red de Sedes Rurales', href: '#' },
-    { name: 'Plan de Estudios Agropecuario', href: '#' },
-    { name: 'Boletines y Comunicados', href: '#' },
-    { name: 'Atención al Ciudadano y PQRS', href: '#' },
   ]
 }

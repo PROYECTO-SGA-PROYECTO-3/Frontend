@@ -20,7 +20,7 @@ export function PilarCard({
   footerColor
 }: PilarCardProps) {
   return (
-    <div className="bg-white border border-slate-100 shadow-lg shadow-slate-100/50 rounded-3xl p-8 flex flex-col hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+    <div className="bg-white border border-slate-100 shadow-lg shadow-slate-100/50 rounded-3xl p-8 flex flex-col h-full hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
       <div className={`w-12 h-12 rounded-xl ${iconBg} flex items-center justify-center mb-6`}>
         <Icon className={`h-6 w-6 ${iconColor}`} />
       </div>

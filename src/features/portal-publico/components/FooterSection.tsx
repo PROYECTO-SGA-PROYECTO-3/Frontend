@@ -7,7 +7,7 @@ export function FooterSection() {
     <footer className="bg-slate-100 pt-16 pb-8 border-t border-slate-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
           
           {/* Logo y Descripción */}
           <div className="lg:col-span-1">
@@ -35,19 +35,7 @@ export function FooterSection() {
             </ul>
           </div>
 
-          {/* Secciones Principales */}
-          <div>
-            <h4 className="font-bold text-slate-900 mb-6 tracking-wide text-sm">SECCIONES PRINCIPALES</h4>
-            <ul className="space-y-3 text-sm text-slate-600">
-              {footerData.secciones.map((seccion, index) => (
-                <li key={index}>
-                  <a href={seccion.href} className="hover:text-brand-600 transition-colors">
-                    {seccion.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+
 
           {/* Canales y Enlaces */}
           <div>
@@ -60,15 +48,10 @@ export function FooterSection() {
 
         </div>
 
-        {/* Bottom bar */}
-        <div className="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-xs text-slate-500 text-center md:text-left">
+        <div className="pt-8 border-t border-slate-200 flex flex-col items-center gap-4">
+          <p className="text-xs text-slate-500 text-center">
             &copy; {new Date().getFullYear()} Institución Educativa Agrícola Fray Isidoro de Montclar. Todos los derechos reservados.
           </p>
-          <div className="flex gap-4 text-xs text-slate-500">
-            <a href="#" className="hover:text-slate-800">Tratamiento de Datos</a>
-            <a href="#" className="hover:text-slate-800">Transparencia y Acceso a la Información</a>
-          </div>
         </div>
 
       </div>

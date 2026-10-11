@@ -1,5 +1,5 @@
 import { Badge } from '@/shared/ui/Badge'
-import heroImage from '@/assets/hero.png'
+import banderaImage from '@/assets/bandera.jpeg'
 import logoImage from '@/assets/logo-ie-descanse.png'
 
 export function HeroSection() {
@@ -28,17 +28,11 @@ export function HeroSection() {
             <div className="relative h-80 sm:h-96 w-full">
               {/* Contenedor con overflow hidden solo para el fondo */}
               <div className="absolute inset-0 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-slate-900/10">
-                {/* Contenedor simulando la imagen de la bandera con herramientas (hero) */}
-                <div className="absolute inset-0 bg-gradient-to-b from-brand-700 to-slate-900">
-                   <img src={heroImage} alt="Fondo Hero" className="w-full h-full object-cover opacity-80 mix-blend-overlay" />
-                </div>
-                
-                {/* Franjas estilo bandera agropecuaria */}
-                <div className="absolute inset-0 flex flex-col z-0 opacity-80">
-                   <div className="flex-1 bg-brand-600"></div>
-                   <div className="flex-1 bg-accent-400"></div>
-                   <div className="flex-1 bg-slate-800"></div>
-                </div>
+                <img 
+                  src={banderaImage} 
+                  alt="Bandera Institucional" 
+                  className="w-full h-full object-cover saturate-110 contrast-110" 
+                />
               </div>
 
               {/* Insignia Modalidad Agropecuaria */}
