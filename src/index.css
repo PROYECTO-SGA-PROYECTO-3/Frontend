@@ -8,13 +8,25 @@
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
+  --text-xs: 0.8125rem;              /* 13px (Tailwind: 12px) */
+  --text-xs--line-height: 1.25rem;
+  --text-sm: 0.9375rem;              /* 15px (Tailwind: 14px) */
+  --text-sm--line-height: 1.375rem;
+
+  --color-slate-400: #64748b;
+  --color-slate-500: #475569;
+
   /* Marca (verde institucional): botones primarios, enlaces activos, acentos */
   --color-brand-50:  #f0fdf4;
   --color-brand-100: #dcfce7;
   --color-brand-200: #bbf7d0;
-  --color-brand-600: #16a34a;
-  --color-brand-700: #15803d;
-  --color-brand-800: #166534;
+  --color-brand-300: #86efac;        /* solo bordes/decoración */
+  --color-brand-400: #4ade80;        /* solo bordes/decoración */
+  --color-brand-500: #16a34a;        /* rellenos, focus rings, barras */
+  --color-brand-600: #15803d;
+  --color-brand-700: #166534;
+  --color-brand-800: #14532d;
+  --color-brand-900: #052e16;
 
   /* Acento (dorado): detalles decorativos, subrayados, resaltados */
   --color-accent-100: #fef3c7;

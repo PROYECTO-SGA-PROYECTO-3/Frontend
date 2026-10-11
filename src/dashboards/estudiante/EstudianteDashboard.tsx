@@ -8,6 +8,8 @@ import { TarjetaPromedio } from '@/features/calificaciones';
 import { ProximosEventos } from '@/features/eventos';
 import { AsignaturasHoy } from '@/features/carga-academica';
 import type { DashboardEstudiante } from './types';
+import { BienvenidaBanner } from './BienvenidaBanner';
+import { TarjetaGrado } from './TarjetaGrado';
 
 export default function Dashboard() {
   const { usuario } = useAuth();
@@ -45,7 +47,14 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <BienvenidaBanner nombre={usuario.primerNombre + " " + usuario.primerApellido} />
+
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              <TarjetaGrado
+                gradoNombre={dashboard.estudiante.gradoNombre}
+                estadoMatricula={dashboard.estudiante.estadoMatricula}
+                jornada={dashboard.estudiante.jornada}
+              />
               <TarjetaPromedio {...dashboard.promedioGeneral} />
               <ProximosEventos eventos={dashboard.proximosEventos} />
             </div>

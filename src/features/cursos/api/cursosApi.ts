@@ -1,0 +1,79 @@
+import { api } from '@/shared/lib/axios'
+import type {
+  Grado,
+  SolicitudGrado,
+  CargaAcademica,
+  SolicitudCrearCarga,
+  SolicitudReasignarDocente,
+} from '@/shared/types/academico.types'
+import type { Matricula } from '@/shared/types/matricula.types'
+
+export async function listarGrados(): Promise<Grado[]> {
+  return api.get<Grado[]>('/academico/grados')
+}
+
+export async function obtenerGrado(id: number): Promise<Grado> {
+  return api.get<Grado>(`/academico/grados/${id}`)
+}
+
+export async function crearGrado(datos: SolicitudGrado): Promise<Grado> {
+  return api.post<Grado>('/academico/grados', datos)
+}
+
+export async function actualizarGrado(
+  id: number,
+  datos: SolicitudGrado,
+): Promise<Grado> {
+  return api.put<Grado>(`/academico/grados/${id}`, datos)
+}
+
+export async function eliminarGrado(id: number): Promise<void> {
+  await api.delete(`/academico/grados/${id}`)
+}
+
+export async function listarEstudiantesPorGrado(
+  gradoId: number,
+  anio?: number,
+): Promise<Matricula[]> {
+  return api.get<Matricula[]>(`/matriculas/grado/${gradoId}`, {
+    params: anio ? { anio } : undefined,
+  })
+}
+
+export async function matricularEstudianteEnCurso(
+  datos: { documentoEstudiante: string; gradoId: number; anio?: number },
+): Promise<Matricula> {
+  return api.post<Matricula>('/matriculas', datos)
+}
+
+export async function eliminarMatricula(matriculaId: number): Promise<void> {
+  await api.delete(`/matriculas/${matriculaId}`)
+}
+
+export async function listarCargaPorGrado(
+  gradoId: number,
+  anio?: number,
+): Promise<CargaAcademica[]> {
+  return api.get<CargaAcademica[]>(`/carga-academica/grado/${gradoId}`, {
+    params: anio ? { anio } : undefined,
+  })
+}
+
+export async function crearCargaAcademica(
+  datos: SolicitudCrearCarga,
+): Promise<CargaAcademica> {
+  return api.post<CargaAcademica>('/carga-academica', datos)
+}
+
+export async function reasignarDocenteCarga(
+  id: number,
+  datos: SolicitudReasignarDocente,
+): Promise<CargaAcademica> {
+  return api.patch<CargaAcademica>(`/carga-academica/${id}/docente`, datos)
+}
+
+export async function eliminarCargaAcademica(id: number): Promise<void> {
+  await api.delete(`/carga-academica/${id}`)
+}
+
+

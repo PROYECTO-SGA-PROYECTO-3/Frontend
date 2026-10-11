@@ -11,12 +11,11 @@ function colorPorNombre(nombre: string) {
 
 interface RegistroAcademicoProps {
   asignaturas: AsignaturaCalificacion[]
+  periodos: string[]
 }
 
-export function RegistroAcademico({ asignaturas }: RegistroAcademicoProps) {
-  const nombresPeriodos = Array.from(
-    new Set(asignaturas.flatMap((a) => a.notasPorPeriodo.map((p) => p.nombrePeriodo))),
-  )
+export function RegistroAcademico({ asignaturas, periodos }: RegistroAcademicoProps) {
+  const nombresPeriodos = periodos
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">

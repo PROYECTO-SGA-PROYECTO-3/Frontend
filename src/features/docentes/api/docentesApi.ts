@@ -2,10 +2,23 @@ import { api } from '@/shared/lib/axios'
 import type { PaginaSpring } from '@/shared/types/api.types'
 import type {
   Docente,
+  DocenteCatalogo,
   ParametrosListarDocentes,
   SolicitudActualizarDocente,
   SolicitudCrearDocente,
 } from '../types'
+
+/**
+ * Obtiene el catálogo liviano de docentes optimizado para selectores y referencias rápidas.
+ * Retorna una lista plana sin paginación pesada ni cálculo de páginas.
+ */
+export async function obtenerCatalogoDocentes(
+  incluirInactivos = false,
+): Promise<DocenteCatalogo[]> {
+  return api.get<DocenteCatalogo[]>('/docentes/catalogo', {
+    params: { incluirInactivos },
+  })
+}
 
 /**
  * Consulta la lista paginada de docentes con filtros de orden y vigencia.

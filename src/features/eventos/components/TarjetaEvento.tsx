@@ -21,15 +21,15 @@ export function TarjetaEvento({
       {/* Contenedor de Fecha */}
       <div className="flex w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-brand-50 py-2.5 text-brand-700 ring-1 ring-brand-700/10 transition-colors group-hover:bg-brand-600 group-hover:text-white">
         <span className="text-2xl font-bold leading-none">{dia}</span>
-        <span className="mt-1 text-[11px] font-bold uppercase tracking-wider">{mes}</span>
+        <span className="mt-1 text-xs font-bold uppercase tracking-wider">{mes}</span>
       </div>
 
       {/* Detalle del Evento */}
       <div className="min-w-0 flex-1">
-        <h3 className="text-base font-bold text-slate-900 transition-colors group-hover:text-brand-900 break-words">
+        <h3 className="text-base font-bold text-slate-900 transition-colors group-hover:text-brand-900 wrap-break-word">
           {evento.titulo}
         </h3>
-        <p className="mt-1 text-sm leading-relaxed text-slate-600 break-words whitespace-pre-line">
+        <p className="mt-1 text-sm leading-relaxed text-slate-600 wrap-break-word whitespace-pre-line">
           {evento.descripcion}
         </p>
 

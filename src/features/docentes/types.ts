@@ -11,6 +11,13 @@ export interface Docente {
   materias: string[]
 }
 
+/** Proyección liviana de docente para selectores y catálogos */
+export interface DocenteCatalogo {
+  id: number
+  documento: string
+  nombreCompleto: string
+}
+
 export interface SolicitudCrearDocente {
   documento: string
   primerNombre: string

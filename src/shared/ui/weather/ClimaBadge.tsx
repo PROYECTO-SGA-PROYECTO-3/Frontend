@@ -196,14 +196,14 @@ export function ClimaBadge({ className }: ClimaBadgeProps) {
 
             {/* Aviso informativo claro si la geolocalización no se pudo activar */}
             {errorUbicacion && !esTiempoReal ? (
-              <div className="flex items-start gap-1.5 rounded-lg bg-amber-50 p-2 text-[11px] text-amber-800 border border-amber-200/70">
+              <div className="flex items-start gap-1.5 rounded-lg bg-amber-50 p-2 text-xs text-amber-800 border border-amber-200/70">
                 <Info size={13} className="shrink-0 mt-0.5 text-amber-600" />
                 <p>
                   {errorUbicacion}. Mostrando el clima oficial de la institución.
                 </p>
               </div>
             ) : !esTiempoReal ? (
-              <p className="text-[11px] text-slate-500 leading-relaxed">
+              <p className="text-xs text-slate-500 leading-relaxed">
                 Estás viendo el clima de la sede oficial. Pulsa el botón de actualizar para consultar el clima de tu posición GPS.
               </p>
             ) : null}
