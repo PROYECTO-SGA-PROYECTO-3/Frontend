@@ -3,6 +3,7 @@ import { obtenerDashboardEstudiante } from './api';
 import { extraerMensajeError } from '@/shared/lib/axios';
 import { useAuth } from '@/features/auth';
 import { Spinner } from '@/shared/ui/Spinner';
+import { nombreCompleto } from '@/shared/lib/utils';
 import { PageHeader } from '@/layouts';
 import { TarjetaPromedio } from '@/features/calificaciones';
 import { ProximosEventos } from '@/features/eventos';
@@ -47,7 +48,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-            <BienvenidaBanner nombre={usuario.primerNombre + " " + usuario.primerApellido} />
+            <BienvenidaBanner nombre={nombreCompleto(usuario)} />
 
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
               <TarjetaGrado

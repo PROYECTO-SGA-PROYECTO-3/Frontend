@@ -11,10 +11,25 @@ interface PersonaConNombre {
   segundoApellido: string | null
 }
 
+/**
+ * Capitaliza la primera letra de cada palabra (Title Case / Nombre Propio).
+ * Ejemplo: "leonel enriquez" -> "Leonel Enriquez", "JUAN PEREZ" -> "Juan Perez"
+ */
+export function capitalizarPalabras(texto: string | null | undefined): string {
+  if (!texto) return ''
+  return texto
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .map((palabra) => palabra.charAt(0).toUpperCase() + palabra.slice(1))
+    .join(' ')
+}
+
 export function nombreCompleto(persona: PersonaConNombre): string {
-  return [persona.primerNombre, persona.segundoNombre, persona.primerApellido, persona.segundoApellido]
+  const nombre = [persona.primerNombre, persona.segundoNombre, persona.primerApellido, persona.segundoApellido]
     .filter(Boolean)
     .join(' ')
+  return capitalizarPalabras(nombre)
 }
 
 export function urlBackend(ruta: string): string {
