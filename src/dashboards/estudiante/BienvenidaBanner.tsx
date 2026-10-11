@@ -1,3 +1,5 @@
+import { capitalizarPalabras } from '@/shared/lib/utils'
+
 interface BienvenidaBannerProps {
   nombre: string;
 }
@@ -9,7 +11,7 @@ export function BienvenidaBanner({ nombre }: BienvenidaBannerProps) {
       <div className="pointer-events-none absolute -right-4 bottom-[-3rem] h-32 w-32 rounded-full bg-brand-200/60" />
 
       <div className="relative max-w-xl">
-        <h2 className="text-3xl font-bold text-slate-900">¡Hola, {nombre}!</h2>
+        <h2 className="text-3xl font-bold text-slate-900">¡Hola, {capitalizarPalabras(nombre)}!</h2>
         <p className="mt-3 text-slate-600">
           Bienvenido de nuevo a tu portal académico. Aquí podrás consultar tu{' '}
           <span className="font-semibold text-brand-700">rendimiento general</span>,{' '}
