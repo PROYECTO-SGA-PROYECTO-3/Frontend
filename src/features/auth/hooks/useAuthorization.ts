@@ -16,7 +16,9 @@ export interface AuthorizationState {
  */
 export function useAuthorization(): AuthorizationState {
   const usuario = useAuthStore((state) => state.usuario)
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const token = useAuthStore((state) => state.token)
+  const isAuthStore = useAuthStore((state) => state.isAuthenticated)
+  const isAuthenticated = isAuthStore || Boolean(token && usuario)
   const rol = usuario?.rol
 
   const hasRole = useCallback(

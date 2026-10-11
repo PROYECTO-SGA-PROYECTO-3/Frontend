@@ -30,7 +30,23 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
-      partialize: (state) => ({ token: state.token, usuario: state.usuario }),
+      partialize: (state) => ({
+        token: state.token,
+        usuario: state.usuario,
+        isAuthenticated: state.isAuthenticated,
+      }),
+      merge: (persistedState, currentState) => {
+        const persisted = (persistedState as Partial<AuthState>) ?? {}
+        const token = persisted.token ?? currentState.token
+        const usuario = persisted.usuario ?? currentState.usuario
+        return {
+          ...currentState,
+          ...persisted,
+          token,
+          usuario,
+          isAuthenticated: Boolean(token && usuario),
+        }
+      },
     },
   ),
 )
