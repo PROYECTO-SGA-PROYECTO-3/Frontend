@@ -248,16 +248,17 @@ export default function DocenteFormPage() {
 							)}
 
 							{/* Botones de acción */}
-							<div className="mt-8 flex items-center justify-end gap-3 border-t border-slate-100 pt-5">
+							<div className="mt-8 flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:items-center sm:justify-end">
 								<Button
 									type="button"
 									variant="secondary"
+									className="w-full sm:w-auto"
 									onClick={() => navigate("/admin/docentes")}
 									disabled={estaGuardando}
 								>
 									Cancelar
 								</Button>
-								<Button type="submit" isLoading={estaGuardando}>
+								<Button type="submit" className="w-full sm:w-auto" isLoading={estaGuardando}>
 									<Save size={18} />
 									{esEdicion ? "Guardar Cambios" : "Registrar Docente"}
 								</Button>
