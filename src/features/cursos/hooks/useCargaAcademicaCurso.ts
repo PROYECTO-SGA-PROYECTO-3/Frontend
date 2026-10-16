@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { extraerMensajeError } from "@/shared/lib/axios";
+import { extraerMensajeError } from '@/shared/lib'
 import type { CargaAcademica } from "@/shared/types/academico.types";
 import { listarCargaPorGrado } from "../api/cursosApi";
 import { CURSOS_QUERY_KEYS } from "./queryKeys";

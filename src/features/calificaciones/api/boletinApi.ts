@@ -1,4 +1,4 @@
-import { api, extraerMensajeErrorDescarga, extraerNombreArchivoDescarga } from '@/shared/lib/axios'
+import { api, extraerMensajeErrorDescarga, extraerNombreArchivoDescarga } from '@/shared/lib'
 
 export interface DescargaBoletin {
   archivo: Blob

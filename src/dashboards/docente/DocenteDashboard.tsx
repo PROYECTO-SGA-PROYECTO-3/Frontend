@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { extraerMensajeError } from '@/shared/lib/axios'
+import { extraerMensajeError } from '@/shared/lib'
 import { useAuth } from '@/features/auth'
 import { PageHeader } from '@/layouts'
 import { BannerBienvenida } from './BannerBienvenida'

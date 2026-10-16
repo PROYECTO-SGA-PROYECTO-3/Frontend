@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Building2, AlertCircle } from 'lucide-react'
 import { obtenerInstitucion } from '../api/institucionApi'
-import { extraerMensajeError } from '@/shared/lib/axios'
+import { extraerMensajeError } from '@/shared/lib'
 import { InstitucionForm } from './InstitucionForm'
 import { InstitucionMediaUploader } from './InstitucionMediaUploader'
 import { Skeleton } from '@/shared/ui/Skeleton'

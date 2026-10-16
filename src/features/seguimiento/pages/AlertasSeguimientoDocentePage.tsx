@@ -5,7 +5,7 @@ import { Avatar } from '@/shared/ui/Avatar'
 import { Badge } from '@/shared/ui/Badge'
 import { Skeleton } from '@/shared/ui/Skeleton'
 import { ErrorState } from '@/shared/ui/ErrorState'
-import { extraerMensajeError } from '@/shared/lib/axios'
+import { extraerMensajeError } from '@/shared/lib'
 import { useAlertasSeguimientoDocente } from '../hooks/useAlertasSeguimientoDocente'
 
 export function AlertasSeguimientoDocentePage() {

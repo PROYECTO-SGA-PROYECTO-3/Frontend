@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { actualizarInstitucion } from '../api/institucionApi'
-import { extraerMensajeError } from '@/shared/lib/axios'
+import { extraerMensajeError } from '@/shared/lib'
 import type { Institucion, SolicitudActualizarInstitucion } from '../types'
 
 export const esquemaInstitucion = z.object({

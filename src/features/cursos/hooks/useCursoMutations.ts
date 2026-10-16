@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { extraerMensajeError } from '@/shared/lib/axios'
+import { extraerMensajeError } from '@/shared/lib'
 import type { SolicitudGrado } from '@/shared/types/academico.types'
 import { actualizarGrado, crearGrado, eliminarGrado } from '../api/cursosApi'
 import { CURSOS_QUERY_KEYS } from './queryKeys'

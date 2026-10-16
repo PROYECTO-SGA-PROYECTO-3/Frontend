@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { extraerMensajeError } from '@/shared/lib/axios'
+import { extraerMensajeError } from '@/shared/lib'
 import { listarAsignaturas } from '../api/materiasApi'
 import type { Asignatura } from '../types'
 
