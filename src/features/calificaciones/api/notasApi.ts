@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { api, extraerMensajeErrorDescarga, extraerNombreArchivoDescarga } from '@/shared/lib/axios'
+import { api, extraerMensajeErrorDescarga, extraerNombreArchivoDescarga } from '@/shared/lib'
 import type { CargaAcademica, Periodo } from '@/shared/types/academico.types'
 import type {
   ErrorFilaImportacion,

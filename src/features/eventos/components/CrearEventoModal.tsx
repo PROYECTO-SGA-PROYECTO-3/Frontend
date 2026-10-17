@@ -1,6 +1,7 @@
 import { useState, useEffect, type FormEvent } from 'react'
 import { X, Calendar } from 'lucide-react'
 import { Button, Input } from '@/shared/ui'
+import { extraerMensajeError } from '@/shared/lib'
 import type { SolicitudCrearEvento } from '../types'
 
 export interface CrearEventoModalProps {
@@ -81,9 +82,8 @@ export function CrearEventoModal({
         lugar: lug,
       })
       onCerrar()
-    } catch (err) {
-      const mensaje = err instanceof Error ? err.message : 'No se pudo crear el evento.'
-      setErrorServidor(mensaje)
+    } catch (err: unknown) {
+      setErrorServidor(extraerMensajeError(err))
     }
   }
 

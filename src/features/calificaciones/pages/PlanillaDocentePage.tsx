@@ -4,7 +4,7 @@ import { ArrowLeft, ClipboardList } from 'lucide-react'
 import { PageHeader } from '@/layouts'
 import { ErrorState } from '@/shared/ui/ErrorState'
 import { Skeleton } from '@/shared/ui/Skeleton'
-import { extraerMensajeError } from '@/shared/lib/axios'
+import { extraerMensajeError } from '@/shared/lib'
 import {
   descargarPlantilla,
   extraerErroresImportacion,

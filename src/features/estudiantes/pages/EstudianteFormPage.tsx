@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Pencil, Plus } from "lucide-react";
 import { PageHeader } from "@/layouts";
 import { ErrorState, Skeleton } from "@/shared/ui";
+import { extraerMensajeError } from '@/shared/lib'
 import {
 	useEstudianteDetalle,
 	useEstudianteMutations,
@@ -61,11 +62,7 @@ export function EstudianteFormPage() {
 			}
 			navigate("/admin/estudiantes");
 		} catch (err: unknown) {
-			setErrorEnvio(
-				err instanceof Error
-					? err.message
-					: "Ocurrió un error al procesar el registro del estudiante.",
-			);
+			setErrorEnvio(extraerMensajeError(err));
 		}
 	};
 

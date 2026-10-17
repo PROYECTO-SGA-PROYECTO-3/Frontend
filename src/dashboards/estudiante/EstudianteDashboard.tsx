@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { obtenerDashboardEstudiante } from './api';
-import { extraerMensajeError } from '@/shared/lib/axios';
+import { extraerMensajeError } from '@/shared/lib'
 import { useAuth } from '@/features/auth';
 import { Spinner } from '@/shared/ui/Spinner';
 import { nombreCompleto } from '@/shared/lib/utils';

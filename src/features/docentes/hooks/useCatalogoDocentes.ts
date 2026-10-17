@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { extraerMensajeError } from "@/shared/lib/axios";
+import { extraerMensajeError } from '@/shared/lib'
 import { listarDocentes } from "../api/docentesApi";
 import type { Docente, ParametrosListarDocentes } from "../types";
 import type { PaginaSpring } from "@/shared/types/api.types";

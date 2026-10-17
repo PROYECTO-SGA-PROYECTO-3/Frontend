@@ -7,7 +7,7 @@ import {
   cerrarPeriodo,
   reabrirPeriodo,
 } from '../api/periodosApi'
-import { extraerMensajeError } from '@/shared/lib/axios'
+import { extraerMensajeError } from '@/shared/lib'
 import type { AnioLectivo } from '@/shared/types/anioLectivo.types'
 import type { Periodo } from '../types'
 

@@ -6,7 +6,7 @@ import {
   subirFirmaRector,
   subirBanderaInstitucion,
 } from '../api/institucionApi'
-import { extraerMensajeError } from '@/shared/lib/axios'
+import { extraerMensajeError } from '@/shared/lib'
 import type { Institucion } from '../types'
 
 export type TipoMediaInstitucional = 'logo' | 'sello' | 'firma' | 'bandera'

@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, IdCard, Pencil, Plus, Save, User } from "lucide-react";
 import { PageHeader } from "@/layouts";
 import { Button, Input, Skeleton } from "@/shared/ui";
+import { extraerMensajeError } from '@/shared/lib'
 import {
 	crearEsquemaDocente,
 	useDocenteDetalle,
@@ -88,9 +89,7 @@ export default function DocenteFormPage() {
 			}
 			navigate("/admin/docentes");
 		} catch (err: unknown) {
-			setErrorEnvio(
-				err instanceof Error ? err.message : "Error al procesar el formulario.",
-			);
+			setErrorEnvio(extraerMensajeError(err));
 		}
 	};
 

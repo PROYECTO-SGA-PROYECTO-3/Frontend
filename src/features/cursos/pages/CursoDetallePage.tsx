@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { ArrowLeft } from 'lucide-react'
 import { PageHeader } from '@/layouts'
 import { ErrorState, Button, ToastNotificacion } from '@/shared/ui'
+import { extraerMensajeError } from '@/shared/lib'
 import type { SolicitudGrado } from '@/shared/types/academico.types'
 import { useCursoDetalle, useCursos, useCursoMutations } from '../hooks'
 import {
@@ -61,11 +62,7 @@ export function CursoDetallePage() {
       )
       setModalEditarAbierto(false)
     } catch (err: unknown) {
-      setErrorServidorModal(
-        err instanceof Error
-          ? err.message
-          : 'Ocurrió un error al actualizar los datos del curso.',
-      )
+      setErrorServidorModal(extraerMensajeError(err))
     }
   }
 

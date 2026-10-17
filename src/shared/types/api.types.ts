@@ -9,16 +9,17 @@ export interface PaginaSpring<T> {
   }
 }
 
-/** Error genérico de la API (ver RespuestaError en Swagger) */
+/** Error genérico de la API (ver RespuestaError en Swagger o Spring Boot DefaultErrorAttributes) */
 export interface ErrorApi {
-  error: string
-  mensaje: string
-  timestamp: string
+  error?: string
+  mensaje?: string
+  message?: string
+  timestamp?: string
 }
 
 /** Error de validación (400): un mensaje por campo */
 export interface ErrorValidacion {
-  error: string
+  error?: string
   campos: Record<string, string>
-  timestamp: string
+  timestamp?: string
 }

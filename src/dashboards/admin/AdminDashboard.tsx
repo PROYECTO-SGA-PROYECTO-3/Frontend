@@ -7,7 +7,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { obtenerDashboardAdmin } from "./api";
 import { listarEventos, ProximosEventos } from "@/features/eventos";
-import { extraerMensajeError } from "@/shared/lib/axios";
+import { extraerMensajeError } from '@/shared/lib'
 import { PageHeader } from "@/layouts";
 import { StatCard } from "@/shared/ui/StatCard";
 import { HeroStatCard } from "@/shared/ui/HeroStatCard";

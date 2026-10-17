@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { listarAniosLectivos, crearAnioLectivo, activarAnioLectivo } from '../api/aniosLectivosApi'
-import { extraerMensajeError } from '@/shared/lib/axios'
+import { extraerMensajeError } from '@/shared/lib'
 import { useAnioLectivoStore } from '../store'
 import type { AnioLectivo } from '../types'
 

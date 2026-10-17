@@ -8,7 +8,7 @@ import logoIe from '@/assets/logo-ie-descanse.png'
 import { Input, Button } from '@/shared/ui'
 import { useAuthStore } from '../store'
 import { login as loginApi } from '../api/authApi'
-import { extraerMensajeError } from '@/shared/lib/axios'
+import { extraerMensajeError } from '@/shared/lib'
 
 import { ClimaBadge } from '@/shared/ui/weather'
 import { Footer } from '@/layouts'

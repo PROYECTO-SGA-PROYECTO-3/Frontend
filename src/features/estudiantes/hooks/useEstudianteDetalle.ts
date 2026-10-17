@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { obtenerEstudiante } from '../api/estudiantesApi'
+import { extraerMensajeError } from '@/shared/lib'
 import type { Estudiante } from '../types'
 
 export const ESTUDIANTE_DETALLE_QUERY_KEY = 'estudiante-detalle' as const
@@ -28,7 +29,7 @@ export function useEstudianteDetalle(id: number | null | undefined) {
     estudiante,
     isLoading: activo ? isLoading : false,
     isError,
-    error: error instanceof Error ? error.message : null,
+    error: error ? extraerMensajeError(error) : null,
     refetch,
   }
 }

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { CURSOS_QUERY_KEYS } from './queryKeys'
 import { eliminarMatricula } from '../api/cursosApi'
-import { extraerMensajeError } from '@/shared/lib/axios'
+import { extraerMensajeError } from '@/shared/lib'
 
 export function useEliminarMatricula(cursoId: number) {
   const queryClient = useQueryClient()

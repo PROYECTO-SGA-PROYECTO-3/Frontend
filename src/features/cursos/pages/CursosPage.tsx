@@ -2,6 +2,7 @@ import { useState } from "react";
 import { CheckCircle2, School } from "lucide-react";
 import { PageHeader } from "@/layouts";
 import { ErrorState } from "@/shared/ui";
+import { extraerMensajeError } from "@/shared/lib";
 import type { Grado, SolicitudGrado } from "@/shared/types/academico.types";
 import { useCursos, useCursoMutations, useFiltroCursos } from "../hooks";
 import {
@@ -103,11 +104,7 @@ export function CursosPage() {
 			}
 			handleCerrarModal();
 		} catch (err: unknown) {
-			setErrorServidorModal(
-				err instanceof Error
-					? err.message
-					: "Error al guardar los datos del curso.",
-			);
+			setErrorServidorModal(extraerMensajeError(err));
 		}
 	};
 
@@ -132,11 +129,7 @@ export function CursosPage() {
 			);
 			handleCerrarEliminar();
 		} catch (err: unknown) {
-			setErrorEliminacion(
-				err instanceof Error
-					? err.message
-					: "No se pudo eliminar el grado. Verifica que no tenga dependencias activas.",
-			);
+			setErrorEliminacion(extraerMensajeError(err));
 		}
 	};
 

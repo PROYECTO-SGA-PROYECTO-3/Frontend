@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { CheckCircle2 } from 'lucide-react'
 import { PageHeader } from '@/layouts'
 import { DialogoConfirmacion, ErrorState } from '@/shared/ui'
-import { nombreCompleto } from '@/shared/lib/utils'
+import { extraerMensajeError, nombreCompleto } from '@/shared/lib'
 import {
   useCatalogoEstudiantes,
   useEstudianteMutations,
@@ -110,9 +110,7 @@ export function EstudiantesPage() {
       }
       setEstudianteACambiarEstado(null)
     } catch (err: unknown) {
-      setErrorAccion(
-        err instanceof Error ? err.message : 'Error al cambiar el estado del estudiante.',
-      )
+      setErrorAccion(extraerMensajeError(err))
     }
   }
 
@@ -126,11 +124,7 @@ export function EstudiantesPage() {
       notificarExito(`Registro de ${nombre} eliminado de la institución.`)
       setEstudianteAEliminar(null)
     } catch (err: unknown) {
-      setErrorAccion(
-        err instanceof Error
-          ? err.message
-          : 'No se pudo eliminar el estudiante. Asegúrate de que no tenga matrículas, notas ni historial académico registrado.',
-      )
+      setErrorAccion(extraerMensajeError(err))
     }
   }
 
@@ -167,7 +161,7 @@ export function EstudiantesPage() {
         {isError && (
           <ErrorState
             titulo="No se pudo cargar el directorio de estudiantes"
-            mensaje={error instanceof Error ? error.message : 'Ocurrió un error inesperado al conectar con el servidor.'}
+            mensaje={error ? extraerMensajeError(error) : 'Ocurrió un error inesperado al conectar con el servidor.'}
             onRetry={() => refetch()}
             variant="card"
           />

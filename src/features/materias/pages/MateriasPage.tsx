@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PageHeader } from "@/layouts";
 import { DialogoConfirmacion, ErrorState } from "@/shared/ui";
+import { extraerMensajeError } from "@/shared/lib";
 import { CheckCircle2 } from "lucide-react";
 import {
 	useCatalogoMaterias,
@@ -103,11 +104,7 @@ export default function MateriasPage() {
 				);
 			}
 		} catch (err: unknown) {
-			const errorMsg =
-				err instanceof Error
-					? err.message
-					: "No fue posible guardar la asignatura.";
-			setErrorServidorModal(errorMsg);
+			setErrorServidorModal(extraerMensajeError(err));
 		}
 	};
 
@@ -123,11 +120,7 @@ export default function MateriasPage() {
 				`Asignatura "${nombreEliminado}" eliminada del catálogo.`,
 			);
 		} catch (err: unknown) {
-			const errorMsg =
-				err instanceof Error
-					? err.message
-					: "No se pudo eliminar la asignatura. Asegúrate de que no tenga cargas académicas asignadas.";
-			setErrorEliminacion(errorMsg);
+			setErrorEliminacion(extraerMensajeError(err));
 		}
 	};
 

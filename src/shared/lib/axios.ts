@@ -1,6 +1,5 @@
 import axios, { AxiosError, type AxiosRequestConfig } from "axios";
 import { useAuthStore } from "@/features/auth";
-import type { ErrorApi, ErrorValidacion } from "../types/api.types";
 
 const axiosClient = axios.create({
 	baseURL: import.meta.env.VITE_API_URL ?? import.meta.env.VITE_BACKEND_API ?? "http://localhost:8080/api",
@@ -61,48 +60,3 @@ export const api = {
 		axiosClient.get<Blob>(url, { ...config, responseType: "blob" }),
 };
 
-// ---------------------------------------------------------------------------
-// Helpers para extraer mensajes de error de forma uniforme en toda la app
-// ---------------------------------------------------------------------------
-
-/** Extrae el mensaje legible de un error de Axios o genérico */
-export function extraerMensajeError(error: unknown): string {
-	if (axios.isAxiosError<ErrorApi | ErrorValidacion>(error)) {
-		const datos = error.response?.data;
-		if (datos && "mensaje" in datos) return datos.mensaje;
-		if (datos && "campos" in datos) return Object.values(datos.campos).join(" ");
-		return error.message;
-	}
-	return error instanceof Error ? error.message : "Ocurrió un error inesperado";
-}
-
-/**
- * Versión async de extraerMensajeError para descargas:
- * cuando responseType es "blob", un error 404/500 también llega como Blob
- * en vez de JSON, por lo que hay que decodificarlo primero.
- */
-export async function extraerMensajeErrorDescarga(
-	error: unknown,
-	mensajePorDefecto: string,
-): Promise<string> {
-	if (axios.isAxiosError(error) && error.response?.data instanceof Blob) {
-		try {
-			const texto = await error.response.data.text();
-			const cuerpo = JSON.parse(texto) as { mensaje?: string };
-			return cuerpo.mensaje ?? mensajePorDefecto;
-		} catch {
-			return mensajePorDefecto;
-		}
-	}
-	return extraerMensajeError(error);
-}
-
-/** Extrae el nombre real del archivo desde el header Content-Disposition */
-export function extraerNombreArchivoDescarga(
-	contentDisposition?: string,
-): string | null {
-	const coincidencia = contentDisposition
-		? /filename="([^"]+)"/.exec(contentDisposition)
-		: null;
-	return coincidencia?.[1] ?? null;
-}
