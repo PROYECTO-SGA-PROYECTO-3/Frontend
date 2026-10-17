@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { CheckCircle2 } from 'lucide-react'
 import { PageHeader } from '@/layouts'
 import { DialogoConfirmacion, ErrorState } from '@/shared/ui'
-import { extraerMensajeError } from '@/shared/lib'
-import { nombreCompleto } from '@/shared/lib/utils'
+import { extraerMensajeError, nombreCompleto } from '@/shared/lib'
 import {
   useCatalogoEstudiantes,
   useEstudianteMutations,
@@ -162,7 +161,7 @@ export function EstudiantesPage() {
         {isError && (
           <ErrorState
             titulo="No se pudo cargar el directorio de estudiantes"
-            mensaje={error instanceof Error ? error.message : 'Ocurrió un error inesperado al conectar con el servidor.'}
+            mensaje={error ? extraerMensajeError(error) : 'Ocurrió un error inesperado al conectar con el servidor.'}
             onRetry={() => refetch()}
             variant="card"
           />

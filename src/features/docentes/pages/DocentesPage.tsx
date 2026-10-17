@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { CheckCircle2 } from 'lucide-react'
 import { PageHeader } from '@/layouts'
 import { DialogoConfirmacion, ErrorState } from '@/shared/ui'
-import { nombreCompleto } from '@/shared/lib/utils'
+import { extraerMensajeError, nombreCompleto } from '@/shared/lib'
 import {
   useCatalogoDocentes,
   useDocenteMutations,
@@ -104,7 +104,7 @@ export default function DocentesPage() {
       }
       setDocenteACambiarEstado(null)
     } catch (err: unknown) {
-      setErrorAccion(err instanceof Error ? err.message : 'Error al cambiar el estado del docente.')
+      setErrorAccion(extraerMensajeError(err))
     }
   }
 
@@ -118,11 +118,7 @@ export default function DocentesPage() {
       notificarExito(`Registro de ${nombre} eliminado de la institución.`)
       setDocenteAEliminar(null)
     } catch (err: unknown) {
-      setErrorAccion(
-        err instanceof Error
-          ? err.message
-          : 'No se pudo eliminar el docente. Asegúrate de que no tenga materias o cargas académicas asignadas.',
-      )
+      setErrorAccion(extraerMensajeError(err))
     }
   }
 
