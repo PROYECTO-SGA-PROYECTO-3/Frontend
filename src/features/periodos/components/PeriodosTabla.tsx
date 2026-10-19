@@ -1,15 +1,17 @@
-import { Plus, Pencil, Lock, Unlock, Trash2 } from 'lucide-react'
+import { Plus, Calendar } from 'lucide-react'
 import { Button } from '@/shared/ui/Button'
-import { Badge } from '@/shared/ui/Badge'
-import { Skeleton } from '@/shared/ui/Skeleton'
+import { ErrorState } from '@/shared/ui/ErrorState'
 import type { Periodo } from '../types'
+import { PeriodoFila } from './PeriodoFila'
+import { PeriodosSkeleton } from './PeriodosSkeleton'
 
-interface PeriodosTablaProps {
+export interface PeriodosTablaProps {
   periodos: Periodo[]
   isLoading: boolean
   errorCarga: string | null
   esActivo: boolean
   alternandoEstado: boolean
+  onReintentar?: () => void
   onIniciarCrear: () => void
   onIniciarEditar: (periodo: Periodo) => void
   onAlternarEstado: (periodo: Periodo) => void
@@ -22,11 +24,56 @@ export function PeriodosTabla({
   errorCarga,
   esActivo,
   alternandoEstado,
+  onReintentar,
   onIniciarCrear,
   onIniciarEditar,
   onAlternarEstado,
   onSolicitarEliminar,
 }: PeriodosTablaProps) {
+  if (isLoading) {
+    return <PeriodosSkeleton />
+  }
+
+  if (errorCarga) {
+    return (
+      <div className="mt-4">
+        <ErrorState
+          titulo="Error al cargar los periodos académicos"
+          mensaje={errorCarga}
+          onRetry={onReintentar}
+          textoBoton="Reintentar carga"
+          variant="card"
+        />
+      </div>
+    )
+  }
+
+  if (periodos.length === 0) {
+    return (
+      <div className="mt-4 flex flex-col items-center justify-center rounded-xl border border-slate-200/80 bg-slate-50/30 p-10 text-center">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400 mb-3">
+          <Calendar size={24} />
+        </div>
+        <p className="text-sm font-semibold text-slate-700">
+          No hay periodos registrados para este año lectivo
+        </p>
+        <p className="mt-1 max-w-sm text-xs text-slate-400">
+          {esActivo
+            ? 'Crea el primer periodo académico para definir el calendario de evaluaciones.'
+            : 'Este año lectivo no contó con periodos registrados.'}
+        </p>
+        {esActivo && (
+          <div className="mt-4">
+            <Button type="button" onClick={onIniciarCrear}>
+              <Plus size={16} />
+              Crear Primer Periodo
+            </Button>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div className="mt-4 flex flex-col gap-4">
       {esActivo && (
@@ -41,102 +88,32 @@ export function PeriodosTabla({
       )}
 
       <div className="overflow-hidden rounded-xl border border-slate-200/80">
-        {isLoading ? (
-          <div className="p-6 space-y-3">
-            {[1, 2, 3].map((i) => (
-              <Skeleton key={i} className="h-10 w-full rounded-lg" />
-            ))}
-          </div>
-        ) : errorCarga ? (
-          <p className="p-6 text-center text-sm text-red-600">{errorCarga}</p>
-        ) : periodos.length === 0 ? (
-          <p className="p-8 text-center text-sm text-slate-400">
-            No hay periodos registrados para este año lectivo.
-          </p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
-              <thead>
-                <tr className="border-b border-slate-200 bg-slate-50/70 text-xs font-semibold uppercase tracking-wider text-slate-500">
-                  <th className="px-4 py-3">Nombre</th>
-                  <th className="px-4 py-3">Rango de Fechas</th>
-                  <th className="px-4 py-3">%</th>
-                  <th className="px-4 py-3">Estado</th>
-                  <th className="px-4 py-3 text-right">Acciones</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {periodos.map((periodo) => (
-                  <tr key={periodo.id} className="hover:bg-slate-50/50">
-                    <td className="px-4 py-3 font-semibold text-slate-800">{periodo.nombre}</td>
-                    <td className="px-4 py-3 text-xs text-slate-500">
-                      {periodo.fechaInicio} — {periodo.fechaFin}
-                    </td>
-                    <td className="px-4 py-3 font-medium text-slate-700">{periodo.porcentaje}%</td>
-                    <td className="px-4 py-3">
-                      <Badge color={periodo.cerradoParaDocentes ? 'red' : 'brand'}>
-                        {periodo.cerradoParaDocentes ? 'Cerrado' : 'Abierto'}
-                      </Badge>
-                    </td>
-                    <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          type="button"
-                          aria-label={`Editar ${periodo.nombre}`}
-                          disabled={!esActivo}
-                          onClick={() => onIniciarEditar(periodo)}
-                          className="cursor-pointer rounded-lg p-1.5 text-blue-600 hover:bg-blue-50 transition disabled:cursor-not-allowed disabled:text-slate-300"
-                        >
-                          <Pencil size={15} />
-                        </button>
-
-                        <button
-                          type="button"
-                          aria-label={
-                            periodo.cerradoParaDocentes
-                              ? `Reabrir ${periodo.nombre}`
-                              : `Cerrar ${periodo.nombre}`
-                          }
-                          disabled={!esActivo || alternandoEstado}
-                          onClick={() => onAlternarEstado(periodo)}
-                          className="cursor-pointer rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 transition disabled:cursor-not-allowed disabled:text-slate-300"
-                          title={
-                            periodo.cerradoParaDocentes
-                              ? 'Reabrir para docentes'
-                              : 'Cerrar ingreso de notas'
-                          }
-                        >
-                          {periodo.cerradoParaDocentes ? (
-                            <Unlock size={15} className="text-brand-600" />
-                          ) : (
-                            <Lock size={15} />
-                          )}
-                        </button>
-
-                        <button
-                          type="button"
-                          aria-label={`Eliminar ${periodo.nombre}`}
-                          disabled={!esActivo || periodo.cerradoParaDocentes}
-                          onClick={() => onSolicitarEliminar(periodo)}
-                          className="cursor-pointer rounded-lg p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 transition disabled:cursor-not-allowed disabled:text-slate-300"
-                          title={
-                            !esActivo
-                              ? 'No se puede eliminar periodos en años históricos'
-                              : periodo.cerradoParaDocentes
-                                ? 'No se puede eliminar un periodo cerrado'
-                                : `Eliminar ${periodo.nombre}`
-                          }
-                        >
-                          <Trash2 size={15} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead>
+              <tr className="border-b border-slate-200 bg-slate-50/70 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                <th className="px-4 py-3">Nombre</th>
+                <th className="px-4 py-3">Rango de Fechas</th>
+                <th className="px-4 py-3">%</th>
+                <th className="px-4 py-3">Estado</th>
+                <th className="px-4 py-3 text-right">Acciones</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {periodos.map((periodo) => (
+                <PeriodoFila
+                  key={periodo.id}
+                  periodo={periodo}
+                  esActivo={esActivo}
+                  alternandoEstado={alternandoEstado}
+                  onIniciarEditar={onIniciarEditar}
+                  onAlternarEstado={onAlternarEstado}
+                  onSolicitarEliminar={onSolicitarEliminar}
+                />
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )

@@ -20,7 +20,11 @@ export function PeriodosAnioModal({ anio, esActivo, onCerrar }: PeriodosAnioModa
   const [periodoAEliminar, setPeriodoAEliminar] = useState<Periodo | null>(null)
   const [toastMensaje, setToastMensaje] = useState<string | null>(null)
 
-  const { periodos, isLoading, errorCarga } = usePeriodosQuery(anio.id)
+  const { periodos, isLoading, errorCarga, refetch } = usePeriodosQuery(anio.id)
+
+  const handleReintentar = () => {
+    void refetch()
+  }
 
   const handleExitoGuardar = (periodo: Periodo) => {
     setPeriodoEditando(null)
@@ -166,6 +170,7 @@ export function PeriodosAnioModal({ anio, esActivo, onCerrar }: PeriodosAnioModa
             errorCarga={errorCarga}
             esActivo={esActivo}
             alternandoEstado={alternandoEstado}
+            onReintentar={handleReintentar}
             onIniciarCrear={handleIniciarCrear}
             onIniciarEditar={handleIniciarEditar}
             onAlternarEstado={alternarEstado}
