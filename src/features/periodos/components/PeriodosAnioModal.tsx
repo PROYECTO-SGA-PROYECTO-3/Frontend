@@ -1,4 +1,7 @@
+import type { KeyboardEvent } from 'react'
 import { X, AlertCircle, Calendar } from 'lucide-react'
+import { DialogoConfirmacion } from '@/shared/ui/DialogoConfirmacion'
+import { ToastNotificacion } from '@/shared/ui/ToastNotificacion'
 import type { AnioLectivo } from '@/shared/types/anioLectivo.types'
 import { useGestionPeriodos } from '../hooks/useGestionPeriodos'
 import { PeriodoForm } from './PeriodoForm'
@@ -26,10 +29,32 @@ export function PeriodosAnioModal({ anio, esActivo, onCerrar }: PeriodosAnioModa
     cancelarEdicion,
     alEnviarForm,
     alternarEstado,
+    // Eliminación
+    periodoAEliminar,
+    errorEliminar,
+    eliminando,
+    solicitarEliminacion,
+    confirmarEliminacion,
+    cancelarEliminacion,
+    // Toast
+    toastMensaje,
+    limpiarToast,
   } = useGestionPeriodos(anio)
 
+  const handleKeyDownDialogo = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Escape' && !guardando && !eliminando && !periodoAEliminar) {
+      onCerrar()
+    }
+  }
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+    <div
+      tabIndex={-1}
+      role="dialog"
+      aria-modal="true"
+      onKeyDown={handleKeyDownDialogo}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4 animate-in fade-in duration-200 outline-none"
+    >
       <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
           <div className="flex items-center gap-2.5">
@@ -48,7 +73,8 @@ export function PeriodosAnioModal({ anio, esActivo, onCerrar }: PeriodosAnioModa
             type="button"
             aria-label="Cerrar modal"
             onClick={onCerrar}
-            className="cursor-pointer rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            disabled={guardando || eliminando}
+            className="cursor-pointer rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 disabled:opacity-50"
           >
             <X size={20} />
           </button>
@@ -83,9 +109,36 @@ export function PeriodosAnioModal({ anio, esActivo, onCerrar }: PeriodosAnioModa
             onIniciarCrear={iniciarCrear}
             onIniciarEditar={iniciarEditar}
             onAlternarEstado={alternarEstado}
+            onSolicitarEliminar={solicitarEliminacion}
           />
         )}
       </div>
+
+      {/* Diálogo de confirmación destructiva para eliminar periodo */}
+      <DialogoConfirmacion
+        abierto={Boolean(periodoAEliminar)}
+        titulo="Eliminar periodo académico"
+        mensaje={
+          periodoAEliminar
+            ? `¿Confirmas que deseas eliminar permanentemente el "${periodoAEliminar.nombre}" (${periodoAEliminar.porcentaje}%)? Esta acción es irreversible y solo se procesará si no contiene calificaciones ni actividad evaluativa registrada.`
+            : ''
+        }
+        error={errorEliminar ?? undefined}
+        procesando={eliminando}
+        textoConfirmar="Eliminar Periodo"
+        varianteConfirmar="peligro"
+        onConfirmar={confirmarEliminacion}
+        onCancelar={cancelarEliminacion}
+      />
+
+      {/* Notificación flotante de confirmación */}
+      {toastMensaje && (
+        <ToastNotificacion
+          mensaje={toastMensaje}
+          tipo="exito"
+          onCerrar={limpiarToast}
+        />
+      )}
     </div>
   )
 }

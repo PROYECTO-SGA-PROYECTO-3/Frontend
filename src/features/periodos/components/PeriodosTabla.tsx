@@ -1,4 +1,4 @@
-import { Plus, Pencil, Lock, Unlock } from 'lucide-react'
+import { Plus, Pencil, Lock, Unlock, Trash2 } from 'lucide-react'
 import { Button } from '@/shared/ui/Button'
 import { Badge } from '@/shared/ui/Badge'
 import { Skeleton } from '@/shared/ui/Skeleton'
@@ -13,6 +13,7 @@ interface PeriodosTablaProps {
   onIniciarCrear: () => void
   onIniciarEditar: (periodo: Periodo) => void
   onAlternarEstado: (periodo: Periodo) => void
+  onSolicitarEliminar: (periodo: Periodo) => void
 }
 
 export function PeriodosTabla({
@@ -24,6 +25,7 @@ export function PeriodosTabla({
   onIniciarCrear,
   onIniciarEditar,
   onAlternarEstado,
+  onSolicitarEliminar,
 }: PeriodosTablaProps) {
   return (
     <div className="mt-4 flex flex-col gap-4">
@@ -77,7 +79,7 @@ export function PeriodosTabla({
                       </Badge>
                     </td>
                     <td className="px-4 py-3 text-right">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-1.5">
                         <button
                           type="button"
                           aria-label={`Editar ${periodo.nombre}`}
@@ -109,6 +111,23 @@ export function PeriodosTabla({
                           ) : (
                             <Lock size={15} />
                           )}
+                        </button>
+
+                        <button
+                          type="button"
+                          aria-label={`Eliminar ${periodo.nombre}`}
+                          disabled={!esActivo || periodo.cerradoParaDocentes}
+                          onClick={() => onSolicitarEliminar(periodo)}
+                          className="cursor-pointer rounded-lg p-1.5 text-slate-400 hover:bg-red-50 hover:text-red-600 transition disabled:cursor-not-allowed disabled:text-slate-300"
+                          title={
+                            !esActivo
+                              ? 'No se puede eliminar periodos en años históricos'
+                              : periodo.cerradoParaDocentes
+                                ? 'No se puede eliminar un periodo cerrado'
+                                : `Eliminar ${periodo.nombre}`
+                          }
+                        >
+                          <Trash2 size={15} />
                         </button>
                       </div>
                     </td>
