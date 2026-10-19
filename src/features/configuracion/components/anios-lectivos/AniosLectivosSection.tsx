@@ -1,104 +1,150 @@
-import { CalendarCheck, AlertCircle } from "lucide-react";
-import { Skeleton } from "@/shared/ui/Skeleton";
+import { useState } from "react";
+import { CalendarCheck, Plus } from "lucide-react";
+import { Button } from "@/shared/ui/Button";
 import { DialogoConfirmacion } from "@/shared/ui/DialogoConfirmacion";
-import { useGestionAniosLectivos } from "../../hooks/useGestionAniosLectivos";
-import { CrearAnioLectivoForm } from "./CrearAnioLectivoForm";
-import { AnioLectivoFila } from "./AnioLectivoFila";
+import { ToastNotificacion } from "@/shared/ui/ToastNotificacion";
+import { useAniosLectivosQuery } from "../../hooks/useAniosLectivosQuery";
+import { useAniosLectivosMutations } from "../../hooks/useAniosLectivosMutations";
+import { AniosLectivosLista } from "./AniosLectivosLista";
+import { CrearAnioLectivoModal } from "./CrearAnioLectivoModal";
 import { PeriodosAnioModal } from "@/features/periodos";
+import type { AnioLectivo } from "../../types";
 
 export function AniosLectivosSection() {
+	const [modalCrearAbierto, setModalCrearAbierto] = useState(false);
+	const [anioAActivar, setAnioAActivar] = useState<AnioLectivo | null>(null);
+	const [anioParaPeriodos, setAnioParaPeriodos] =
+		useState<AnioLectivo | null>(null);
+	const [toastMensaje, setToastMensaje] = useState<string | null>(null);
+
+	const { anios, anioActivoActual, isLoading, errorCarga } =
+		useAniosLectivosQuery();
+
+	const handleExitoCrear = (creado: AnioLectivo) => {
+		setModalCrearAbierto(false);
+		setToastMensaje(`Año lectivo ${creado.anio} creado exitosamente.`);
+	};
+
+	const handleExitoActivar = (id: number) => {
+		const anioActivado = anios.find((a) => a.id === id);
+		setAnioAActivar(null);
+		setToastMensaje(
+			anioActivado
+				? `Año lectivo ${anioActivado.anio} activado como año corriente.`
+				: "Año lectivo activado como año corriente.",
+		);
+	};
+
 	const {
-		anios,
-		anioActivoActual,
-		isLoading,
-		errorCarga,
-		anioNuevo,
-		setAnioNuevo,
-		activarAlCrear,
-		setActivarAlCrear,
-		errorCrear,
+		crearAnio,
 		creando,
-		manejarSubmitCrear,
-		anioAActivar,
-		errorActivar,
+		errorCrear,
+		limpiarErrorCrear,
+		activarAnio,
 		activando,
-		solicitarActivacion,
-		confirmarActivacion,
-		cancelarActivacion,
-		anioParaPeriodos,
-		abrirPeriodos,
-		cerrarPeriodos,
-	} = useGestionAniosLectivos();
+		errorActivar,
+		limpiarErrorActivar,
+	} = useAniosLectivosMutations({
+		onExitoCrear: handleExitoCrear,
+		onExitoActivar: handleExitoActivar,
+	});
+
+	const handleAbrirModalCrear = () => {
+		limpiarErrorCrear();
+		setModalCrearAbierto(true);
+	};
+
+	const handleCerrarModalCrear = () => {
+		if (!creando) {
+			limpiarErrorCrear();
+			setModalCrearAbierto(false);
+		}
+	};
+
+	const handleSolicitarActivacion = (anio: AnioLectivo) => {
+		limpiarErrorActivar();
+		setAnioAActivar(anio);
+	};
+
+	const handleConfirmarActivacion = () => {
+		if (anioAActivar) {
+			activarAnio(anioAActivar.id);
+		}
+	};
+
+	const handleCancelarActivacion = () => {
+		if (!activando) {
+			limpiarErrorActivar();
+			setAnioAActivar(null);
+		}
+	};
+
+	const handleAbrirPeriodos = (anio: AnioLectivo) => {
+		setAnioParaPeriodos(anio);
+	};
+
+	const handleCerrarPeriodos = () => {
+		setAnioParaPeriodos(null);
+	};
+
+	const handleCerrarToast = () => {
+		setToastMensaje(null);
+	};
 
 	return (
 		<section className="flex flex-col gap-6 pt-6 border-t border-slate-200">
-			<div>
-				<div className="flex items-center gap-2.5">
-					<div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
-						<CalendarCheck size={20} />
+			{/* Encabezado con acción directa */}
+			<div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+				<div>
+					<div className="flex items-center gap-2.5">
+						<div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand-700 shadow-inner">
+							<CalendarCheck size={20} />
+						</div>
+						<h2 className="text-xl font-bold tracking-tight text-slate-900">
+							Años Lectivos del Plantel
+						</h2>
 					</div>
-					<h2 className="text-xl font-bold tracking-tight text-slate-900">
-						Años Lectivos del Plantel
-					</h2>
+					<p className="mt-1.5 max-w-2xl text-sm text-slate-500">
+						Solo puede haber un año académico activo a la vez, el cual determina los
+						periodos y operaciones corrientes. Los demás años permanecen en modo
+						consulta histórica.
+					</p>
 				</div>
-				<p className="mt-1.5 text-sm text-slate-500">
-					Solo puede haber un año académico activo a la vez, el cual determina los
-					periodos y operaciones corrientes. Los demás años permanecen en modo
-					consulta histórica.
-				</p>
+
+				<div className="shrink-0">
+					<Button
+						type="button"
+						variant="primary"
+						onClick={handleAbrirModalCrear}
+						className="w-full sm:w-auto"
+					>
+						<Plus size={16} />
+						Nuevo Año Lectivo
+					</Button>
+				</div>
 			</div>
 
-			{/* Formulario de creación */}
-			<CrearAnioLectivoForm
-				anioNuevo={anioNuevo}
-				activarAlCrear={activarAlCrear}
+			{/* Listado protegido de años lectivos */}
+			<div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition hover:shadow-md">
+				<AniosLectivosLista
+					isLoading={isLoading}
+					errorCarga={errorCarga}
+					anios={anios}
+					onGestionarPeriodos={handleAbrirPeriodos}
+					onActivarAnio={handleSolicitarActivacion}
+				/>
+			</div>
+
+			{/* Modal para crear año lectivo */}
+			<CrearAnioLectivoModal
+				abierto={modalCrearAbierto}
 				creando={creando}
 				errorCrear={errorCrear}
-				onAnioNuevoChange={setAnioNuevo}
-				onActivarAlCrearChange={setActivarAlCrear}
-				onSubmit={manejarSubmitCrear}
+				onSubmit={crearAnio}
+				onCerrar={handleCerrarModalCrear}
 			/>
 
-			{/* Listado de años */}
-			<div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm">
-				{isLoading ? (
-					<div className="p-6 space-y-4">
-						{[1, 2, 3].map((i) => (
-							<div
-								key={i}
-								className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0"
-							>
-								<Skeleton className="h-5 w-24" />
-								<Skeleton className="h-8 w-40 rounded-lg" />
-							</div>
-						))}
-					</div>
-				) : errorCarga ? (
-					<div className="p-6 text-center text-sm text-red-600">
-						<AlertCircle size={24} className="mx-auto mb-2 text-red-500" />
-						<p>Error al cargar los años lectivos: {errorCarga}</p>
-					</div>
-				) : anios.length === 0 ? (
-					<div className="p-10 text-center text-sm text-slate-400">
-						No hay años lectivos registrados en el sistema.
-					</div>
-				) : (
-					<div className="divide-y divide-slate-100">
-						{[...anios]
-							.sort((a, b) => b.anio - a.anio)
-							.map((anio) => (
-								<AnioLectivoFila
-									key={anio.id}
-									anio={anio}
-									onGestionarPeriodos={abrirPeriodos}
-									onActivarAnio={solicitarActivacion}
-								/>
-							))}
-					</div>
-				)}
-			</div>
-
-			{/* Diálogo de Confirmación para activar año */}
+			{/* Diálogo de confirmación para activar año */}
 			<DialogoConfirmacion
 				abierto={Boolean(anioAActivar)}
 				titulo="Activar año lectivo"
@@ -110,8 +156,9 @@ export function AniosLectivosSection() {
 				error={errorActivar ?? undefined}
 				procesando={activando}
 				textoConfirmar="Activar Año"
-				onConfirmar={confirmarActivacion}
-				onCancelar={cancelarActivacion}
+				varianteConfirmar="primary"
+				onConfirmar={handleConfirmarActivacion}
+				onCancelar={handleCancelarActivacion}
 			/>
 
 			{/* Modal de Periodos del Año */}
@@ -121,7 +168,16 @@ export function AniosLectivosSection() {
 					esActivo={Boolean(
 						anioActivoActual && anioParaPeriodos.id === anioActivoActual.id,
 					)}
-					onCerrar={cerrarPeriodos}
+					onCerrar={handleCerrarPeriodos}
+				/>
+			)}
+
+			{/* Notificación flotante de confirmación */}
+			{toastMensaje && (
+				<ToastNotificacion
+					mensaje={toastMensaje}
+					tipo="exito"
+					onCerrar={handleCerrarToast}
 				/>
 			)}
 		</section>
