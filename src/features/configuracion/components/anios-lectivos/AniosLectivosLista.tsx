@@ -9,6 +9,7 @@ interface AniosLectivosListaProps {
 	anios: AnioLectivo[];
 	onGestionarPeriodos: (anio: AnioLectivo) => void;
 	onActivarAnio: (anio: AnioLectivo) => void;
+	onEliminarAnio: (anio: AnioLectivo) => void;
 }
 
 export function AniosLectivosLista({
@@ -17,6 +18,7 @@ export function AniosLectivosLista({
 	anios,
 	onGestionarPeriodos,
 	onActivarAnio,
+	onEliminarAnio,
 }: AniosLectivosListaProps) {
 	if (isLoading) {
 		return <AniosLectivosSkeleton />;
@@ -57,6 +59,7 @@ export function AniosLectivosLista({
 					anio={anio}
 					onGestionarPeriodos={onGestionarPeriodos}
 					onActivarAnio={onActivarAnio}
+					onEliminarAnio={onEliminarAnio}
 				/>
 			))}
 		</div>

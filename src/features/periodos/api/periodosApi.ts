@@ -20,3 +20,8 @@ export async function cerrarPeriodo(id: number): Promise<Periodo> {
 export async function reabrirPeriodo(id: number): Promise<Periodo> {
   return api.patch<Periodo>(`/academico/periodos/${id}/reabrir`)
 }
+
+export async function eliminarPeriodo(id: number): Promise<void> {
+  return api.delete(`/academico/periodos/${id}`)
+}
+

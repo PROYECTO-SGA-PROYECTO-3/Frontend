@@ -39,3 +39,7 @@ export async function activarAnioLectivo(id: number): Promise<AnioLectivo[]> {
 
   return listarAniosLectivos()
 }
+
+export async function eliminarAnioLectivo(id: number): Promise<void> {
+  return api.delete(`/anios-lectivos/${id}`)
+}

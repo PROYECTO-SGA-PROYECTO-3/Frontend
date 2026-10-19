@@ -1,8 +1,13 @@
+import { useState, type KeyboardEvent } from 'react'
 import { X, AlertCircle, Calendar } from 'lucide-react'
+import { DialogoConfirmacion } from '@/shared/ui/DialogoConfirmacion'
+import { ToastNotificacion } from '@/shared/ui/ToastNotificacion'
 import type { AnioLectivo } from '@/shared/types/anioLectivo.types'
-import { useGestionPeriodos } from '../hooks/useGestionPeriodos'
+import { usePeriodosQuery } from '../hooks/usePeriodosQuery'
+import { usePeriodosMutations } from '../hooks/usePeriodosMutations'
 import { PeriodoForm } from './PeriodoForm'
 import { PeriodosTabla } from './PeriodosTabla'
+import type { Periodo, SolicitudPeriodo } from '../types'
 
 interface PeriodosAnioModalProps {
   anio: AnioLectivo
@@ -11,25 +16,110 @@ interface PeriodosAnioModalProps {
 }
 
 export function PeriodosAnioModal({ anio, esActivo, onCerrar }: PeriodosAnioModalProps) {
+  const [periodoEditando, setPeriodoEditando] = useState<Periodo | 'nuevo' | null>(null)
+  const [periodoAEliminar, setPeriodoAEliminar] = useState<Periodo | null>(null)
+  const [toastMensaje, setToastMensaje] = useState<string | null>(null)
+
+  const { periodos, isLoading, errorCarga, refetch } = usePeriodosQuery(anio.id)
+
+  const handleReintentar = () => {
+    void refetch()
+  }
+
+  const handleExitoGuardar = (periodo: Periodo) => {
+    setPeriodoEditando(null)
+    setToastMensaje(`Periodo "${periodo.nombre}" guardado exitosamente.`)
+  }
+
+  const handleExitoAlternar = (periodo: Periodo) => {
+    setToastMensaje(
+      `Periodo "${periodo.nombre}" ${periodo.cerradoParaDocentes ? 'cerrado' : 'reabierto'} exitosamente.`
+    )
+  }
+
+  const handleExitoEliminar = (id: number) => {
+    const eliminado = periodos.find((p) => p.id === id)
+    setPeriodoAEliminar(null)
+    setToastMensaje(
+      eliminado
+        ? `Periodo "${eliminado.nombre}" eliminado exitosamente.`
+        : 'Periodo eliminado exitosamente.'
+    )
+  }
+
   const {
-    periodos,
-    isLoading,
-    errorCarga,
-    periodoEditando,
-    form,
-    setForm,
-    errorForm,
+    guardarPeriodo,
     guardando,
-    alternandoEstado,
-    iniciarCrear,
-    iniciarEditar,
-    cancelarEdicion,
-    alEnviarForm,
+    errorGuardar,
+    limpiarErrorGuardar,
     alternarEstado,
-  } = useGestionPeriodos(anio)
+    alternandoEstado,
+    eliminarPeriodo,
+    eliminando,
+    errorEliminar,
+    limpiarErrorEliminar,
+  } = usePeriodosMutations({
+    anioId: anio.id,
+    onExitoGuardar: handleExitoGuardar,
+    onExitoAlternar: handleExitoAlternar,
+    onExitoEliminar: handleExitoEliminar,
+  })
+
+  const handleIniciarCrear = () => {
+    limpiarErrorGuardar()
+    setPeriodoEditando('nuevo')
+  }
+
+  const handleIniciarEditar = (periodo: Periodo) => {
+    limpiarErrorGuardar()
+    setPeriodoEditando(periodo)
+  }
+
+  const handleCancelarEdicion = () => {
+    setPeriodoEditando(null)
+  }
+
+  const handleSubmitForm = (datos: Omit<SolicitudPeriodo, 'anioLectivoId'>) => {
+    const id = periodoEditando && periodoEditando !== 'nuevo' ? periodoEditando.id : undefined
+    guardarPeriodo({ ...datos, anioLectivoId: anio.id }, id)
+  }
+
+  const handleSolicitarEliminacion = (periodo: Periodo) => {
+    limpiarErrorEliminar()
+    setPeriodoAEliminar(periodo)
+  }
+
+  const handleConfirmarEliminacion = () => {
+    if (periodoAEliminar) {
+      eliminarPeriodo(periodoAEliminar.id)
+    }
+  }
+
+  const handleCancelarEliminacion = () => {
+    if (!eliminando) {
+      limpiarErrorEliminar()
+      setPeriodoAEliminar(null)
+    }
+  }
+
+  const handleCerrarToast = () => {
+    setToastMensaje(null)
+  }
+
+  const handleKeyDownDialogo = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Escape' && !guardando && !eliminando && !periodoAEliminar) {
+      onCerrar()
+    }
+  }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+    <div
+      tabIndex={-1}
+      role="dialog"
+      aria-modal="true"
+      onKeyDown={handleKeyDownDialogo}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4 animate-in fade-in duration-200 outline-none"
+    >
       <div className="w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
           <div className="flex items-center gap-2.5">
@@ -48,7 +138,8 @@ export function PeriodosAnioModal({ anio, esActivo, onCerrar }: PeriodosAnioModa
             type="button"
             aria-label="Cerrar modal"
             onClick={onCerrar}
-            className="cursor-pointer rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            disabled={guardando || eliminando}
+            className="cursor-pointer rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 disabled:opacity-50"
           >
             <X size={20} />
           </button>
@@ -65,13 +156,12 @@ export function PeriodosAnioModal({ anio, esActivo, onCerrar }: PeriodosAnioModa
 
         {periodoEditando ? (
           <PeriodoForm
+            key={periodoEditando === 'nuevo' ? 'nuevo' : periodoEditando.id}
             periodoEditando={periodoEditando}
-            form={form}
-            errorForm={errorForm}
             guardando={guardando}
-            onFormChange={(valores) => setForm((prev) => ({ ...prev, ...valores }))}
-            onCancelar={cancelarEdicion}
-            onSubmit={alEnviarForm}
+            errorServidor={errorGuardar}
+            onCancelar={handleCancelarEdicion}
+            onSubmit={handleSubmitForm}
           />
         ) : (
           <PeriodosTabla
@@ -80,12 +170,40 @@ export function PeriodosAnioModal({ anio, esActivo, onCerrar }: PeriodosAnioModa
             errorCarga={errorCarga}
             esActivo={esActivo}
             alternandoEstado={alternandoEstado}
-            onIniciarCrear={iniciarCrear}
-            onIniciarEditar={iniciarEditar}
+            onReintentar={handleReintentar}
+            onIniciarCrear={handleIniciarCrear}
+            onIniciarEditar={handleIniciarEditar}
             onAlternarEstado={alternarEstado}
+            onSolicitarEliminar={handleSolicitarEliminacion}
           />
         )}
       </div>
+
+      {/* Diálogo de confirmación destructiva para eliminar periodo */}
+      <DialogoConfirmacion
+        abierto={Boolean(periodoAEliminar)}
+        titulo="Eliminar periodo académico"
+        mensaje={
+          periodoAEliminar
+            ? `¿Confirmas que deseas eliminar permanentemente el "${periodoAEliminar.nombre}" (${periodoAEliminar.porcentaje}%)? Esta acción es irreversible y solo se procesará si no contiene calificaciones ni actividad evaluativa registrada.`
+            : ''
+        }
+        error={errorEliminar ?? undefined}
+        procesando={eliminando}
+        textoConfirmar="Eliminar Periodo"
+        varianteConfirmar="peligro"
+        onConfirmar={handleConfirmarEliminacion}
+        onCancelar={handleCancelarEliminacion}
+      />
+
+      {/* Notificación flotante de confirmación */}
+      {toastMensaje && (
+        <ToastNotificacion
+          mensaje={toastMensaje}
+          tipo="exito"
+          onCerrar={handleCerrarToast}
+        />
+      )}
     </div>
   )
 }

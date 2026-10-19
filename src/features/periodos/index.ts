@@ -1,6 +1,7 @@
 export * from './types'
 export * from './api/periodosApi'
-export * from './hooks/useGestionPeriodos'
+export * from './hooks/usePeriodosQuery'
+export * from './hooks/usePeriodosMutations'
 export { CierrePeriodo as CierrePeriodoDocente, CierrePeriodo } from './components/CierrePeriodoDocente'
 export { PeriodoForm } from './components/PeriodoForm'
 export { PeriodosTabla } from './components/PeriodosTabla'
