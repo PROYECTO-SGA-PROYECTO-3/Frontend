@@ -14,9 +14,8 @@ export function BienvenidaBanner({ nombre }: BienvenidaBannerProps) {
         <h2 className="text-3xl font-bold text-slate-900">¡Hola, {capitalizarPalabras(nombre)}!</h2>
         <p className="mt-3 text-slate-600">
           Bienvenido de nuevo a tu portal académico. Aquí podrás consultar tu{' '}
-          <span className="font-semibold text-brand-700">rendimiento general</span>,{' '}
-          revisar tus <span className="font-semibold text-brand-700">próximos eventos</span>{' '}
-          y el <span className="font-semibold text-brand-700">horario de tus clases</span>.
+          <span className="font-semibold text-brand-700">rendimiento general</span>{' '}
+           y revisar tus <span className="font-semibold text-brand-700">próximos eventos</span>
         </p>
       </div>
     </div>

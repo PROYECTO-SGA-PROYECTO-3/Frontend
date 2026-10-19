@@ -5,7 +5,6 @@ import { PageHeader } from '@/layouts'
 import { BannerBienvenida } from './BannerBienvenida'
 import { DocenteDashboardSkeleton } from './DocenteDashboardSkeleton'
 import { useDashboardDocente } from './hooks/useDashboardDocente'
-import { ClasesHoy } from '@/features/carga-academica'
 import { CierrePeriodo } from '@/features/periodos'
 import { AlertasSeguimiento } from '@/features/seguimiento'
 import { ProximosEventos, useEventosInstitucionales } from '@/features/eventos'
@@ -48,10 +47,9 @@ export default function DocenteDashboard() {
                 nombre={dashboard.docente.nombreCompleto}
                 planillasPendientes={dashboard.planillasPendientes}
                 onCalificarAhora={() => navigate('/docente/planilla')}
-                onVerCalendario={() => navigate('/calendario')}
+                onVerCalendario={() => navigate('/docente/calendario')}
               />
 
-              <ClasesHoy clases={dashboard.clasesDeHoy} />
 
               <AlertasSeguimiento
                 estudiantes={dashboard.estudiantesBajoRendimiento}

@@ -3,14 +3,6 @@ export interface ResumenDocenteDashboard {
   cargo: string
 }
 
-export interface ClaseHoyDocente {
-  id: number
-  asignatura: string
-  grado: string
-  horaInicio: string
-  horaFin: string
-  cantidadEstudiantes: number
-}
 
 export interface CierrePeriodoResumen {
   nombrePeriodo: string | null
@@ -30,7 +22,6 @@ export interface EstudianteBajoRendimiento {
 export interface DashboardDocente {
   docente: ResumenDocenteDashboard
   planillasPendientes: number
-  clasesDeHoy: ClaseHoyDocente[]
   cierrePeriodo: CierrePeriodoResumen
   estudiantesBajoRendimiento: EstudianteBajoRendimiento[]
 }
