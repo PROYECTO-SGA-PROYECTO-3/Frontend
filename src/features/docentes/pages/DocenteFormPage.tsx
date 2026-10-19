@@ -66,6 +66,7 @@ export default function DocenteFormPage() {
 	const onSubmit = async (valores: DocenteFormValores) => {
 		setErrorEnvio(null);
 		try {
+			const nombreCompletoDocente = `${valores.primerNombre} ${valores.primerApellido}`.trim();
 			if (esEdicion && docenteId) {
 				await actualizarDocente({
 					id: docenteId,
@@ -74,6 +75,12 @@ export default function DocenteFormPage() {
 						segundoNombre: valores.segundoNombre || undefined,
 						primerApellido: valores.primerApellido,
 						segundoApellido: valores.segundoApellido || undefined,
+					},
+				});
+				navigate("/admin/docentes", {
+					state: {
+						mensajeFeedback: `Docente ${nombreCompletoDocente} actualizado exitosamente.`,
+						tipoFeedback: "exito",
 					},
 				});
 			} else {
@@ -86,8 +93,13 @@ export default function DocenteFormPage() {
 					email: valores.email ?? "",
 					contrasena: valores.contrasena ?? "",
 				});
+				navigate("/admin/docentes", {
+					state: {
+						mensajeFeedback: `Docente ${nombreCompletoDocente} registrado exitosamente.`,
+						tipoFeedback: "exito",
+					},
+				});
 			}
-			navigate("/admin/docentes");
 		} catch (err: unknown) {
 			setErrorEnvio(extraerMensajeError(err));
 		}
