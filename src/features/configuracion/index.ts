@@ -1,5 +1,6 @@
 export * from './types'
 export * from './api/institucionApi'
 export * from './api/aniosLectivosApi'
+export * from './hooks/useInstitucion'
 export * from './hooks/useAnioLectivo'
 export * from './store'

@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -18,9 +17,13 @@ export const esquemaInstitucion = z.object({
 
 export type FormValoresInstitucion = z.input<typeof esquemaInstitucion>
 
-export function useInstitucionForm(institucion: Institucion | null) {
+export function useInstitucionForm(
+  institucion: Institucion | null,
+  onGuardadoExitoso?: () => void,
+) {
   const queryClient = useQueryClient()
 
+  // Sincronización reactiva declarativa mediante values (estándar React Hook Form v7)
   const {
     register,
     handleSubmit,
@@ -28,34 +31,32 @@ export function useInstitucionForm(institucion: Institucion | null) {
     formState: { errors, isDirty },
   } = useForm<FormValoresInstitucion>({
     resolver: zodResolver(esquemaInstitucion),
+    values: institucion
+      ? {
+          nombre: institucion.nombre || '',
+          nit: institucion.nit || '',
+          codigoDane: institucion.codigoDane || '',
+          resolucion: institucion.resolucion || '',
+          direccion: institucion.direccion || '',
+          nombreRector: institucion.nombreRector || '',
+        }
+      : undefined,
     defaultValues: {
-      nombre: institucion?.nombre ?? '',
-      nit: institucion?.nit ?? '',
-      codigoDane: institucion?.codigoDane ?? '',
-      resolucion: institucion?.resolucion ?? '',
-      direccion: institucion?.direccion ?? '',
-      nombreRector: institucion?.nombreRector ?? '',
+      nombre: '',
+      nit: '',
+      codigoDane: '',
+      resolucion: '',
+      direccion: '',
+      nombreRector: '',
     },
   })
-
-  useEffect(() => {
-    if (institucion) {
-      reset({
-        nombre: institucion.nombre || '',
-        nit: institucion.nit || '',
-        codigoDane: institucion.codigoDane || '',
-        resolucion: institucion.resolucion || '',
-        direccion: institucion.direccion || '',
-        nombreRector: institucion.nombreRector || '',
-      })
-    }
-  }, [institucion, reset])
 
   const mutacionGuardar = useMutation({
     mutationFn: (datos: SolicitudActualizarInstitucion) => actualizarInstitucion(datos),
     onSuccess: (dataActualizada) => {
       queryClient.setQueryData(['institucion'], dataActualizada)
       queryClient.invalidateQueries({ queryKey: ['institucion'] })
+      onGuardadoExitoso?.()
     },
   })
 
@@ -74,6 +75,7 @@ export function useInstitucionForm(institucion: Institucion | null) {
     register,
     errors,
     isDirty,
+    reset,
     isPending: mutacionGuardar.isPending,
     isSuccess: mutacionGuardar.isSuccess,
     isError: mutacionGuardar.isError,
