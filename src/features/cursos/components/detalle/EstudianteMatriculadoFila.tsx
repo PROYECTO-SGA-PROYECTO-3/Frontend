@@ -1,4 +1,4 @@
-import { Eye, Trash2 } from 'lucide-react'
+import { Eye, Trash2, SlidersHorizontal } from 'lucide-react'
 import type { Matricula, EstadoMatricula } from '@/shared/types/matricula.types'
 import { Avatar, Badge, type BadgeColor } from '@/shared/ui'
 
@@ -6,6 +6,7 @@ export interface EstudianteMatriculadoFilaProps {
   matricula: Matricula
   indice: number
   onRetirar?: (matricula: Matricula) => void
+  onCambiarEstado?: (matricula: Matricula) => void
 }
 
 const COLOR_ESTADO: Record<EstadoMatricula, BadgeColor> = {
@@ -19,12 +20,19 @@ export function EstudianteMatriculadoFila({
   matricula,
   indice,
   onRetirar,
+  onCambiarEstado,
 }: EstudianteMatriculadoFilaProps) {
   const colorBadge = COLOR_ESTADO[matricula.estado] ?? 'slate'
 
   const handleRetirar = () => {
     onRetirar?.(matricula)
   }
+
+  const handleCambiarEstado = () => {
+    onCambiarEstado?.(matricula)
+  }
+
+  const estaActiva = matricula.estado === 'ACTIVA'
 
   return (
     <tr className="group transition-colors hover:bg-slate-50/80">
@@ -78,24 +86,50 @@ export function EstudianteMatriculadoFila({
             <Eye size={16} aria-hidden="true" />
           </button>
 
-          {/* Botón Retirar Estudiante del Curso (solo permitido si está ACTIVA) */}
+          {/* Botón Cambiar Estado de Matrícula (solo permitido si está ACTIVA) */}
+          {onCambiarEstado && (
+            <button
+              type="button"
+              disabled={!estaActiva}
+              onClick={handleCambiarEstado}
+              title={
+                estaActiva
+                  ? `Cambiar estado de matrícula de ${matricula.nombreCompletoEstudiante}`
+                  : `Matrícula en estado final (${matricula.estado}), no modificable`
+              }
+              aria-label={
+                estaActiva
+                  ? `Cambiar estado de matrícula de ${matricula.nombreCompletoEstudiante}`
+                  : `Matrícula en estado final (${matricula.estado}), no modificable`
+              }
+              className={
+                estaActiva
+                  ? 'cursor-pointer rounded-lg p-1.5 text-slate-400 transition hover:bg-brand-50 hover:text-brand-600'
+                  : 'rounded-lg p-1.5 text-slate-300 cursor-not-allowed opacity-40 transition'
+              }
+            >
+              <SlidersHorizontal size={16} aria-hidden="true" />
+            </button>
+          )}
+
+          {/* Botón Eliminar Matrícula del Curso (anulación en caso de error de digitación, solo si está ACTIVA y sin notas) */}
           {onRetirar && (
             <button
               type="button"
-              disabled={matricula.estado !== 'ACTIVA'}
+              disabled={!estaActiva}
               onClick={handleRetirar}
               title={
-                matricula.estado === 'ACTIVA'
-                  ? `Retirar a ${matricula.nombreCompletoEstudiante} del curso`
-                  : `No se puede retirar una matrícula en estado ${matricula.estado}`
+                estaActiva
+                  ? `Eliminar matrícula de ${matricula.nombreCompletoEstudiante} del curso (sin calificaciones)`
+                  : `No se puede eliminar una matrícula en estado ${matricula.estado}`
               }
               aria-label={
-                matricula.estado === 'ACTIVA'
-                  ? `Retirar a ${matricula.nombreCompletoEstudiante} del curso`
-                  : `Matrícula en estado ${matricula.estado}, no retirable`
+                estaActiva
+                  ? `Eliminar matrícula de ${matricula.nombreCompletoEstudiante} del curso`
+                  : `Matrícula en estado ${matricula.estado}, no eliminable`
               }
               className={
-                matricula.estado === 'ACTIVA'
+                estaActiva
                   ? 'cursor-pointer rounded-lg p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-600'
                   : 'rounded-lg p-1.5 text-slate-300 cursor-not-allowed opacity-40 transition'
               }

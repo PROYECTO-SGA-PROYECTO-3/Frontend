@@ -4,11 +4,13 @@ import { EstudianteMatriculadoFila } from './EstudianteMatriculadoFila'
 export interface EstudiantesMatriculadosTableProps {
   estudiantes: Matricula[]
   onRetirar?: (matricula: Matricula) => void
+  onCambiarEstado?: (matricula: Matricula) => void
 }
 
 export function EstudiantesMatriculadosTable({
   estudiantes,
   onRetirar,
+  onCambiarEstado,
 }: EstudiantesMatriculadosTableProps) {
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xs">
@@ -43,6 +45,7 @@ export function EstudiantesMatriculadosTable({
                 matricula={matricula}
                 indice={index + 1}
                 onRetirar={onRetirar}
+                onCambiarEstado={onCambiarEstado}
               />
             ))}
           </tbody>

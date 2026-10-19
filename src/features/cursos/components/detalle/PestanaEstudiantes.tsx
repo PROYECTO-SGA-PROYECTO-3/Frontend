@@ -9,11 +9,12 @@ import {
   DialogoConfirmacion,
   ToastNotificacion,
 } from '@/shared/ui'
-import type { Matricula } from '@/shared/types/matricula.types'
+import type { Matricula, EstadoMatricula } from '@/shared/types/matricula.types'
 import { useEstudiantesCurso, useEliminarMatricula } from '../../hooks'
 import { EstudiantesMatriculadosTable } from './EstudiantesMatriculadosTable'
 import { EstudiantesCursoEmptyState } from './EstudiantesCursoEmptyState'
 import { MatricularEstudianteModal } from './MatricularEstudianteModal'
+import { CambiarEstadoMatriculaModal } from './CambiarEstadoMatriculaModal'
 
 export interface PestanaEstudiantesProps {
   cursoId: number
@@ -38,10 +39,29 @@ export function PestanaEstudiantes({
   const [modalMatricularAbierto, setModalMatricularAbierto] = useState(false)
   const [matriculaARetirar, setMatriculaARetirar] =
     useState<Matricula | null>(null)
+  const [matriculaACambiarEstado, setMatriculaACambiarEstado] =
+    useState<Matricula | null>(null)
   const [mensajeExito, setMensajeExito] = useState<string | null>(null)
 
   const handleCerrarToast = () => {
     setMensajeExito(null)
+  }
+
+  const handleAbrirCambiarEstado = (matricula: Matricula) => {
+    setMatriculaACambiarEstado(matricula)
+  }
+
+  const handleCerrarCambiarEstado = () => {
+    setMatriculaACambiarEstado(null)
+  }
+
+  const handleExitoCambiarEstado = (
+    nombre: string,
+    nuevoEstado: EstadoMatricula,
+  ) => {
+    setMensajeExito(
+      `El estado de matrícula de "${nombre}" se actualizó a ${nuevoEstado} exitosamente.`,
+    )
   }
 
   const handleAbrirRetirar = (matricula: Matricula) => {
@@ -220,6 +240,7 @@ export function PestanaEstudiantes({
             <EstudiantesMatriculadosTable
               estudiantes={estudiantesFiltrados}
               onRetirar={handleAbrirRetirar}
+              onCambiarEstado={handleAbrirCambiarEstado}
             />
           )}
         </div>
@@ -238,14 +259,24 @@ export function PestanaEstudiantes({
         }}
       />
 
-      {/* Diálogo de Confirmación para Retirar Estudiante del Curso */}
+      {/* Modal de Cambio de Estado de Matrícula (PATCH /matriculas/:id/estado) */}
+      <CambiarEstadoMatriculaModal
+        abierto={Boolean(matriculaACambiarEstado)}
+        matricula={matriculaACambiarEstado}
+        cursoId={cursoId}
+        nombreCurso={tituloCurso}
+        onCerrar={handleCerrarCambiarEstado}
+        onExito={handleExitoCambiarEstado}
+      />
+
+      {/* Diálogo de Confirmación para Eliminar Matrícula del Curso (DELETE /matriculas/:id) */}
       <DialogoConfirmacion
         abierto={Boolean(matriculaARetirar)}
-        titulo="¿Retirar estudiante del curso?"
-        mensaje={`¿Estás seguro de que deseas retirar a "${matriculaARetirar?.nombreCompletoEstudiante}" de ${tituloCurso}? El estudiante quedará libre para ser matriculado en otro grado.`}
+        titulo="¿Eliminar matrícula del estudiante?"
+        mensaje={`¿Estás seguro de que deseas anular y eliminar la matrícula de "${matriculaARetirar?.nombreCompletoEstudiante}" en ${tituloCurso}? Esta acción es un borrado físico y solo procede si el estudiante no cuenta con calificaciones registradas.`}
         error={errorRetiro ?? undefined}
         procesando={estaRetirando}
-        textoConfirmar="Retirar estudiante"
+        textoConfirmar="Eliminar matrícula"
         varianteConfirmar="peligro"
         onConfirmar={handleConfirmarRetirar}
         onCancelar={handleCancelarRetirar}

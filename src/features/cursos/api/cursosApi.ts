@@ -6,7 +6,10 @@ import type {
   SolicitudCrearCarga,
   SolicitudReasignarDocente,
 } from '@/shared/types/academico.types'
-import type { Matricula } from '@/shared/types/matricula.types'
+import type {
+  Matricula,
+  SolicitudCambiarEstado,
+} from '@/shared/types/matricula.types'
 
 export async function listarGrados(): Promise<Grado[]> {
   return api.get<Grado[]>('/academico/grados')
@@ -48,6 +51,13 @@ export async function matricularEstudianteEnCurso(
 
 export async function eliminarMatricula(matriculaId: number): Promise<void> {
   await api.delete(`/matriculas/${matriculaId}`)
+}
+
+export async function cambiarEstadoMatricula(
+  matriculaId: number,
+  datos: SolicitudCambiarEstado,
+): Promise<Matricula> {
+  return api.patch<Matricula>(`/matriculas/${matriculaId}/estado`, datos)
 }
 
 export async function listarCargaPorGrado(
