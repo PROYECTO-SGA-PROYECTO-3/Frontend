@@ -6,7 +6,7 @@ const AdminDashboard = lazy(() =>
   import('@/dashboards/admin').then((m) => ({ default: m.AdminDashboard })),
 )
 const AdminConfiguracion = lazy(() =>
-  import('@/features/configuracion').then((m) => ({ default: m.ConfiguracionPage })),
+  import('@/features/configuracion/pages/ConfiguracionPage'),
 )
 const AdminMaterias = lazy(() =>
   import('@/features/materias').then((m) => ({ default: m.MateriasPage })),

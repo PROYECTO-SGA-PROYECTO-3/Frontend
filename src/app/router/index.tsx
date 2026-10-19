@@ -6,9 +6,7 @@ import { docenteRoutes } from './docente.routes'
 import { estudianteRoutes } from './estudiante.routes'
 import { Spinner } from '@/shared/ui/Spinner'
 
-const LoginPage = lazy(() =>
-  import('@/features/auth').then((m) => ({ default: m.LoginPage })),
-)
+const LoginPage = lazy(() => import('@/features/auth/pages/LoginPage'))
 const NoAutorizado = lazy(() => import('@/pages/NoAutorizado'))
 const NoEncontrado = lazy(() => import('@/pages/NoEncontrado'))
 const LandingPage = lazy(() =>
