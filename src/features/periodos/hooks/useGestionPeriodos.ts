@@ -6,6 +6,7 @@ import {
   actualizarPeriodo,
   cerrarPeriodo,
   reabrirPeriodo,
+  eliminarPeriodo,
 } from '../api/periodosApi'
 import { extraerMensajeError } from '@/shared/lib'
 import type { AnioLectivo } from '@/shared/types/anioLectivo.types'
@@ -30,6 +31,13 @@ export function useGestionPeriodos(anio: AnioLectivo) {
   const [periodoEditando, setPeriodoEditando] = useState<Periodo | 'nuevo' | null>(null)
   const [form, setForm] = useState<FormPeriodoValores>(FORM_INICIAL)
   const [errorForm, setErrorForm] = useState<string | null>(null)
+
+  // Estado para eliminación de periodo
+  const [periodoAEliminar, setPeriodoAEliminar] = useState<Periodo | null>(null)
+  const [errorEliminar, setErrorEliminar] = useState<string | null>(null)
+
+  // Estado para retroalimentación flotante
+  const [toastMensaje, setToastMensaje] = useState<string | null>(null)
 
   // Consultar periodos del año
   const {
@@ -84,6 +92,27 @@ export function useGestionPeriodos(anio: AnioLectivo) {
     },
   })
 
+  // Mutación para eliminar periodo condicionalmente
+  const mutacionEliminar = useMutation({
+    mutationFn: async (id: number) => {
+      return await eliminarPeriodo(id)
+    },
+    onSuccess: (_, id) => {
+      queryClient.invalidateQueries({ queryKey: ['periodos', anio.id] })
+      const eliminado = periodos.find((p) => p.id === id)
+      setPeriodoAEliminar(null)
+      setErrorEliminar(null)
+      setToastMensaje(
+        eliminado
+          ? `Periodo "${eliminado.nombre}" eliminado exitosamente.`
+          : 'Periodo eliminado exitosamente.'
+      )
+    },
+    onError: (err) => {
+      setErrorEliminar(extraerMensajeError(err))
+    },
+  })
+
   const iniciarCrear = () => {
     setForm(FORM_INICIAL)
     setErrorForm(null)
@@ -131,6 +160,28 @@ export function useGestionPeriodos(anio: AnioLectivo) {
     mutacionGuardar.mutate()
   }
 
+  const solicitarEliminacion = (periodo: Periodo) => {
+    setErrorEliminar(null)
+    setPeriodoAEliminar(periodo)
+  }
+
+  const confirmarEliminacion = () => {
+    if (periodoAEliminar) {
+      mutacionEliminar.mutate(periodoAEliminar.id)
+    }
+  }
+
+  const cancelarEliminacion = () => {
+    if (!mutacionEliminar.isPending) {
+      setPeriodoAEliminar(null)
+      setErrorEliminar(null)
+    }
+  }
+
+  const limpiarToast = () => {
+    setToastMensaje(null)
+  }
+
   return {
     periodos,
     isLoading,
@@ -146,5 +197,15 @@ export function useGestionPeriodos(anio: AnioLectivo) {
     cancelarEdicion,
     alEnviarForm,
     alternarEstado: (p: Periodo) => mutacionAlternarEstado.mutate(p),
+    // Eliminación
+    periodoAEliminar,
+    errorEliminar,
+    eliminando: mutacionEliminar.isPending,
+    solicitarEliminacion,
+    confirmarEliminacion,
+    cancelarEliminacion,
+    // Toast
+    toastMensaje,
+    limpiarToast,
   }
 }
