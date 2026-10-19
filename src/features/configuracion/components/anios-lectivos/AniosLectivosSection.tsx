@@ -13,6 +13,7 @@ import type { AnioLectivo } from "../../types";
 export function AniosLectivosSection() {
 	const [modalCrearAbierto, setModalCrearAbierto] = useState(false);
 	const [anioAActivar, setAnioAActivar] = useState<AnioLectivo | null>(null);
+	const [anioAEliminar, setAnioAEliminar] = useState<AnioLectivo | null>(null);
 	const [anioParaPeriodos, setAnioParaPeriodos] =
 		useState<AnioLectivo | null>(null);
 	const [toastMensaje, setToastMensaje] = useState<string | null>(null);
@@ -35,6 +36,16 @@ export function AniosLectivosSection() {
 		);
 	};
 
+	const handleExitoEliminar = (id: number) => {
+		const anioEliminado = anios.find((a) => a.id === id);
+		setAnioAEliminar(null);
+		setToastMensaje(
+			anioEliminado
+				? `Año lectivo ${anioEliminado.anio} eliminado exitosamente.`
+				: "Año lectivo eliminado exitosamente.",
+		);
+	};
+
 	const {
 		crearAnio,
 		creando,
@@ -44,9 +55,14 @@ export function AniosLectivosSection() {
 		activando,
 		errorActivar,
 		limpiarErrorActivar,
+		eliminarAnio,
+		eliminando,
+		errorEliminar,
+		limpiarErrorEliminar,
 	} = useAniosLectivosMutations({
 		onExitoCrear: handleExitoCrear,
 		onExitoActivar: handleExitoActivar,
+		onExitoEliminar: handleExitoEliminar,
 	});
 
 	const handleAbrirModalCrear = () => {
@@ -76,6 +92,24 @@ export function AniosLectivosSection() {
 		if (!activando) {
 			limpiarErrorActivar();
 			setAnioAActivar(null);
+		}
+	};
+
+	const handleSolicitarEliminacion = (anio: AnioLectivo) => {
+		limpiarErrorEliminar();
+		setAnioAEliminar(anio);
+	};
+
+	const handleConfirmarEliminacion = () => {
+		if (anioAEliminar) {
+			eliminarAnio(anioAEliminar.id);
+		}
+	};
+
+	const handleCancelarEliminacion = () => {
+		if (!eliminando) {
+			limpiarErrorEliminar();
+			setAnioAEliminar(null);
 		}
 	};
 
@@ -132,6 +166,7 @@ export function AniosLectivosSection() {
 					anios={anios}
 					onGestionarPeriodos={handleAbrirPeriodos}
 					onActivarAnio={handleSolicitarActivacion}
+					onEliminarAnio={handleSolicitarEliminacion}
 				/>
 			</div>
 
@@ -159,6 +194,23 @@ export function AniosLectivosSection() {
 				varianteConfirmar="primary"
 				onConfirmar={handleConfirmarActivacion}
 				onCancelar={handleCancelarActivacion}
+			/>
+
+			{/* Diálogo de confirmación destructiva para eliminar año */}
+			<DialogoConfirmacion
+				abierto={Boolean(anioAEliminar)}
+				titulo="Eliminar año lectivo"
+				mensaje={
+					anioAEliminar
+						? `¿Confirmas que deseas eliminar permanentemente el año lectivo ${anioAEliminar.anio}? Esta acción es irreversible y solo se procesará si no contiene periodos, matrículas ni cargas académicas vinculadas.`
+						: ""
+				}
+				error={errorEliminar ?? undefined}
+				procesando={eliminando}
+				textoConfirmar="Eliminar Año"
+				varianteConfirmar="peligro"
+				onConfirmar={handleConfirmarEliminacion}
+				onCancelar={handleCancelarEliminacion}
 			/>
 
 			{/* Modal de Periodos del Año */}
