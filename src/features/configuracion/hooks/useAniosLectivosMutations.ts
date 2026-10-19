@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { crearAnioLectivo, activarAnioLectivo } from '../api/aniosLectivosApi'
+import { crearAnioLectivo, activarAnioLectivo, eliminarAnioLectivo } from '../api/aniosLectivosApi'
 import { extraerMensajeError } from '@/shared/lib'
 import { useAnioLectivoStore } from '../store'
 import type { AnioLectivo } from '../types'
@@ -8,6 +8,7 @@ import type { AnioLectivo } from '../types'
 interface UseAniosLectivosMutationsProps {
   onExitoCrear?: (creado: AnioLectivo) => void
   onExitoActivar?: (id: number) => void
+  onExitoEliminar?: (id: number) => void
 }
 
 export function useAniosLectivosMutations(props?: UseAniosLectivosMutationsProps) {
@@ -17,6 +18,7 @@ export function useAniosLectivosMutations(props?: UseAniosLectivosMutationsProps
 
   const [errorCrear, setErrorCrear] = useState<string | null>(null)
   const [errorActivar, setErrorActivar] = useState<string | null>(null)
+  const [errorEliminar, setErrorEliminar] = useState<string | null>(null)
 
   const mutacionCrear = useMutation({
     mutationFn: async ({ anio, activar }: { anio: number; activar: boolean }) => {
@@ -54,6 +56,21 @@ export function useAniosLectivosMutations(props?: UseAniosLectivosMutationsProps
     },
   })
 
+  const mutacionEliminar = useMutation({
+    mutationFn: async (id: number) => {
+      return await eliminarAnioLectivo(id)
+    },
+    onSuccess: async (_, id) => {
+      await queryClient.invalidateQueries({ queryKey: ['aniosLectivos'] })
+      await cargarAniosStore()
+      setErrorEliminar(null)
+      props?.onExitoEliminar?.(id)
+    },
+    onError: (err) => {
+      setErrorEliminar(extraerMensajeError(err))
+    },
+  })
+
   const crearAnio = (params: { anio: number; activar: boolean }) => {
     setErrorCrear(null)
     mutacionCrear.mutate(params)
@@ -64,12 +81,21 @@ export function useAniosLectivosMutations(props?: UseAniosLectivosMutationsProps
     mutacionActivar.mutate(id)
   }
 
+  const eliminarAnio = (id: number) => {
+    setErrorEliminar(null)
+    mutacionEliminar.mutate(id)
+  }
+
   const limpiarErrorCrear = () => {
     setErrorCrear(null)
   }
 
   const limpiarErrorActivar = () => {
     setErrorActivar(null)
+  }
+
+  const limpiarErrorEliminar = () => {
+    setErrorEliminar(null)
   }
 
   return {
@@ -81,5 +107,9 @@ export function useAniosLectivosMutations(props?: UseAniosLectivosMutationsProps
     activando: mutacionActivar.isPending,
     errorActivar,
     limpiarErrorActivar,
+    eliminarAnio,
+    eliminando: mutacionEliminar.isPending,
+    errorEliminar,
+    limpiarErrorEliminar,
   }
 }
