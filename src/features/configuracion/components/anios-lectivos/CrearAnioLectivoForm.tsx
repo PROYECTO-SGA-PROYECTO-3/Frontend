@@ -107,11 +107,12 @@ export function CrearAnioLectivoForm({
 						variant="secondary"
 						onClick={onCancelar}
 						disabled={creando}
+						className="w-auto"
 					>
 						Cancelar
 					</Button>
 				)}
-				<Button type="submit" variant="primary" isLoading={creando}>
+				<Button type="submit" variant="primary" isLoading={creando} className="w-auto">
 					<Plus size={16} />
 					Crear Año Lectivo
 				</Button>

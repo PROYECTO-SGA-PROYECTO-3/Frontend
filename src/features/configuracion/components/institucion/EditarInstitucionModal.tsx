@@ -150,10 +150,11 @@ function EditarInstitucionDialog({
 							variant="secondary"
 							onClick={onCerrar}
 							disabled={isPending}
+							className="w-auto"
 						>
 							Cancelar
 						</Button>
-						<Button type="submit" isLoading={isPending} disabled={isPending}>
+						<Button type="submit" isLoading={isPending} disabled={isPending} className="w-auto">
 							<Save size={16} />
 							Guardar Cambios
 						</Button>

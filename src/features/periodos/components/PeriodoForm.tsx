@@ -121,11 +121,21 @@ export function PeriodoForm({
         />
       </div>
 
-      <div className="flex justify-end gap-3 pt-2">
-        <Button type="button" variant="secondary" onClick={onCancelar} disabled={guardando}>
+      <div className="flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={onCancelar}
+          disabled={guardando}
+          className="w-auto"
+        >
           Cancelar
         </Button>
-        <Button type="submit" isLoading={guardando}>
+        <Button
+          type="submit"
+          isLoading={guardando}
+          className="w-auto"
+        >
           {esNuevo ? 'Crear Periodo' : 'Guardar Cambios'}
         </Button>
       </div>
