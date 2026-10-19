@@ -16,7 +16,6 @@ export interface ResumenEstudianteDashboard {
   estadoMatricula: EstadoMatricula | null
   jornada: string | null
 }
-
 export interface ResumenPromedio {
   valor: number
   nivel: NivelPromedio
@@ -24,17 +23,10 @@ export interface ResumenPromedio {
   historicoPeriodos: number[]
 }
 
-export interface AsignaturaHoy {
-  id: number
-  nombre: string
-  horaInicio: string
-  horaFin: string
-}
 
 export interface DashboardEstudiante {
   estudiante: ResumenEstudianteDashboard
   promedioGeneral: ResumenPromedio
   entregasPendientes: number
   proximosEventos: EventoInstitucional[]
-  asignaturasHoy: AsignaturaHoy[]
 }
