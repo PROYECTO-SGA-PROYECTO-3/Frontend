@@ -18,9 +18,17 @@ export interface ItemMediaInfo {
   urlActual: string | null | undefined
 }
 
+const MENSAJES_EXITO: Record<TipoMediaInstitucional, string> = {
+  logo: 'Logotipo escolar actualizado con éxito.',
+  sello: 'Sello institucional actualizado con éxito.',
+  firma: 'Firma del rector actualizada con éxito.',
+  bandera: 'Bandera o emblema institucional actualizado con éxito.',
+}
+
 export function useInstitucionMedia(institucion: Institucion | null) {
   const queryClient = useQueryClient()
   const [errorGlobal, setErrorGlobal] = useState<string | null>(null)
+  const [mensajeExito, setMensajeExito] = useState<string | null>(null)
   const [tipoEnProceso, setTipoEnProceso] = useState<TipoMediaInstitucional | null>(null)
 
   const mutacionSubida = useMutation({
@@ -32,7 +40,9 @@ export function useInstitucionMedia(institucion: Institucion | null) {
       if (tipo === 'firma') return subirFirmaRector(archivo)
       return subirBanderaInstitucion(archivo)
     },
-    onSuccess: (dataActualizada) => {
+    onSuccess: (dataActualizada, variables) => {
+      setMensajeExito(MENSAJES_EXITO[variables.tipo])
+      setErrorGlobal(null)
       queryClient.setQueryData(['institucion'], dataActualizada)
       queryClient.invalidateQueries({ queryKey: ['institucion'] })
       setTipoEnProceso(null)
@@ -55,8 +65,13 @@ export function useInstitucionMedia(institucion: Institucion | null) {
       return
     }
 
+    setMensajeExito(null)
     mutacionSubida.mutate({ archivo, tipo })
     e.target.value = ''
+  }
+
+  const limpiarMensajeExito = () => {
+    setMensajeExito(null)
   }
 
   const itemsMedia: ItemMediaInfo[] = [
@@ -90,6 +105,8 @@ export function useInstitucionMedia(institucion: Institucion | null) {
     itemsMedia,
     tipoEnProceso,
     errorGlobal,
+    mensajeExito,
+    limpiarMensajeExito,
     isPending: mutacionSubida.isPending,
     manejarSubidaArchivo,
   }

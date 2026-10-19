@@ -1,6 +1,8 @@
+import type { ChangeEvent } from 'react'
 import { AlertCircle } from 'lucide-react'
+import { ToastNotificacion } from '@/shared/ui/ToastNotificacion'
 import type { Institucion } from '../../types'
-import { useInstitucionMedia } from '../../hooks/useInstitucionMedia'
+import { useInstitucionMedia, type TipoMediaInstitucional } from '../../hooks/useInstitucionMedia'
 import { MediaUploadItem } from './MediaUploadItem'
 
 interface InstitucionMediaUploaderProps {
@@ -12,9 +14,19 @@ export function InstitucionMediaUploader({ institucion }: InstitucionMediaUpload
     itemsMedia,
     tipoEnProceso,
     errorGlobal,
+    mensajeExito,
+    limpiarMensajeExito,
     isPending,
     manejarSubidaArchivo,
   } = useInstitucionMedia(institucion)
+
+  const handleCerrarToast = () => {
+    limpiarMensajeExito()
+  }
+
+  const handleSeleccionarArchivo = (tipo: TipoMediaInstitucional) => (e: ChangeEvent<HTMLInputElement>) => {
+    manejarSubidaArchivo(e, tipo)
+  }
 
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition hover:shadow-md">
@@ -38,10 +50,18 @@ export function InstitucionMediaUploader({ institucion }: InstitucionMediaUpload
             key={item.tipo}
             item={item}
             estaSubiendo={tipoEnProceso === item.tipo && isPending}
-            onSeleccionarArchivo={(e) => manejarSubidaArchivo(e, item.tipo)}
+            onSeleccionarArchivo={handleSeleccionarArchivo(item.tipo)}
           />
         ))}
       </div>
+
+      {mensajeExito && (
+        <ToastNotificacion
+          mensaje={mensajeExito}
+          tipo="exito"
+          onCerrar={handleCerrarToast}
+        />
+      )}
     </div>
   )
 }
