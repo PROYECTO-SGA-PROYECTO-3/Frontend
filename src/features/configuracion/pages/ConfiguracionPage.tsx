@@ -1,6 +1,5 @@
 import { PageHeader } from '@/layouts'
-import { InstitucionSection } from '../components/InstitucionSection'
-import { AniosLectivosSection } from '../components/AniosLectivosSection'
+import { InstitucionSection, AniosLectivosSection } from '../components'
 
 export default function Configuracion() {
   return (
@@ -10,7 +9,7 @@ export default function Configuracion() {
         seccionActual="Configuración General"
       />
 
-      <main className="flex-1 p-6 md:p-8 xl:p-10 max-w-[1600px] mx-auto w-full space-y-10">
+      <main className="flex-1 p-6 md:p-8 xl:p-10 max-w-7xl mx-auto w-full space-y-10">
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
             Gestión Institucional y Académica
