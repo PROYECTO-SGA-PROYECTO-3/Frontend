@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import { obtenerDashboardEstudiante } from './api';
-import { extraerMensajeError } from '@/shared/lib'
+import { extraerMensajeError } from '@/shared/lib';
 import { useAuth } from '@/features/auth';
 import { Spinner } from '@/shared/ui/Spinner';
 import { nombreCompleto } from '@/shared/lib/utils';
 import { PageHeader } from '@/layouts';
 import { TarjetaPromedio } from '@/features/calificaciones';
 import { ProximosEventos } from '@/features/eventos';
-import { AsignaturasHoy } from '@/features/carga-academica';
 import type { DashboardEstudiante } from './types';
 import { BienvenidaBanner } from './BienvenidaBanner';
 import { TarjetaGrado } from './TarjetaGrado';
@@ -60,7 +59,6 @@ export default function Dashboard() {
               <ProximosEventos eventos={dashboard.proximosEventos} />
             </div>
 
-            <AsignaturasHoy asignaturas={dashboard.asignaturasHoy} />
           </div>
         )}
       </main>
