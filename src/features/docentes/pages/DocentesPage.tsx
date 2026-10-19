@@ -1,8 +1,7 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { CheckCircle2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { PageHeader } from '@/layouts'
-import { DialogoConfirmacion, ErrorState } from '@/shared/ui'
+import { DialogoConfirmacion, ErrorState, ToastNotificacion, type TipoToast } from '@/shared/ui'
 import { extraerMensajeError, nombreCompleto } from '@/shared/lib'
 import {
   useCatalogoDocentes,
@@ -67,18 +66,28 @@ export default function DocentesPage() {
     limpiarFiltros,
   } = useFiltroDocentes(docentes)
 
-  // 4. Diálogos de confirmación y feedback
+  const location = useLocation()
+
   const [docenteACambiarEstado, setDocenteACambiarEstado] = useState<Docente | null>(null)
   const [docenteAEliminar, setDocenteAEliminar] = useState<Docente | null>(null)
   const [errorAccion, setErrorAccion] = useState<string | null>(null)
-  const [mensajeExito, setMensajeExito] = useState<string | null>(null)
+  const [toast, setToast] = useState<{ mensaje: string; tipo: TipoToast } | null>(null)
 
-  const notificarExito = (msg: string) => {
-    setMensajeExito(msg)
-    setTimeout(() => {
-      setMensajeExito(null)
-    }, 4000)
+  const notificarToast = (mensaje: string, tipo: TipoToast = 'exito') => {
+    setToast({ mensaje, tipo })
   }
+
+  const handleCerrarToast = () => {
+    setToast(null)
+  }
+
+  useEffect(() => {
+    const estado = location.state as { mensajeFeedback?: string; tipoFeedback?: TipoToast } | null
+    if (estado?.mensajeFeedback) {
+      notificarToast(estado.mensajeFeedback, estado.tipoFeedback || 'exito')
+      window.history.replaceState({}, document.title)
+    }
+  }, [location.state])
 
   // Navegación a formularios
   const handleCrear = () => {
@@ -97,10 +106,10 @@ export default function DocentesPage() {
       const nombre = nombreCompleto(docenteACambiarEstado)
       if (docenteACambiarEstado.activo) {
         await desactivarDocente(docenteACambiarEstado.id)
-        notificarExito(`Docente ${nombre} desactivado temporalmente.`)
+        notificarToast(`Docente ${nombre} desactivado temporalmente.`, 'exito')
       } else {
         await activarDocente(docenteACambiarEstado.id)
-        notificarExito(`Docente ${nombre} reactivado exitosamente.`)
+        notificarToast(`Docente ${nombre} reactivado exitosamente.`, 'exito')
       }
       setDocenteACambiarEstado(null)
     } catch (err: unknown) {
@@ -115,7 +124,7 @@ export default function DocentesPage() {
     try {
       const nombre = nombreCompleto(docenteAEliminar)
       await eliminarDocente(docenteAEliminar.id)
-      notificarExito(`Registro de ${nombre} eliminado de la institución.`)
+      notificarToast(`Registro de ${nombre} eliminado de la institución.`, 'exito')
       setDocenteAEliminar(null)
     } catch (err: unknown) {
       setErrorAccion(extraerMensajeError(err))
@@ -130,25 +139,6 @@ export default function DocentesPage() {
       />
 
       <main className="mx-auto w-full max-w-[1600px] flex-1 space-y-8 p-6 md:p-8 xl:p-10">
-        {/* Banner de notificación de éxito */}
-        {mensajeExito && (
-          <div
-            role="status"
-            className="flex items-center justify-between gap-3 rounded-xl border border-brand-200 bg-brand-50/90 px-4 py-3 text-sm text-brand-900 shadow-xs animate-in fade-in slide-in-from-top-2 duration-300"
-          >
-            <div className="flex items-center gap-2">
-              <CheckCircle2 size={18} className="text-brand-700 shrink-0" />
-              <span className="font-medium">{mensajeExito}</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setMensajeExito(null)}
-              className="cursor-pointer text-brand-700 hover:text-brand-900"
-            >
-              &times;
-            </button>
-          </div>
-        )}
 
         {/* Encabezado del módulo */}
         <section className="flex flex-col gap-1">
@@ -161,7 +151,6 @@ export default function DocentesPage() {
           </p>
         </section>
 
-        {/* Tarjetas de Estadísticas Globales */}
         <DocentesStats
           totalDocentes={totalDocentes}
           totalActivos={totalActivos}
@@ -171,7 +160,6 @@ export default function DocentesPage() {
           totalFiltrados={totalFiltrados}
         />
 
-        {/* Barra de herramientas: Búsqueda, filtros y botón de registro */}
         <DocentesToolbar
           busqueda={busqueda}
           filtroEstado={filtroEstado}
@@ -186,7 +174,6 @@ export default function DocentesPage() {
           hayFiltros={hayFiltroActivo}
         />
 
-        {/* Contenido principal: Tabla, Skeleton o Estados Vacíos */}
         <section aria-label="Directorio de docentes">
           {isLoading ? (
             <DocentesSkeleton cantidadFilas={6} />
@@ -223,7 +210,6 @@ export default function DocentesPage() {
         </section>
       </main>
 
-      {/* Diálogo de confirmación: Activar / Desactivar */}
       <DialogoConfirmacion
         abierto={Boolean(docenteACambiarEstado)}
         titulo={docenteACambiarEstado?.activo ? 'Desactivar docente' : 'Activar docente'}
@@ -244,7 +230,6 @@ export default function DocentesPage() {
         }}
       />
 
-      {/* Diálogo de confirmación: Eliminar definitivamente */}
       <DialogoConfirmacion
         abierto={Boolean(docenteAEliminar)}
         titulo="Eliminar docente"
@@ -261,6 +246,12 @@ export default function DocentesPage() {
           setDocenteAEliminar(null)
           setErrorAccion(null)
         }}
+      />
+
+      <ToastNotificacion
+        mensaje={toast?.mensaje ?? null}
+        tipo={toast?.tipo ?? 'exito'}
+        onCerrar={handleCerrarToast}
       />
     </div>
   )

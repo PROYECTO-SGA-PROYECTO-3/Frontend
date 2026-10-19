@@ -1,8 +1,7 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { CheckCircle2 } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { PageHeader } from '@/layouts'
-import { DialogoConfirmacion, ErrorState } from '@/shared/ui'
+import { DialogoConfirmacion, ErrorState, ToastNotificacion, type TipoToast } from '@/shared/ui'
 import { extraerMensajeError, nombreCompleto } from '@/shared/lib'
 import {
   useCatalogoEstudiantes,
@@ -69,18 +68,30 @@ export function EstudiantesPage() {
     estaEliminando,
   } = useEstudianteMutations()
 
-  // 5. Diálogos de confirmación y feedback
+  const location = useLocation()
+
+  // 5. Diálogos de confirmación y feedback flotante (Toast)
   const [estudianteACambiarEstado, setEstudianteACambiarEstado] = useState<Estudiante | null>(null)
   const [estudianteAEliminar, setEstudianteAEliminar] = useState<Estudiante | null>(null)
   const [errorAccion, setErrorAccion] = useState<string | null>(null)
-  const [mensajeExito, setMensajeExito] = useState<string | null>(null)
+  const [toast, setToast] = useState<{ mensaje: string; tipo: TipoToast } | null>(null)
 
-  const notificarExito = (msg: string) => {
-    setMensajeExito(msg)
-    setTimeout(() => {
-      setMensajeExito(null)
-    }, 4000)
+  const notificarToast = (mensaje: string, tipo: TipoToast = 'exito') => {
+    setToast({ mensaje, tipo })
   }
+
+  const handleCerrarToast = () => {
+    setToast(null)
+  }
+
+  // Capturar mensajes emitidos por redirecciones de formularios (creación / edición)
+  useEffect(() => {
+    const estado = location.state as { mensajeFeedback?: string; tipoFeedback?: TipoToast } | null
+    if (estado?.mensajeFeedback) {
+      notificarToast(estado.mensajeFeedback, estado.tipoFeedback || 'exito')
+      window.history.replaceState({}, document.title)
+    }
+  }, [location.state])
 
   // Navegación
   const handleCrear = () => {
@@ -103,10 +114,10 @@ export function EstudiantesPage() {
       const nombre = nombreCompleto(estudianteACambiarEstado)
       if (estudianteACambiarEstado.activo) {
         await desactivarEstudiante(estudianteACambiarEstado.id)
-        notificarExito(`Estudiante ${nombre} desactivado del sistema.`)
+        notificarToast(`Estudiante ${nombre} desactivado del sistema.`, 'exito')
       } else {
         await activarEstudiante(estudianteACambiarEstado.id)
-        notificarExito(`Estudiante ${nombre} reactivado exitosamente.`)
+        notificarToast(`Estudiante ${nombre} reactivado exitosamente.`, 'exito')
       }
       setEstudianteACambiarEstado(null)
     } catch (err: unknown) {
@@ -121,7 +132,7 @@ export function EstudiantesPage() {
     try {
       const nombre = nombreCompleto(estudianteAEliminar)
       await eliminarEstudiante(estudianteAEliminar.id)
-      notificarExito(`Registro de ${nombre} eliminado de la institución.`)
+      notificarToast(`Registro de ${nombre} eliminado de la institución.`, 'exito')
       setEstudianteAEliminar(null)
     } catch (err: unknown) {
       setErrorAccion(extraerMensajeError(err))
@@ -136,26 +147,6 @@ export function EstudiantesPage() {
       />
 
       <main className="mx-auto w-full max-w-[1600px] flex-1 space-y-8 p-6 md:p-8 xl:p-10">
-        {/* Banner de notificación de éxito */}
-        {mensajeExito && (
-          <div
-            role="status"
-            className="flex items-center justify-between gap-3 rounded-xl border border-brand-200 bg-brand-50/90 px-4 py-3 text-sm text-brand-900 shadow-xs animate-in fade-in slide-in-from-top-2 duration-300"
-          >
-            <div className="flex items-center gap-2">
-              <CheckCircle2 size={18} className="text-brand-700 shrink-0" />
-              <span className="font-medium">{mensajeExito}</span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setMensajeExito(null)}
-              aria-label="Cerrar notificación"
-              className="text-xs font-semibold text-brand-700 hover:text-brand-900 cursor-pointer"
-            >
-              Cerrar
-            </button>
-          </div>
-        )}
 
         {/* Estado de Error del Servidor */}
         {isError && (
@@ -261,6 +252,13 @@ export function EstudiantesPage() {
           setEstudianteAEliminar(null)
           setErrorAccion(null)
         }}
+      />
+
+      {/* Notificación flotante del sistema */}
+      <ToastNotificacion
+        mensaje={toast?.mensaje ?? null}
+        tipo={toast?.tipo ?? 'exito'}
+        onCerrar={handleCerrarToast}
       />
     </div>
   )

@@ -19,7 +19,6 @@ export function EstudianteFormPage() {
 
 	const [errorEnvio, setErrorEnvio] = useState<string | null>(null);
 
-	// 1. Consulta React Query si es modo edición
 	const {
 		estudiante,
 		isLoading: cargandoEstudiante,
@@ -27,7 +26,6 @@ export function EstudianteFormPage() {
 		refetch,
 	} = useEstudianteDetalle(estudianteId);
 
-	// 2. Mutaciones con invalidación de caché reactiva
 	const {
 		crearEstudiante,
 		estaCreando,
@@ -35,10 +33,10 @@ export function EstudianteFormPage() {
 		estaActualizando,
 	} = useEstudianteMutations();
 
-	// 3. Envío del formulario
 	const handleSubmit = async (valores: EstudianteFormValores) => {
 		setErrorEnvio(null);
 		try {
+			const nombreCompletoEstudiante = `${valores.primerNombre.trim()} ${valores.primerApellido.trim()}`;
 			if (esEdicion && estudianteId) {
 				await actualizarEstudiante({
 					id: estudianteId,
@@ -47,6 +45,12 @@ export function EstudianteFormPage() {
 						segundoNombre: valores.segundoNombre?.trim() || undefined,
 						primerApellido: valores.primerApellido.trim(),
 						segundoApellido: valores.segundoApellido?.trim() || undefined,
+					},
+				});
+				navigate("/admin/estudiantes", {
+					state: {
+						mensajeFeedback: `Estudiante ${nombreCompletoEstudiante} actualizado exitosamente.`,
+						tipoFeedback: "exito",
 					},
 				});
 			} else {
@@ -59,8 +63,13 @@ export function EstudianteFormPage() {
 					email: valores.email?.trim() ?? "",
 					contrasena: valores.contrasena ?? "",
 				});
+				navigate("/admin/estudiantes", {
+					state: {
+						mensajeFeedback: `Estudiante ${nombreCompletoEstudiante} registrado exitosamente.`,
+						tipoFeedback: "exito",
+					},
+				});
 			}
-			navigate("/admin/estudiantes");
 		} catch (err: unknown) {
 			setErrorEnvio(extraerMensajeError(err));
 		}
