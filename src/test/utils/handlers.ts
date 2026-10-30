@@ -1,9 +1,9 @@
 import { http, HttpResponse } from 'msw'
-import { admin, docente } from './fixtures/usuarios'
+import { admin, docente, estudiante } from './fixtures/usuarios'
 
 type LoginBody = { documento?: string; contrasena?: string }
 
-const usuarios = [docente, admin]
+const usuarios = [docente, admin, estudiante]
 
 export const handlers = [
   // Mock para el widget de clima en la cabecera de Login (Open-Meteo)

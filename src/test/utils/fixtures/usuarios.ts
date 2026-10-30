@@ -33,3 +33,20 @@ export const admin = {
     rol: 'ADMIN',
   } satisfies RespuestaLoginApi,
 }
+
+export const estudiante = {
+  credenciales: {
+    documento: '1000000003',
+    contrasena: 'clave-estudiante-test',
+  },
+  respuesta: {
+    token: 'token-falso-estudiante',
+    documento: '1000000003',
+    email: 'estudiante@example.test',
+    primerNombre: 'Laura',
+    segundoNombre: 'Sofia',
+    primerApellido: 'Ramirez',
+    segundoApellido: 'Perez',
+    rol: 'ESTUDIANTE',
+  } satisfies RespuestaLoginApi,
+}
