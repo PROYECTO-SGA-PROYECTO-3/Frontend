@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { TablaNotasPlanilla } from './TablaNotasPlanilla'
-import { crearNotaMock } from '@/test/fixtures'
+import { TablaNotasPlanilla } from '@/features/calificaciones/components/TablaNotasPlanilla'
+import { crearNotaMock } from '@/test/utils/fixtures'
 
 describe('Planilla de Calificaciones del Curso', () => {
   const notas = [

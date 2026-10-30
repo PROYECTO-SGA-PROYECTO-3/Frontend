@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { useAuthStore } from './store'
+import { useAuthStore } from '@/features/auth/store'
 import { queryClient } from '@/shared/lib/query-client'
-import { crearUsuarioMock } from '@/test/fixtures'
+import { crearUsuarioMock } from '@/test/utils/fixtures'
 
 describe('Control de Sesión de Usuario', () => {
   const usuarioMock = crearUsuarioMock()

@@ -33,3 +33,5 @@ export function crearNotaMock(parcial: Partial<Nota> = {}): Nota {
     ...parcial,
   }
 }
+
+export * from './usuarios'

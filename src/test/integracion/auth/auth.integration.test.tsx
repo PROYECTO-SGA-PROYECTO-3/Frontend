@@ -1,12 +1,16 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { TestWrapper } from '@/test/TestWrapper'
-import Login from './pages/LoginPage'
-import { useAuthStore } from './store'
-import { admin, docente } from '@/test/fixtures/usuarios'
+import { TestWrapper } from '@/test/utils/TestWrapper'
+import { iniciarServidorMsw } from '@/test/utils/server'
+import { admin, docente } from '@/test/utils/fixtures/usuarios'
+import Login from '@/features/auth/pages/LoginPage'
+import { useAuthStore } from '@/features/auth/store'
 
 describe('Integración: Pantalla de Login y Autenticación', () => {
+  // Activa y gestiona el ciclo de vida del servidor de red simulada (MSW)
+  iniciarServidorMsw()
+
   beforeEach(() => {
     useAuthStore.setState({
       token: null,

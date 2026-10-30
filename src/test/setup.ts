@@ -1,6 +1,5 @@
 import '@testing-library/jest-dom/vitest'
-import { afterAll, afterEach, beforeAll, vi } from 'vitest'
-import { server } from './server'
+import { vi } from 'vitest'
 
 // Soporte global para navegación en jsdom
 Object.defineProperty(window, 'location', {
@@ -14,7 +13,3 @@ Object.defineProperty(window, 'location', {
   writable: true,
   configurable: true,
 })
-
-beforeAll(() => server.listen({ onUnhandledFrame: 'error' }))
-afterEach(() => server.resetHandlers())
-afterAll(() => server.close())

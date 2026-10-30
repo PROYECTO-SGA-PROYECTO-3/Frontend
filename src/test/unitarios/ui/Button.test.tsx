@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { Button } from './Button'
+import { Button } from '@/shared/ui/Button'
 
 describe('Botón de Acción', () => {
   it('comunica su etiqueta claramente y ejecuta la acción al ser pulsado por el usuario', async () => {
