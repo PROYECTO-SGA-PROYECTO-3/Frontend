@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { crearEsquemaEstudiante } from "./useValidacionEstudiante";
+import { crearEsquemaEstudiante } from "@/features/estudiantes/hooks/useValidacionEstudiante";
 
 describe("Validación de Datos de Estudiante", () => {
 	const baseValida = {

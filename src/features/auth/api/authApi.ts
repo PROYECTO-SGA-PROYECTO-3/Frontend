@@ -5,7 +5,7 @@ import type { Credenciales, Rol, SesionAuth, Usuario } from '../types'
  * Forma cruda que devuelve el backend (ver esquema RespuestaAuth en Swagger):
  * plana, sin separar token y datos del usuario. Se normaliza a SesionAuth.
  */
-interface RespuestaLoginApi {
+export interface RespuestaLoginApi {
   token: string
   documento: string
   email: string

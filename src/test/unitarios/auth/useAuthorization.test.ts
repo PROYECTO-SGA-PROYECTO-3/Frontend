@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { renderHook } from '@testing-library/react'
-import { useAuthStore } from '../store'
-import { useAuthorization } from './useAuthorization'
-import { crearUsuarioConRol } from '@/test/fixtures'
+import { useAuthStore } from '@/features/auth/store'
+import { useAuthorization } from '@/features/auth/hooks/useAuthorization'
+import { crearUsuarioConRol } from '@/test/utils/fixtures'
 
 describe('Autorización y Control de Acceso por Rol', () => {
   beforeEach(() => {
@@ -32,7 +32,6 @@ describe('Autorización y Control de Acceso por Rol', () => {
     expect(result.current.rol).toBe('DOCENTE')
     expect(result.current.hasRole('DOCENTE')).toBe(true)
     expect(result.current.hasRole('ADMIN')).toBe(false)
-    
   })
 
   it('autoriza la acción si el perfil del usuario pertenece al grupo de roles permitidos', () => {
