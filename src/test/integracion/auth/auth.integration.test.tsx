@@ -3,7 +3,7 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { TestWrapper } from '@/test/utils/TestWrapper'
 import { iniciarServidorMsw } from '@/test/utils/server'
-import { admin, docente } from '@/test/utils/fixtures/usuarios'
+import { admin, docente, estudiante } from '@/test/utils/fixtures/usuarios'
 import Login from '@/features/auth/pages/LoginPage'
 import { useAuthStore } from '@/features/auth/store'
 
@@ -20,47 +20,35 @@ describe('Integración: Pantalla de Login y Autenticación', () => {
     })
   })
 
-  it('inicia sesión con credenciales de docente y activa el rol correspondiente', async () => {
-    const user = userEvent.setup()
+  const casosLoginExitoso = [
+    { rol: 'DOCENTE', descripcion: 'docente', fixture: docente },
+    { rol: 'ADMIN', descripcion: 'administrador', fixture: admin },
+    { rol: 'ESTUDIANTE', descripcion: 'estudiante', fixture: estudiante },
+  ] as const
 
-    render(
-      <TestWrapper>
-        <Login />
-      </TestWrapper>,
-    )
+  it.each(casosLoginExitoso)(
+    'inicia sesión con credenciales de $descripcion y activa el rol correspondiente',
+    async ({ rol, fixture }) => {
+      const user = userEvent.setup()
 
-    await user.type(screen.getByLabelText(/documento/i), docente.credenciales.documento)
-    await user.type(screen.getByLabelText(/contraseña/i), docente.credenciales.contrasena)
-    await user.click(screen.getByRole('button', { name: /ingresar a la plataforma/i }))
+      render(
+        <TestWrapper>
+          <Login />
+        </TestWrapper>,
+      )
 
-    await waitFor(() => {
-      const state = useAuthStore.getState()
-      expect(state.isAuthenticated).toBe(true)
-      expect(state.token).toBe(docente.respuesta.token)
-      expect(state.usuario?.rol).toBe('DOCENTE')
-    })
-  })
+      await user.type(screen.getByLabelText(/documento/i), fixture.credenciales.documento)
+      await user.type(screen.getByLabelText(/contraseña/i), fixture.credenciales.contrasena)
+      await user.click(screen.getByRole('button', { name: /ingresar a la plataforma/i }))
 
-  it('inicia sesión con credenciales de administrador y activa el rol correspondiente', async () => {
-    const user = userEvent.setup()
-
-    render(
-      <TestWrapper>
-        <Login />
-      </TestWrapper>,
-    )
-
-    await user.type(screen.getByLabelText(/documento/i), admin.credenciales.documento)
-    await user.type(screen.getByLabelText(/contraseña/i), admin.credenciales.contrasena)
-    await user.click(screen.getByRole('button', { name: /ingresar a la plataforma/i }))
-
-    await waitFor(() => {
-      const state = useAuthStore.getState()
-      expect(state.isAuthenticated).toBe(true)
-      expect(state.token).toBe(admin.respuesta.token)
-      expect(state.usuario?.rol).toBe('ADMIN')
-    })
-  })
+      await waitFor(() => {
+        const state = useAuthStore.getState()
+        expect(state.isAuthenticated).toBe(true)
+        expect(state.token).toBe(fixture.respuesta.token)
+        expect(state.usuario?.rol).toBe(rol)
+      })
+    },
+  )
 
   it('muestra mensaje de error si las credenciales son incorrectas', async () => {
     const user = userEvent.setup()

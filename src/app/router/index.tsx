@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, type RouteObject } from 'react-router-dom'
 import { ProtectedRoute } from './ProtectedRoute'
 import { adminRoutes } from './admin.routes'
 import { docenteRoutes } from './docente.routes'
@@ -27,7 +27,7 @@ function SuspenseWrapper({ children }: { children: React.ReactNode }) {
   )
 }
 
-export const router = createBrowserRouter([
+export const rutasApp: RouteObject[] = [
   {
     errorElement: (
       <SuspenseWrapper>
@@ -84,7 +84,9 @@ export const router = createBrowserRouter([
       },
     ],
   },
-])
+]
+
+const router = createBrowserRouter(rutasApp)
 
 export function AppRouter() {
   return <RouterProvider router={router} />
