@@ -1,5 +1,6 @@
 import type { Usuario, Rol } from '@/features/auth/types'
 import type { Nota } from '@/features/calificaciones/types'
+import type { Docente } from '@/features/docentes/types'
 
 export function crearUsuarioMock(parcial: Partial<Usuario> = {}): Usuario {
   return {
@@ -30,6 +31,22 @@ export function crearNotaMock(parcial: Partial<Nota> = {}): Nota {
     nombrePeriodo: 'Primer Periodo',
     valor: 4.5,
     habilitadaParaEdicion: true,
+    ...parcial,
+  }
+}
+
+export function crearDocenteMock(parcial: Partial<Docente> = {}): Docente {
+  return {
+    id: 1,
+    documento: '1000000001',
+    email: 'carlos.gomez@iedescanse.edu.co',
+    primerNombre: 'Carlos',
+    segundoNombre: null,
+    primerApellido: 'Gomez',
+    segundoApellido: null,
+    firmaUrl: null,
+    activo: true,
+    materias: ['Matemáticas'],
     ...parcial,
   }
 }
