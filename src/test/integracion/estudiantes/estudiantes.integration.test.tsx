@@ -51,7 +51,9 @@ describe('Integración: Directorio de Estudiantes', () => {
                         crearEstudianteMock({
                             id: 2,
                             primerNombre: 'Carlos',
+                            segundoNombre: null,
                             primerApellido: 'Mejia',
+                            segundoApellido: null,
                             documento: '1020304051',
                         }),
                     ]),
@@ -66,7 +68,7 @@ describe('Integración: Directorio de Estudiantes', () => {
         )
 
         expect(await screen.findByText(/Ana Maria Torres/i)).toBeInTheDocument()
-        expect(await screen.findByText(/Carlos Maria Mejia/i)).toBeInTheDocument()
+        expect(await screen.findByText(/Carlos Mejia/i)).toBeInTheDocument()
     })
 
     it('muestra el error del servidor y recupera la tabla al reintentar', async () => {
