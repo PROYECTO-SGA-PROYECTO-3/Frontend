@@ -2,15 +2,14 @@ import { useEffect, useState } from 'react'
 import type { FiltroEstadoEstudiante } from '../types'
 
 interface UseFiltroEstudiantesOpciones {
-  onFiltroCambio?: () => void
   debounceMs?: number
 }
 
 /**
  * Hook responsable del estado de búsqueda, filtrado y debounce para el catálogo de estudiantes.
+ * Entrega el término sin normalizar: useCatalogoEstudiantes lo normaliza en un único punto.
  */
 export function useFiltroEstudiantes({
-  onFiltroCambio,
   debounceMs = 400,
 }: UseFiltroEstudiantesOpciones = {}) {
   const [busqueda, setBusqueda] = useState('')
@@ -21,29 +20,17 @@ export function useFiltroEstudiantes({
   // Debounce del término de búsqueda
   useEffect(() => {
     const handler = setTimeout(() => {
-      setBusquedaDebounced(busqueda.trim())
-      onFiltroCambio?.()
+      setBusquedaDebounced(busqueda)
     }, debounceMs)
 
     return () => clearTimeout(handler)
-  }, [busqueda, debounceMs, onFiltroCambio])
-
-  const cambiarEstado = (nuevoEstado: FiltroEstadoEstudiante) => {
-    setFiltroEstado(nuevoEstado)
-    onFiltroCambio?.()
-  }
-
-  const cambiarGrado = (nuevoGrado: number | '') => {
-    setFiltroGrado(nuevoGrado)
-    onFiltroCambio?.()
-  }
+  }, [busqueda, debounceMs])
 
   const limpiarFiltros = () => {
     setBusqueda('')
     setBusquedaDebounced('')
     setFiltroEstado('TODOS')
     setFiltroGrado('')
-    onFiltroCambio?.()
   }
 
   const hayFiltrosActivos =
@@ -57,9 +44,9 @@ export function useFiltroEstudiantes({
     setBusqueda,
     busquedaDebounced,
     filtroEstado,
-    cambiarEstado,
+    cambiarEstado: setFiltroEstado,
     filtroGrado,
-    cambiarGrado,
+    cambiarGrado: setFiltroGrado,
     incluirInactivos,
     hayFiltrosActivos,
     limpiarFiltros,

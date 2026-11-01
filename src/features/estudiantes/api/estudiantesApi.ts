@@ -27,7 +27,7 @@ export async function listarEstudiantes({
       sortBy,
       direction,
       incluirInactivos,
-      ...(termino?.trim() ? { termino: termino.trim() } : {}),
+      ...(termino ? { termino } : {}),
       ...(gradoId ? { gradoId } : {}),
     },
   })
