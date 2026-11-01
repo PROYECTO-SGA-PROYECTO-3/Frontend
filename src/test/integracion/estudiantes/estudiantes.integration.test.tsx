@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { TestWrapper } from '@/test/utils/TestWrapper'
@@ -102,5 +102,75 @@ describe('Integración: Directorio de Estudiantes', () => {
         expect(
             screen.queryByText('No se pudo cargar el directorio de estudiantes'),
         ).not.toBeInTheDocument()
+    })
+
+    it('pide al servidor solo los inactivos al elegir "Solo Inactivos"', async () => {
+        const user = userEvent.setup()
+        const urlsConsultadas: string[] = []
+
+        server.use(
+            gradosHandler,
+            http.get('*/estudiantes', ({ request }) => {
+                urlsConsultadas.push(request.url)
+                return HttpResponse.json(paginaDe([crearEstudianteMock()]))
+            }),
+        )
+
+        render(
+            <TestWrapper initialEntries={['/admin/estudiantes']}>
+                <EstudiantesPage />
+            </TestWrapper>,
+        )
+
+        expect(await screen.findByText(/Ana Maria Torres/i)).toBeInTheDocument()
+
+        // Con el filtro en "Todos los estados" el parámetro no viaja: el servidor devuelve ambos
+        const primeraConsulta = new URL(urlsConsultadas[0])
+        expect(primeraConsulta.searchParams.has('activo')).toBe(false)
+
+        await user.selectOptions(
+            screen.getByLabelText('Filtrar por estado del estudiante'),
+            'INACTIVOS',
+        )
+
+        await waitFor(() => {
+            expect(urlsConsultadas.length).toBeGreaterThan(1)
+        })
+
+        const ultimaConsulta = new URL(urlsConsultadas[urlsConsultadas.length - 1])
+        expect(ultimaConsulta.searchParams.get('activo')).toBe('false')
+    })
+
+    it('pide al servidor solo los activos al elegir "Solo Activos"', async () => {
+        const user = userEvent.setup()
+        const urlsConsultadas: string[] = []
+
+        server.use(
+            gradosHandler,
+            http.get('*/estudiantes', ({ request }) => {
+                urlsConsultadas.push(request.url)
+                return HttpResponse.json(paginaDe([crearEstudianteMock()]))
+            }),
+        )
+
+        render(
+            <TestWrapper initialEntries={['/admin/estudiantes']}>
+                <EstudiantesPage />
+            </TestWrapper>,
+        )
+
+        expect(await screen.findByText(/Ana Maria Torres/i)).toBeInTheDocument()
+
+        await user.selectOptions(
+            screen.getByLabelText('Filtrar por estado del estudiante'),
+            'ACTIVOS',
+        )
+
+        await waitFor(() => {
+            expect(urlsConsultadas.length).toBeGreaterThan(1)
+        })
+
+        const ultimaConsulta = new URL(urlsConsultadas[urlsConsultadas.length - 1])
+        expect(ultimaConsulta.searchParams.get('activo')).toBe('true')
     })
 })
