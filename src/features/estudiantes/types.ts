@@ -34,7 +34,7 @@ export interface SolicitudActualizarEstudiante {
 export interface ParametrosListarEstudiantes {
   pagina?: number
   tamanoPagina?: number
-  incluirInactivos?: boolean
+  activo?: boolean
   termino?: string
   gradoId?: number
   sortBy?: string

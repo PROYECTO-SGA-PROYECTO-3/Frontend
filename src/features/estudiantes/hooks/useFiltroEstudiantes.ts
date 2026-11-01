@@ -6,6 +6,16 @@ interface UseFiltroEstudiantesOpciones {
 }
 
 /**
+ * Traducción de los tres estados de la UI al parámetro `activo` del backend:
+ * undefined = todos, true = solo activos, false = solo inactivos.
+ */
+const ACTIVO_SEGUN_FILTRO: Record<FiltroEstadoEstudiante, boolean | undefined> = {
+  TODOS: undefined,
+  ACTIVOS: true,
+  INACTIVOS: false,
+}
+
+/**
  * Hook responsable del estado de búsqueda, filtrado y debounce para el catálogo de estudiantes.
  * Entrega el término sin normalizar: useCatalogoEstudiantes lo normaliza en un único punto.
  */
@@ -36,8 +46,8 @@ export function useFiltroEstudiantes({
   const hayFiltrosActivos =
     busqueda.trim() !== '' || filtroEstado !== 'TODOS' || filtroGrado !== ''
 
-  // Determinación de inclusión de inactivos para el backend
-  const incluirInactivos = filtroEstado !== 'ACTIVOS'
+  // Traducción del filtro de la UI al parámetro del backend
+  const activo = ACTIVO_SEGUN_FILTRO[filtroEstado]
 
   return {
     busqueda,
@@ -47,7 +57,7 @@ export function useFiltroEstudiantes({
     cambiarEstado: setFiltroEstado,
     filtroGrado,
     cambiarGrado: setFiltroGrado,
-    incluirInactivos,
+    activo,
     hayFiltrosActivos,
     limpiarFiltros,
   }

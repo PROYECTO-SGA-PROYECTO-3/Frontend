@@ -14,7 +14,7 @@ import type {
 export async function listarEstudiantes({
   pagina = 0,
   tamanoPagina = 10,
-  incluirInactivos = true,
+  activo,
   termino,
   gradoId,
   sortBy = 'PRIMER_NOMBRE',
@@ -26,7 +26,7 @@ export async function listarEstudiantes({
       size: tamanoPagina,
       sortBy,
       direction,
-      incluirInactivos,
+      ...(activo !== undefined ? { activo } : {}),
       ...(termino ? { termino } : {}),
       ...(gradoId ? { gradoId } : {}),
     },
@@ -77,7 +77,7 @@ export async function buscarCandidatosEstudiantes(
     params: {
       termino: termino.trim(),
       size: limite,
-      incluirInactivos: false,
+      activo: true,
     },
   })
   return respuesta.content

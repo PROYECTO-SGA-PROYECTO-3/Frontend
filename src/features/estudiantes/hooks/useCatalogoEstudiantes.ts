@@ -8,7 +8,7 @@ export const ESTUDIANTES_QUERY_KEY = ["estudiantes"] as const;
 
 interface UseCatalogoEstudiantesOpciones {
 	tamanoInicial?: number;
-	incluirInactivos?: boolean;
+	activo?: boolean;
 	termino?: string;
 	gradoId?: number;
 	sortBy?: string;
@@ -21,7 +21,7 @@ interface UseCatalogoEstudiantesOpciones {
  */
 export function useCatalogoEstudiantes({
 	tamanoInicial = 10,
-	incluirInactivos = true,
+	activo,
 	termino,
 	gradoId,
 	sortBy = "PRIMER_NOMBRE",
@@ -34,7 +34,7 @@ export function useCatalogoEstudiantes({
 	const terminoNormalizado = termino?.trim() || undefined;
 
 	// Reiniciar a la página 0 cuando cambie cualquier filtro del backend
-	const claveFiltros = `${terminoNormalizado ?? ""}__${gradoId ?? ""}__${incluirInactivos}`;
+	const claveFiltros = `${terminoNormalizado ?? ""}__${gradoId ?? ""}__${activo ?? ""}`;
 	const [ultimaClaveFiltros, setUltimaClaveFiltros] = useState(claveFiltros);
 
 	if (claveFiltros !== ultimaClaveFiltros) {
@@ -45,7 +45,7 @@ export function useCatalogoEstudiantes({
 	const parametros: ParametrosListarEstudiantes = {
 		pagina,
 		tamanoPagina,
-		incluirInactivos,
+		activo,
 		termino: terminoNormalizado,
 		gradoId,
 		sortBy,
