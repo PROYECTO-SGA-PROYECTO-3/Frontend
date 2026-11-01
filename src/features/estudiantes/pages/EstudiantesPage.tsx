@@ -31,7 +31,7 @@ export function EstudiantesPage() {
     cambiarEstado,
     filtroGrado,
     cambiarGrado,
-    incluirInactivos,
+    activo,
     hayFiltrosActivos,
     limpiarFiltros,
   } = useFiltroEstudiantes({
@@ -53,7 +53,7 @@ export function EstudiantesPage() {
     refetch,
   } = useCatalogoEstudiantes({
     tamanoInicial: 10,
-    incluirInactivos,
+    activo,
     termino: busquedaDebounced,
     gradoId: filtroGrado || undefined,
   })
