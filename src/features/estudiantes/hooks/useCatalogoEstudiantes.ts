@@ -30,8 +30,11 @@ export function useCatalogoEstudiantes({
 	const [pagina, setPagina] = useState(0);
 	const [tamanoPagina, setTamanoPagina] = useState(tamanoInicial);
 
+	// Punto único de normalización del término: alimenta la clave de caché y los parámetros
+	const terminoNormalizado = termino?.trim() || undefined;
+
 	// Reiniciar a la página 0 cuando cambie cualquier filtro del backend
-	const claveFiltros = `${termino ?? ""}__${gradoId ?? ""}__${incluirInactivos}`;
+	const claveFiltros = `${terminoNormalizado ?? ""}__${gradoId ?? ""}__${incluirInactivos}`;
 	const [ultimaClaveFiltros, setUltimaClaveFiltros] = useState(claveFiltros);
 
 	if (claveFiltros !== ultimaClaveFiltros) {
@@ -43,8 +46,8 @@ export function useCatalogoEstudiantes({
 		pagina,
 		tamanoPagina,
 		incluirInactivos,
-		termino: termino?.trim() || undefined,
-		gradoId: gradoId ? Number(gradoId) : undefined,
+		termino: terminoNormalizado,
+		gradoId,
 		sortBy,
 		direction,
 	};
@@ -63,17 +66,11 @@ export function useCatalogoEstudiantes({
 		staleTime: 1000 * 60 * 3, // 3 minutos de frescura en caché
 	});
 
-  const estudiantes = resultado?.content ?? []
-  const totalElementos = resultado?.page.totalElements ?? 0
-  const totalPaginas = resultado?.page.totalPages ?? 0
-  const paginaServidor = resultado?.page.number ?? pagina
-
 	return {
-		resultado,
-		estudiantes,
-		totalElementos,
-		totalPaginas,
-		pagina: paginaServidor,
+		estudiantes: resultado?.content ?? [],
+		totalElementos: resultado?.page.totalElements ?? 0,
+		totalPaginas: resultado?.page.totalPages ?? 0,
+		pagina: resultado?.page.number ?? pagina,
 		tamanoPagina,
 		setPagina,
 		setTamanoPagina,

@@ -55,7 +55,7 @@ export function EstudiantesPage() {
     tamanoInicial: 10,
     incluirInactivos,
     termino: busquedaDebounced,
-    gradoId: filtroGrado ? Number(filtroGrado) : undefined,
+    gradoId: filtroGrado || undefined,
   })
 
   // 4. Operaciones de mutación con invalidación de caché
