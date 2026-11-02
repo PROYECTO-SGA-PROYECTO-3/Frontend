@@ -67,18 +67,21 @@ export async function eliminarEstudiante(id: number): Promise<void> {
 
 /**
  * Consulta liviana de candidatos a estudiantes para autocompletados y selectores.
- * El backend aplica sus valores por defecto de paginación automáticamente.
+ * Reutiliza listarEstudiantes para que exista un único punto que arme la llamada
+ * a /estudiantes y los parámetros no puedan divergir entre ambos usos.
  */
 export async function buscarCandidatosEstudiantes(
   termino: string,
   limite = 5,
 ): Promise<Estudiante[]> {
-  const respuesta = await api.get<PaginaSpring<Estudiante>>('/estudiantes', {
-    params: {
-      termino: termino.trim(),
-      size: limite,
-      activo: true,
-    },
+  const respuesta = await listarEstudiantes({
+    termino: termino.trim(),
+    tamanoPagina: limite,
+    activo: true,
+    sortBy: 'ID',
+    // El selector venía ordenado por ID: es el valor por defecto del backend,
+    // no el de listarEstudiantes. Quitar esta línea lo pasa a orden alfabético.
+    
   })
   return respuesta.content
 }
