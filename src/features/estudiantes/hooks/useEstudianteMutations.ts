@@ -6,8 +6,7 @@ import {
   desactivarEstudiante,
   eliminarEstudiante,
 } from '../api/estudiantesApi'
-import { ESTUDIANTES_QUERY_KEY } from './useCatalogoEstudiantes'
-import { ESTUDIANTE_DETALLE_QUERY_KEY } from './useEstudianteDetalle'
+import { ESTUDIANTES_QUERY_KEYS } from './queryKeys'
 import type { SolicitudActualizarEstudiante, SolicitudCrearEstudiante } from '../types'
 
 /**
@@ -18,9 +17,9 @@ export function useEstudianteMutations() {
   const queryClient = useQueryClient()
 
   const invalidarConsultas = (id?: number) => {
-    queryClient.invalidateQueries({ queryKey: ESTUDIANTES_QUERY_KEY })
+    queryClient.invalidateQueries({ queryKey: ESTUDIANTES_QUERY_KEYS.todos })
     if (id) {
-      queryClient.invalidateQueries({ queryKey: [ESTUDIANTE_DETALLE_QUERY_KEY, id] })
+      queryClient.invalidateQueries({ queryKey: ESTUDIANTES_QUERY_KEYS.detalle(id) })
     }
   }
 

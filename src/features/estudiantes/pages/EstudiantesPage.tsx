@@ -188,7 +188,7 @@ export function EstudiantesPage() {
         {isError && (
           <ErrorState
             titulo="No se pudo cargar el directorio de estudiantes"
-            mensaje={error ? extraerMensajeError(error) : 'Ocurrió un error inesperado al conectar con el servidor.'}
+            mensaje={error ?? 'Ocurrió un error inesperado al conectar con el servidor.'}
             onRetry={() => refetch()}
             variant="card"
           />
