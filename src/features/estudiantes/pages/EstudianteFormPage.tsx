@@ -35,41 +35,34 @@ export function EstudianteFormPage() {
 
 	const handleSubmit = async (valores: EstudianteFormValores) => {
 		setErrorEnvio(null);
+
+		// Los nombres y apellidos viajan igual en creación y en edición
+		const datosPersonales = {
+			primerNombre: valores.primerNombre.trim(),
+			segundoNombre: valores.segundoNombre?.trim() || undefined,
+			primerApellido: valores.primerApellido.trim(),
+			segundoApellido: valores.segundoApellido?.trim() || undefined,
+		};
+
 		try {
-			const nombreCompletoEstudiante = `${valores.primerNombre.trim()} ${valores.primerApellido.trim()}`;
 			if (esEdicion && estudianteId) {
-				await actualizarEstudiante({
-					id: estudianteId,
-					datos: {
-						primerNombre: valores.primerNombre.trim(),
-						segundoNombre: valores.segundoNombre?.trim() || undefined,
-						primerApellido: valores.primerApellido.trim(),
-						segundoApellido: valores.segundoApellido?.trim() || undefined,
-					},
-				});
-				navigate("/admin/estudiantes", {
-					state: {
-						mensajeFeedback: `Estudiante ${nombreCompletoEstudiante} actualizado exitosamente.`,
-						tipoFeedback: "exito",
-					},
-				});
+				await actualizarEstudiante({ id: estudianteId, datos: datosPersonales });
 			} else {
 				await crearEstudiante({
-					primerNombre: valores.primerNombre.trim(),
-					segundoNombre: valores.segundoNombre?.trim() || undefined,
-					primerApellido: valores.primerApellido.trim(),
-					segundoApellido: valores.segundoApellido?.trim() || undefined,
+					...datosPersonales,
 					documento: valores.documento?.trim() ?? "",
 					email: valores.email?.trim() ?? "",
 					contrasena: valores.contrasena ?? "",
 				});
-				navigate("/admin/estudiantes", {
-					state: {
-						mensajeFeedback: `Estudiante ${nombreCompletoEstudiante} registrado exitosamente.`,
-						tipoFeedback: "exito",
-					},
-				});
 			}
+
+			const nombre = `${datosPersonales.primerNombre} ${datosPersonales.primerApellido}`;
+			navigate("/admin/estudiantes", {
+				state: {
+					mensajeFeedback: `Estudiante ${nombre} ${esEdicion ? "actualizado" : "registrado"} exitosamente.`,
+					tipoFeedback: "exito",
+				},
+			});
 		} catch (err: unknown) {
 			setErrorEnvio(extraerMensajeError(err));
 		}

@@ -18,6 +18,21 @@ import {
 } from '../components'
 import type { Estudiante } from '../types'
 
+/** Acciones de la tabla que requieren confirmación del administrador. */
+type AccionPendiente =
+  | { tipo: 'cambiar-estado'; estudiante: Estudiante }
+  | { tipo: 'eliminar'; estudiante: Estudiante }
+
+/** Textos y efecto de una acción pendiente, para resolverla con un único diálogo. */
+interface AccionConfirmable {
+  titulo: string
+  mensaje: string
+  textoConfirmar: string
+  procesando: boolean
+  mensajeExito: string
+  ejecutar: () => Promise<unknown>
+}
+
 export function EstudiantesPage() {
   const navigate = useNavigate()
 
@@ -58,7 +73,7 @@ export function EstudiantesPage() {
     gradoId: filtroGrado || undefined,
   })
 
-  // 4. Operaciones de mutación con invalidación de caché
+  // Operaciones de mutación con invalidación de caché
   const {
     activarEstudiante,
     estaActivando,
@@ -70,9 +85,8 @@ export function EstudiantesPage() {
 
   const location = useLocation()
 
-  // 5. Diálogos de confirmación y feedback flotante (Toast)
-  const [estudianteACambiarEstado, setEstudianteACambiarEstado] = useState<Estudiante | null>(null)
-  const [estudianteAEliminar, setEstudianteAEliminar] = useState<Estudiante | null>(null)
+  // Diálogos de confirmación y feedback flotante (Toast)
+  const [accionPendiente, setAccionPendiente] = useState<AccionPendiente | null>(null)
   const [errorAccion, setErrorAccion] = useState<string | null>(null)
   const [toast, setToast] = useState<{ mensaje: string; tipo: TipoToast } | null>(null)
 
@@ -106,34 +120,56 @@ export function EstudiantesPage() {
     navigate(`/admin/estudiantes/${estudiante.id}/perfil`)
   }
 
-  // Confirmar cambio de estado (Activar / Desactivar)
-  const handleConfirmarCambioEstado = async () => {
-    if (!estudianteACambiarEstado) return
-    setErrorAccion(null)
-    try {
-      const nombre = nombreCompleto(estudianteACambiarEstado)
-      if (estudianteACambiarEstado.activo) {
-        await desactivarEstudiante(estudianteACambiarEstado.id)
-        notificarToast(`Estudiante ${nombre} desactivado del sistema.`, 'exito')
-      } else {
-        await activarEstudiante(estudianteACambiarEstado.id)
-        notificarToast(`Estudiante ${nombre} reactivado exitosamente.`, 'exito')
+  // Textos y efecto de cada acción confirmable, declarados en un solo lugar
+  const describirAccion = ({ tipo, estudiante }: AccionPendiente): AccionConfirmable => {
+    const nombre = nombreCompleto(estudiante)
+
+    if (tipo === 'eliminar') {
+      return {
+        titulo: 'Eliminar registro de estudiante',
+        mensaje: `¿Seguro que deseas eliminar definitivamente a ${nombre}? Esta acción es irreversible. El estudiante debe estar inactivo y no poseer calificaciones ni matrículas asociadas.`,
+        textoConfirmar: 'Eliminar definitivamente',
+        procesando: estaEliminando,
+        mensajeExito: `Registro de ${nombre} eliminado de la institución.`,
+        ejecutar: () => eliminarEstudiante(estudiante.id),
       }
-      setEstudianteACambiarEstado(null)
-    } catch (err: unknown) {
-      setErrorAccion(extraerMensajeError(err))
+    }
+
+    if (estudiante.activo) {
+      return {
+        titulo: 'Desactivar estudiante',
+        mensaje: `¿Seguro que deseas desactivar a ${nombre}? Se conservará su historial y calificaciones, pero no podrá iniciar sesión en la plataforma.`,
+        textoConfirmar: 'Desactivar',
+        procesando: estaDesactivando,
+        mensajeExito: `Estudiante ${nombre} desactivado del sistema.`,
+        ejecutar: () => desactivarEstudiante(estudiante.id),
+      }
+    }
+
+    return {
+      titulo: 'Activar estudiante',
+      mensaje: `¿Seguro que deseas reactivar la cuenta de ${nombre}? Podrá acceder nuevamente al portal estudiantil.`,
+      textoConfirmar: 'Activar',
+      procesando: estaActivando,
+      mensajeExito: `Estudiante ${nombre} reactivado exitosamente.`,
+      ejecutar: () => activarEstudiante(estudiante.id),
     }
   }
 
-  // Confirmar eliminación definitiva
-  const handleConfirmarEliminar = async () => {
-    if (!estudianteAEliminar) return
+  const accionConfirmable = accionPendiente ? describirAccion(accionPendiente) : null
+
+  const cerrarAccion = () => {
+    setAccionPendiente(null)
+    setErrorAccion(null)
+  }
+
+  const handleConfirmarAccion = async () => {
+    if (!accionConfirmable) return
     setErrorAccion(null)
     try {
-      const nombre = nombreCompleto(estudianteAEliminar)
-      await eliminarEstudiante(estudianteAEliminar.id)
-      notificarToast(`Registro de ${nombre} eliminado de la institución.`, 'exito')
-      setEstudianteAEliminar(null)
+      await accionConfirmable.ejecutar()
+      notificarToast(accionConfirmable.mensajeExito, 'exito')
+      setAccionPendiente(null)
     } catch (err: unknown) {
       setErrorAccion(extraerMensajeError(err))
     }
@@ -152,7 +188,7 @@ export function EstudiantesPage() {
         {isError && (
           <ErrorState
             titulo="No se pudo cargar el directorio de estudiantes"
-            mensaje={error ? extraerMensajeError(error) : 'Ocurrió un error inesperado al conectar con el servidor.'}
+            mensaje={error ?? 'Ocurrió un error inesperado al conectar con el servidor.'}
             onRetry={() => refetch()}
             variant="card"
           />
@@ -198,8 +234,10 @@ export function EstudiantesPage() {
                 onCambiarTamanoPagina={setTamanoPagina}
                 onVerPerfil={handleVerPerfil}
                 onEditar={handleEditar}
-                onCambiarEstado={setEstudianteACambiarEstado}
-                onEliminar={setEstudianteAEliminar}
+                onCambiarEstado={(estudiante) =>
+                  setAccionPendiente({ tipo: 'cambiar-estado', estudiante })
+                }
+                onEliminar={(estudiante) => setAccionPendiente({ tipo: 'eliminar', estudiante })}
               />
             ) : (
               <EstudiantesEmptyState
@@ -212,46 +250,16 @@ export function EstudiantesPage() {
         )}
       </main>
 
-      {/* Modal de confirmación para cambio de estado (Activar / Desactivar) */}
+      {/* Modal único de confirmación: activar, desactivar o eliminar */}
       <DialogoConfirmacion
-        abierto={Boolean(estudianteACambiarEstado)}
-        titulo={
-          estudianteACambiarEstado?.activo ? 'Desactivar estudiante' : 'Activar estudiante'
-        }
-        mensaje={
-          estudianteACambiarEstado
-            ? estudianteACambiarEstado.activo
-              ? `¿Seguro que deseas desactivar a ${nombreCompleto(estudianteACambiarEstado)}? Se conservará su historial y calificaciones, pero no podrá iniciar sesión en la plataforma.`
-              : `¿Seguro que deseas reactivar la cuenta de ${nombreCompleto(estudianteACambiarEstado)}? Podrá acceder nuevamente al portal estudiantil.`
-            : ''
-        }
+        abierto={Boolean(accionConfirmable)}
+        titulo={accionConfirmable?.titulo ?? ''}
+        mensaje={accionConfirmable?.mensaje ?? ''}
         error={errorAccion ?? undefined}
-        procesando={estaActivando || estaDesactivando}
-        textoConfirmar={estudianteACambiarEstado?.activo ? 'Desactivar' : 'Activar'}
-        onConfirmar={handleConfirmarCambioEstado}
-        onCancelar={() => {
-          setEstudianteACambiarEstado(null)
-          setErrorAccion(null)
-        }}
-      />
-
-      {/* Modal de confirmación para eliminación permanente */}
-      <DialogoConfirmacion
-        abierto={Boolean(estudianteAEliminar)}
-        titulo="Eliminar registro de estudiante"
-        mensaje={
-          estudianteAEliminar
-            ? `¿Seguro que deseas eliminar definitivamente a ${nombreCompleto(estudianteAEliminar)}? Esta acción es irreversible. El estudiante debe estar inactivo y no poseer calificaciones ni matrículas asociadas.`
-            : ''
-        }
-        error={errorAccion ?? undefined}
-        procesando={estaEliminando}
-        textoConfirmar="Eliminar definitivamente"
-        onConfirmar={handleConfirmarEliminar}
-        onCancelar={() => {
-          setEstudianteAEliminar(null)
-          setErrorAccion(null)
-        }}
+        procesando={accionConfirmable?.procesando ?? false}
+        textoConfirmar={accionConfirmable?.textoConfirmar}
+        onConfirmar={handleConfirmarAccion}
+        onCancelar={cerrarAccion}
       />
 
       {/* Notificación flotante del sistema */}

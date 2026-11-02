@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { extraerMensajeError } from "@/shared/lib";
 import { listarEstudiantes } from "../api/estudiantesApi";
+import { ESTUDIANTES_QUERY_KEYS } from "./queryKeys";
 import type { Estudiante, ParametrosListarEstudiantes } from "../types";
 import type { PaginaSpring } from "@/shared/types/api.types";
-
-export const ESTUDIANTES_QUERY_KEY = ["estudiantes"] as const;
 
 interface UseCatalogoEstudiantesOpciones {
 	tamanoInicial?: number;
@@ -60,7 +60,7 @@ export function useCatalogoEstudiantes({
 		error,
 		refetch,
 	} = useQuery<PaginaSpring<Estudiante>, Error>({
-		queryKey: [...ESTUDIANTES_QUERY_KEY, parametros],
+		queryKey: ESTUDIANTES_QUERY_KEYS.lista(parametros),
 		queryFn: () => listarEstudiantes(parametros),
 		placeholderData: keepPreviousData,
 		staleTime: 1000 * 60 * 3, // 3 minutos de frescura en caché
@@ -77,7 +77,7 @@ export function useCatalogoEstudiantes({
 		isLoading,
 		isFetching,
 		isError,
-		error,
+		error: error ? extraerMensajeError(error) : null,
 		refetch,
 	};
 }

@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { extraerMensajeError } from '@/shared/lib'
 import type { Estudiante } from '../types'
 import { buscarCandidatosEstudiantes } from '../api/estudiantesApi'
+import { ESTUDIANTES_QUERY_KEYS } from './queryKeys'
 
 export interface UseBuscarCandidatosEstudiantesOpciones {
   limite?: number
@@ -27,7 +28,7 @@ export function useBuscarCandidatosEstudiantes(
     error,
     refetch,
   } = useQuery<Estudiante[], Error>({
-    queryKey: ['estudiantes', 'candidatos', terminoLimpio, limite],
+    queryKey: ESTUDIANTES_QUERY_KEYS.candidatos(terminoLimpio, limite),
     queryFn: () => buscarCandidatosEstudiantes(terminoLimpio, limite),
     enabled: puedeBuscar,
     staleTime: 1000 * 60 * 2, // 2 minutos de frescura
