@@ -7,6 +7,7 @@ import {
   useCatalogoDocentes,
   useDocenteMutations,
   useFiltroDocentes,
+  useResumenDocentes,
 } from '../hooks'
 import {
   DocentesEmptyState,
@@ -35,8 +36,10 @@ export default function DocentesPage() {
     refetch,
   } = useCatalogoDocentes({ tamanoInicial: 5 })
 
+  // 2. Conteos agregados de la planta: independientes de la página visible
+  const { resumen } = useResumenDocentes()
 
-  // 2. Operaciones de mutación
+  // 3. Operaciones de mutación
   const {
     activarDocente,
     estaActivando,
@@ -46,7 +49,7 @@ export default function DocentesPage() {
     estaEliminando,
   } = useDocenteMutations()
 
-  // 3. Filtros reactivos y cómputos en cliente
+  // 4. Filtros, búsqueda y orden en cliente sobre la página descargada
   const {
     busqueda,
     setBusqueda,
@@ -57,11 +60,6 @@ export default function DocentesPage() {
     orden,
     setOrden,
     docentesFiltrados,
-    totalDocentes,
-    totalFiltrados,
-    totalActivos,
-    totalInactivos,
-    totalConFirma,
     hayFiltroActivo,
     limpiarFiltros,
   } = useFiltroDocentes(docentes)
@@ -151,14 +149,7 @@ export default function DocentesPage() {
           </p>
         </section>
 
-        <DocentesStats
-          totalDocentes={totalDocentes}
-          totalActivos={totalActivos}
-          totalInactivos={totalInactivos}
-          totalConFirma={totalConFirma}
-          hayFiltroActivo={hayFiltroActivo}
-          totalFiltrados={totalFiltrados}
-        />
+        <DocentesStats resumen={resumen} totalListado={totalElementos} />
 
         <DocentesToolbar
           busqueda={busqueda}
@@ -199,6 +190,7 @@ export default function DocentesPage() {
               totalPaginas={totalPaginas}
               totalElementos={totalElementos}
               tamanoPagina={tamanoPagina}
+              hayFiltros={hayFiltroActivo}
               onCambiarPagina={setPagina}
               onCambiarTamanoPagina={setTamanoPagina}
               onEditar={handleEditar}

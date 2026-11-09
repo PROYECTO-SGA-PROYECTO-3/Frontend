@@ -3,8 +3,13 @@ import { nombreCompleto } from '@/shared/lib/utils'
 import type { Docente, FiltroEstadoDocente, FiltroFirmaDocente, OrdenDocente } from '../types'
 
 /**
- * Hook responsable exclusivamente de las operaciones en cliente sobre el listado de docentes:
- * búsqueda instantánea, filtrado por estado y firma, y ordenamiento.
+ * Hook responsable exclusivamente de las operaciones en cliente sobre el listado
+ * de docentes: búsqueda instantánea, filtrado por estado y firma, y ordenamiento.
+ *
+ * Opera sobre la página ya descargada, no sobre la planta completa: `/api/docentes`
+ * no acepta término de búsqueda. Por eso no deriva estadísticas, que se leerían
+ * como totales de la institución; de los totales se encarga DocentesStats con el
+ * dato global del servidor.
  */
 export function useFiltroDocentes(docentes: Docente[]) {
   const [busqueda, setBusqueda] = useState('')
@@ -21,21 +26,6 @@ export function useFiltroDocentes(docentes: Docente[]) {
 
   const hayFiltroActivo =
     busqueda.trim() !== '' || filtroEstado !== 'TODOS' || filtroFirma !== 'TODOS'
-
-  // Estadísticas globales sobre el conjunto actual
-  const { totalActivos, totalInactivos, totalConFirma } = useMemo(() => {
-    let activos = 0
-    let conFirma = 0
-    for (const d of docentes) {
-      if (d.activo) activos++
-      if (d.firmaUrl) conFirma++
-    }
-    return {
-      totalActivos: activos,
-      totalInactivos: docentes.length - activos,
-      totalConFirma: conFirma,
-    }
-  }, [docentes])
 
   // Aplicación de filtros y orden
   const docentesFiltrados = useMemo(() => {
@@ -90,11 +80,6 @@ export function useFiltroDocentes(docentes: Docente[]) {
     orden,
     setOrden,
     docentesFiltrados,
-    totalDocentes: docentes.length,
-    totalFiltrados: docentesFiltrados.length,
-    totalActivos,
-    totalInactivos,
-    totalConFirma,
     hayFiltroActivo,
     limpiarFiltros,
   }

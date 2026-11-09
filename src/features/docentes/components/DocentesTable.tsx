@@ -8,6 +8,8 @@ interface DocentesTableProps {
   totalPaginas: number
   totalElementos: number
   tamanoPagina: number
+  /** Si hay filtros de cliente activos, las filas son un subconjunto de la página. */
+  hayFiltros?: boolean
   onCambiarPagina: (nuevaPagina: number) => void
   onCambiarTamanoPagina?: (nuevoTamano: number) => void
   onEditar: (docente: Docente) => void
@@ -21,13 +23,16 @@ export function DocentesTable({
   totalPaginas,
   totalElementos,
   tamanoPagina,
+  hayFiltros = false,
   onCambiarPagina,
   onCambiarTamanoPagina,
   onEditar,
   onCambiarEstado,
   onEliminar,
 }: DocentesTableProps) {
-
+  // El rango "desde–hasta" solo describe la realidad cuando las filas visibles son
+  // la página completa del servidor. Con un filtro de cliente activo se informa el
+  // conteo de coincidencias, porque ese filtro solo alcanza a la página descargada.
   const desde = totalElementos === 0 ? 0 : paginaActual * tamanoPagina + 1
   const hasta = Math.min(desde + docentes.length - 1, totalElementos)
 
@@ -77,11 +82,21 @@ export function DocentesTable({
       {/* Pie de tabla con información, selector de tamaño y paginación */}
       <footer className="flex flex-col items-center justify-between gap-3 sm:flex-row px-1">
         <div className="flex flex-wrap items-center gap-3">
-          <p className="text-xs font-medium text-slate-500">
-            Mostrando <span className="font-semibold text-slate-700">{desde}</span> a{' '}
-            <span className="font-semibold text-slate-700">{hasta}</span> de{' '}
-            <span className="font-semibold text-slate-700">{totalElementos}</span> docentes
-          </p>
+          {hayFiltros ? (
+            <p className="text-xs font-medium text-slate-500">
+              <span className="font-semibold text-slate-700">{docentes.length}</span>{' '}
+              {docentes.length === 1 ? 'docente coincide' : 'docentes coinciden'} con los
+              filtros en esta página, de{' '}
+              <span className="font-semibold text-slate-700">{totalElementos}</span>{' '}
+              registrados
+            </p>
+          ) : (
+            <p className="text-xs font-medium text-slate-500">
+              Mostrando <span className="font-semibold text-slate-700">{desde}</span> a{' '}
+              <span className="font-semibold text-slate-700">{hasta}</span> de{' '}
+              <span className="font-semibold text-slate-700">{totalElementos}</span> docentes
+            </p>
+          )}
 
           {onCambiarTamanoPagina && (
             <div className="flex items-center gap-1.5 text-xs text-slate-500 border-l border-slate-200 pl-3">

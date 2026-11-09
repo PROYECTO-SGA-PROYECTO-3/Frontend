@@ -3,6 +3,11 @@ import { act, renderHook } from '@testing-library/react'
 import { useFiltroDocentes } from '@/features/docentes/hooks/useFiltroDocentes'
 import { crearDocenteMock } from '@/test/utils/fixtures'
 
+/**
+ * El hook filtra la página ya descargada, no la planta completa: `/api/docentes`
+ * no acepta término de búsqueda. Sus resultados nunca deben presentarse como si
+ * cubrieran a todos los docentes de la institución.
+ */
 describe('Búsqueda y Filtrado del Directorio de Docentes', () => {
   // Planta docente de prueba: cada docente difiere en estado, firma y materias
   // para que cada filtro tenga un único resultado esperado.
@@ -58,18 +63,13 @@ describe('Búsqueda y Filtrado del Directorio de Docentes', () => {
     expect(nombresDe(result.current.docentesFiltrados)).toEqual(['Ana'])
   })
 
-  it('mantiene las estadísticas del encabezado sobre la planta completa, no sobre lo filtrado', () => {
+  it('separa la planta por estado de habilitación', () => {
     const { result } = renderHook(() => useFiltroDocentes(planta))
 
-    expect(result.current.totalActivos).toBe(2)
-    expect(result.current.totalInactivos).toBe(1)
-    expect(result.current.totalConFirma).toBe(1)
+    act(() => result.current.setFiltroEstado('ACTIVOS'))
+    expect(nombresDe(result.current.docentesFiltrados)).toEqual(['Ana', 'Carlos'])
 
-    act(() => result.current.setBusqueda('gomez'))
-
-    expect(result.current.totalFiltrados).toBe(1)
-    expect(result.current.totalDocentes).toBe(3)
-    expect(result.current.totalActivos).toBe(2)
-    expect(result.current.totalConFirma).toBe(1)
+    act(() => result.current.setFiltroEstado('INACTIVOS'))
+    expect(nombresDe(result.current.docentesFiltrados)).toEqual(['Zulma'])
   })
 })

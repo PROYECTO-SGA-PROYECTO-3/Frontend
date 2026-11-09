@@ -4,6 +4,7 @@ import type {
   Docente,
   DocenteCatalogo,
   ParametrosListarDocentes,
+  ResumenDocentes,
   SolicitudActualizarDocente,
   SolicitudCrearDocente,
 } from '../types'
@@ -18,6 +19,15 @@ export async function obtenerCatalogoDocentes(
   return api.get<DocenteCatalogo[]>('/docentes/catalogo', {
     params: { incluirInactivos },
   })
+}
+
+/**
+ * Obtiene los conteos agregados de toda la planta docente.
+ * Las tarjetas de métricas los necesitan porque el listado llega paginado:
+ * contar sobre una página devuelve cifras que cambian al navegar.
+ */
+export async function obtenerResumenDocentes(): Promise<ResumenDocentes> {
+  return api.get<ResumenDocentes>('/docentes/resumen')
 }
 
 /**
