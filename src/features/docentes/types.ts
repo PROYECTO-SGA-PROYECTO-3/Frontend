@@ -18,6 +18,17 @@ export interface DocenteCatalogo {
   nombreCompleto: string
 }
 
+/**
+ * Conteos agregados de la planta docente que entrega `/docentes/resumen`.
+ * No se pueden derivar del listado, que llega paginado.
+ */
+export interface ResumenDocentes {
+  total: number
+  activos: number
+  inactivos: number
+  conFirma: number
+}
+
 export interface SolicitudCrearDocente {
   documento: string
   primerNombre: string
