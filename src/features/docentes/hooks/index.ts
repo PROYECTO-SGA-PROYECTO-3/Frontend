@@ -1,3 +1,4 @@
+export * from './queryKeys'
 export * from './useCatalogoDocentes'
 export * from './useDocenteDetalle'
 export * from './useDocenteMutations'

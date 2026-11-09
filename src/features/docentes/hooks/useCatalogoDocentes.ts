@@ -2,10 +2,9 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { extraerMensajeError } from '@/shared/lib'
 import { listarDocentes } from "../api/docentesApi";
+import { DOCENTES_QUERY_KEYS } from "./queryKeys";
 import type { Docente, ParametrosListarDocentes } from "../types";
 import type { PaginaSpring } from "@/shared/types/api.types";
-
-export const DOCENTES_QUERY_KEY = ["docentes"] as const;
 
 interface UseCatalogoDocentesOpciones {
 	tamanoInicial?: number;
@@ -39,7 +38,7 @@ export function useCatalogoDocentes({
 		refetch,
 		isFetching,
 	} = useQuery<PaginaSpring<Docente>, Error>({
-		queryKey: [...DOCENTES_QUERY_KEY, parametros],
+		queryKey: DOCENTES_QUERY_KEYS.lista(parametros),
 		queryFn: () => listarDocentes(parametros),
 		staleTime: 1000 * 60 * 5, // 5 minutos de frescura
 	});

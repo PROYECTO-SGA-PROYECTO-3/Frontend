@@ -8,95 +8,85 @@ import {
   desactivarDocente,
   eliminarDocente,
 } from '../api/docentesApi'
-import { DOCENTES_QUERY_KEY } from './useCatalogoDocentes'
-import { DOCENTE_DETALLE_QUERY_KEY } from './useDocenteDetalle'
+import { DOCENTES_QUERY_KEYS } from './queryKeys'
 import type { SolicitudActualizarDocente, SolicitudCrearDocente } from '../types'
 
 /**
  * Hook responsable exclusivamente de ejecutar y sincronizar mutaciones
  * del dominio de docentes (crear, editar, activar, desactivar, firma, eliminar).
+ *
+ * Expone de cada mutación solo lo que las vistas consumen: el disparador y su
+ * estado de carga. El motivo del fallo lo resuelve cada pantalla con
+ * `extraerMensajeError` sobre el error capturado, salvo en la firma digital.
  */
 export function useDocenteMutations() {
   const queryClient = useQueryClient()
 
   const invalidarConsultas = (id?: number) => {
-    queryClient.invalidateQueries({ queryKey: DOCENTES_QUERY_KEY })
+    queryClient.invalidateQueries({ queryKey: DOCENTES_QUERY_KEYS.todos })
     if (id) {
-      queryClient.invalidateQueries({ queryKey: [DOCENTE_DETALLE_QUERY_KEY, id] })
+      queryClient.invalidateQueries({ queryKey: DOCENTES_QUERY_KEYS.detalle(id) })
     }
   }
 
   // Mutación: Crear docente
-  const mutacionCrear = useMutation({
+  const { mutateAsync: mutarCrear, isPending: estaCreando } = useMutation({
     mutationFn: (datos: SolicitudCrearDocente) => crearDocente(datos),
     onSuccess: () => invalidarConsultas(),
   })
 
   // Mutación: Actualizar datos personales
-  const mutacionActualizar = useMutation({
+  const { mutateAsync: mutarActualizar, isPending: estaActualizando } = useMutation({
     mutationFn: ({ id, datos }: { id: number; datos: SolicitudActualizarDocente }) =>
       actualizarDocente(id, datos),
     onSuccess: (_, variables) => invalidarConsultas(variables.id),
   })
 
-  // Mutación: Cargar / actualizar firma digital
-  const mutacionFirma = useMutation({
+  // Mutación: Cargar / actualizar firma digital.
+  // Es la única que conserva su error derivado, porque DocenteFirmaUploader lo
+  // muestra en el mismo recuadro que sus validaciones locales de archivo.
+  const {
+    mutateAsync: mutarFirma,
+    isPending: estaSubiendoFirma,
+    error: errorMutacionFirma,
+  } = useMutation({
     mutationFn: ({ id, archivo }: { id: number; archivo: File }) =>
       actualizarFirmaDocente(id, archivo),
     onSuccess: (_, variables) => invalidarConsultas(variables.id),
   })
 
   // Mutación: Activar docente
-  const mutacionActivar = useMutation({
+  const { mutateAsync: mutarActivar, isPending: estaActivando } = useMutation({
     mutationFn: (id: number) => activarDocente(id),
     onSuccess: (_, id) => invalidarConsultas(id),
   })
 
   // Mutación: Desactivar docente
-  const mutacionDesactivar = useMutation({
+  const { mutateAsync: mutarDesactivar, isPending: estaDesactivando } = useMutation({
     mutationFn: (id: number) => desactivarDocente(id),
     onSuccess: (_, id) => invalidarConsultas(id),
   })
 
-  // Mutación: Eliminar docente
-  const mutacionEliminar = useMutation({
+  // Mutación: Eliminar docente. No invalida su detalle: el registro ya no
+  // existe y refetcharlo solo produciría un 404.
+  const { mutateAsync: mutarEliminar, isPending: estaEliminando } = useMutation({
     mutationFn: (id: number) => eliminarDocente(id),
-    onSuccess: (_, id) => invalidarConsultas(id),
+    onSuccess: () => invalidarConsultas(),
   })
 
   return {
-    // Crear
-    crearDocente: mutacionCrear.mutateAsync,
-    estaCreando: mutacionCrear.isPending,
-    errorCrear: mutacionCrear.error ? extraerMensajeError(mutacionCrear.error) : null,
-
-    // Actualizar
-    actualizarDocente: mutacionActualizar.mutateAsync,
-    estaActualizando: mutacionActualizar.isPending,
-    errorActualizar: mutacionActualizar.error
-      ? extraerMensajeError(mutacionActualizar.error)
-      : null,
-
-    // Firma
-    actualizarFirma: mutacionFirma.mutateAsync,
-    estaSubiendoFirma: mutacionFirma.isPending,
-    errorFirma: mutacionFirma.error ? extraerMensajeError(mutacionFirma.error) : null,
-
-    // Activar
-    activarDocente: mutacionActivar.mutateAsync,
-    estaActivando: mutacionActivar.isPending,
-    errorActivar: mutacionActivar.error ? extraerMensajeError(mutacionActivar.error) : null,
-
-    // Desactivar
-    desactivarDocente: mutacionDesactivar.mutateAsync,
-    estaDesactivando: mutacionDesactivar.isPending,
-    errorDesactivar: mutacionDesactivar.error
-      ? extraerMensajeError(mutacionDesactivar.error)
-      : null,
-
-    // Eliminar
-    eliminarDocente: mutacionEliminar.mutateAsync,
-    estaEliminando: mutacionEliminar.isPending,
-    errorEliminar: mutacionEliminar.error ? extraerMensajeError(mutacionEliminar.error) : null,
+    crearDocente: mutarCrear,
+    estaCreando,
+    actualizarDocente: mutarActualizar,
+    estaActualizando,
+    actualizarFirma: mutarFirma,
+    estaSubiendoFirma,
+    errorFirma: errorMutacionFirma ? extraerMensajeError(errorMutacionFirma) : null,
+    activarDocente: mutarActivar,
+    estaActivando,
+    desactivarDocente: mutarDesactivar,
+    estaDesactivando,
+    eliminarDocente: mutarEliminar,
+    estaEliminando,
   }
 }

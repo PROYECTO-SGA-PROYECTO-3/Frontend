@@ -1,8 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import {
+	DOCENTES_QUERY_KEYS,
 	obtenerCatalogoDocentes,
 	type DocenteCatalogo,
 } from "@/features/docentes";
+
+// El catálogo liviano se consulta siempre sin inactivos: un solo valor alimenta
+// la clave de caché y el parámetro, para que no puedan divergir.
+const INCLUIR_INACTIVOS = false;
 
 interface UseDocentesCandidatosOpciones {
 	enabled?: boolean;
@@ -21,8 +26,8 @@ export function useDocentesCandidatos({
 		isLoading,
 		isError,
 	} = useQuery<DocenteCatalogo[]>({
-		queryKey: ["docentes", "catalogo"],
-		queryFn: () => obtenerCatalogoDocentes(false),
+		queryKey: DOCENTES_QUERY_KEYS.catalogo(INCLUIR_INACTIVOS),
+		queryFn: () => obtenerCatalogoDocentes(INCLUIR_INACTIVOS),
 		enabled,
 		staleTime: 1000 * 60 * 15, // 15 minutos en caché
 		select: (listaDocentes) => {
