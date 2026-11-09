@@ -58,18 +58,66 @@ describe('Búsqueda y Filtrado del Directorio de Docentes', () => {
     expect(nombresDe(result.current.docentesFiltrados)).toEqual(['Ana'])
   })
 
-  it('mantiene las estadísticas del encabezado sobre la planta completa, no sobre lo filtrado', () => {
+  it('separa la planta por estado de habilitación', () => {
     const { result } = renderHook(() => useFiltroDocentes(planta))
 
-    expect(result.current.totalActivos).toBe(2)
-    expect(result.current.totalInactivos).toBe(1)
-    expect(result.current.totalConFirma).toBe(1)
+    act(() => result.current.setFiltroEstado('ACTIVOS'))
+    expect(nombresDe(result.current.docentesFiltrados)).toEqual(['Ana', 'Carlos'])
+
+    act(() => result.current.setFiltroEstado('INACTIVOS'))
+    expect(nombresDe(result.current.docentesFiltrados)).toEqual(['Zulma'])
+  })
+
+  it('separa a quienes ya tienen firma digital de quienes la tienen pendiente', () => {
+    const { result } = renderHook(() => useFiltroDocentes(planta))
+
+    act(() => result.current.setFiltroFirma('CON_FIRMA'))
+    expect(nombresDe(result.current.docentesFiltrados)).toEqual(['Carlos'])
+
+    act(() => result.current.setFiltroFirma('SIN_FIRMA'))
+    expect(nombresDe(result.current.docentesFiltrados)).toEqual(['Ana', 'Zulma'])
+  })
+
+  it('ordena por nombre en ambos sentidos y por identificación', () => {
+    const { result } = renderHook(() => useFiltroDocentes(planta))
+
+    expect(nombresDe(result.current.docentesFiltrados)).toEqual(['Ana', 'Carlos', 'Zulma'])
+
+    act(() => result.current.setOrden('NOMBRE_DESC'))
+    expect(nombresDe(result.current.docentesFiltrados)).toEqual(['Zulma', 'Carlos', 'Ana'])
+
+    act(() => result.current.setOrden('DOCUMENTO_ASC'))
+    expect(nombresDe(result.current.docentesFiltrados)).toEqual(['Ana', 'Carlos', 'Zulma'])
+  })
+
+  it('señala cuándo hay filtros puestos y los restablece todos de una vez', () => {
+    const { result } = renderHook(() => useFiltroDocentes(planta))
+
+    expect(result.current.hayFiltroActivo).toBe(false)
 
     act(() => result.current.setBusqueda('gomez'))
+    act(() => result.current.setFiltroFirma('CON_FIRMA'))
+    expect(result.current.hayFiltroActivo).toBe(true)
 
-    expect(result.current.totalFiltrados).toBe(1)
-    expect(result.current.totalDocentes).toBe(3)
-    expect(result.current.totalActivos).toBe(2)
-    expect(result.current.totalConFirma).toBe(1)
+    act(() => result.current.limpiarFiltros())
+
+    expect(result.current.hayFiltroActivo).toBe(false)
+    expect(result.current.busqueda).toBe('')
+    expect(result.current.filtroEstado).toBe('TODOS')
+    expect(result.current.filtroFirma).toBe('TODOS')
+    expect(result.current.orden).toBe('NOMBRE_ASC')
+    expect(result.current.docentesFiltrados).toHaveLength(3)
+  })
+
+  // `/api/docentes` no acepta término de búsqueda, así que este hook solo puede
+  // filtrar la página ya descargada. El test fija ese límite para que nadie
+  // presente sus resultados como si cubrieran la planta completa.
+  it('alcanza únicamente a los docentes que recibe, no a los de otras páginas', () => {
+    const paginaUno = [planta[0], planta[1]]
+    const { result } = renderHook(() => useFiltroDocentes(paginaUno))
+
+    act(() => result.current.setBusqueda('zulma'))
+
+    expect(result.current.docentesFiltrados).toEqual([])
   })
 })
