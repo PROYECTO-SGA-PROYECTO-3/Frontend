@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { extraerMensajeError } from '@/shared/lib'
 import { obtenerDocente } from '../api/docentesApi'
+import { DOCENTES_QUERY_KEYS } from './queryKeys'
 import type { Docente } from '../types'
-
-export const DOCENTE_DETALLE_QUERY_KEY = 'docente-detalle'
 
 /**
  * Hook responsable exclusivamente de consultar la información detallada
@@ -19,7 +18,7 @@ export function useDocenteDetalle(id: number | null | undefined) {
     error,
     refetch,
   } = useQuery<Docente, Error>({
-    queryKey: [DOCENTE_DETALLE_QUERY_KEY, id],
+    queryKey: DOCENTES_QUERY_KEYS.detalle(id),
     queryFn: () => obtenerDocente(id as number),
     enabled: activo,
     staleTime: 1000 * 60 * 3, // 3 minutos
