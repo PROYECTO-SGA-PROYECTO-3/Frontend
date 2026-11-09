@@ -1,4 +1,5 @@
 import { http, HttpResponse } from 'msw'
+import type { DashboardAdmin } from '@/dashboards/admin/types'
 import { admin, docente, estudiante } from './fixtures/usuarios'
 
 type LoginBody = { documento?: string; contrasena?: string }
@@ -35,4 +36,18 @@ export const handlers = [
           { status: 401 },
         )
   }),
+
+  // Datos que cargan los paneles al montarse; cada test los sobrescribe con server.use si los necesita
+  http.get('*/anios-lectivos', () => HttpResponse.json([])),
+  http.get('*/eventos', () => HttpResponse.json([])),
+  http.get('*/dashboard/admin', () =>
+    HttpResponse.json({
+      totalEstudiantes: 0,
+      matriculasActivas: 0,
+      docentesActivos: 0,
+      totalAsignaturas: 0,
+      totalGrados: 0,
+      anioLectivoActivo: null,
+    } satisfies DashboardAdmin),
+  ),
 ]
